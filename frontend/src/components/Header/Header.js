@@ -1,7 +1,10 @@
 import React from "react";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
+import IconButton from '@mui/material/IconButton';
 
 const Header = () => {
+
+
   return (
     <>
       <div className="top-header-area" id="sticker">
@@ -68,7 +71,7 @@ const Header = () => {
                       </ul>
                     </li>
                     <li>
-                      <Link to='/contact'>Contact</Link>
+                      <Link to="/contact">Contact</Link>
                     </li>
                     <li>
                       <Link href="shop.html">Shop</Link>
@@ -94,6 +97,9 @@ const Header = () => {
                         </Link>
                         <Link className="mobile-hide search-bar-icon" href="#">
                           <i className="fas fa-search" />
+                        </Link>
+                        <Link className="mobile-hide search-bar-icon" to='/register'>
+                        <i class="fas fa-sign-in-alt" />
                         </Link>
                       </div>
                     </li>

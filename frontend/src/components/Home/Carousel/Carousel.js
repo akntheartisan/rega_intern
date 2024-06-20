@@ -4,7 +4,7 @@ import Header from '../../Header/Header';
 const Carousel = () => {
   return (
     <>
-    <Header/>
+  
       <div className="homepage-slider">
         <div className="single-homepage-slider homepage-bg-1" style={{height:'100vh'}}>
           <div className="container">
