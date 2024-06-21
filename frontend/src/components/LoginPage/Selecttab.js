@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Signin from "./Signin";
 import Signup from "./Signup";
+import userlogin from  "./userlogin.jpg"
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,7 +48,7 @@ export default function BasicTabs({ setUser }) {
     setValue(newValue);
   };
 
-  return (
+  return (  
     <Box
       sx={{
         width: "100%",
@@ -56,7 +57,9 @@ export default function BasicTabs({ setUser }) {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "black",
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url(${userlogin})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
       }}
     >
       <Box
@@ -66,16 +69,29 @@ export default function BasicTabs({ setUser }) {
           padding:'10px',
           backdropFilter:'blur(10px)',
           borderRadius:'20px'
-          
-          
         }}
       >
         <Box>
-          <Tabs
+        <Tabs
             value={value}
             onChange={handleChange}
             aria-label="basic tabs example"
             centered
+            TabIndicatorProps={{ style: { backgroundColor: 'white' } }} // Indicator color
+            sx={{
+              '& .MuiTab-root': {
+                color: 'white', // Default text color
+                '&.Mui-selected': {
+                  color: 'white', // Text color when selected
+                },
+                '&:hover': {
+                  color: 'white', // Text color on hover
+                },
+                '&.Mui-focusVisible': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)', // Background color when focused
+                },
+              },
+            }}
           >
             <Tab label="Sign In" {...a11yProps(0)} sx={{color:'white'}}/>
             <Tab label="Sign Up" {...a11yProps(1)} sx={{color:'white'}}/>

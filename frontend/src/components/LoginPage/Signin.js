@@ -8,22 +8,19 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 // import { FormContext } from "../../App";
 import { toast } from "react-hot-toast";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import PasswordIcon from "@mui/icons-material/Password";
 
 const Signin = () => {
   // const {setUser} = useContext(FormContext);
   const navigate = useNavigate();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [checked, setChecked] = useState(false);
 
   async function verify() {
     const credential = { username, password };
-    // if (name == "ak" && auth == "ak") {
-    //   setUser(true);
-    //   navigate("/admin");
-    // } else {
-    //   alert("wrong credentials");
-    // }
-
     try {
       const response = await axios.post(
         "http://localhost:4000/api/project/signin",
@@ -39,17 +36,9 @@ const Signin = () => {
         console.log(userData);
         // setUser(userData);
         navigate("/admin");
-      }else{
-        navigate("/")
+      } else {
+        navigate("/");
       }
-
-      // if(token){
-      //   navigate("/admin")
-      // }else{
-      //   navigate("/")
-      // }
-
-      // alert("Form Submitted Successfully");
     } catch (error) {
       console.log(error);
       if (error.response.data.error) {
@@ -74,20 +63,21 @@ const Signin = () => {
   return (
     <div>
       <>
-        <Stack direction="column" spacing={4} sx={{color:'white'}}>
+        <Stack direction="column" spacing={4} sx={{ color: "white" }}>
           <TextField
             label="Username"
             name="username"
+            size="small"
             sx={{
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: 'white', // Default border color
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white", // Default border color
                 },
-                '&:hover fieldset': {
-                  borderColor: 'white', // Border color on hover
+                "&:hover fieldset": {
+                  borderColor: "white", // Border color on hover
                 },
-                '&.Mui-focused fieldset': {
-                  borderColor: 'white', // Border color when focused
+                "&.Mui-focused fieldset": {
+                  borderColor: "white", // Border color when focused
                 },
               },
             }}
@@ -98,82 +88,88 @@ const Signin = () => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <AccountCircleIcon sx={{color:'white'}}/>
+                  <AccountCircleIcon sx={{ color: "white" }} />
                 </InputAdornment>
               ),
+              style: { color: "white" },
             }}
             InputLabelProps={{
-              style: { color: '#fff' },
+              style: { color: "#fff" },
             }}
           />
 
           <TextField
             label="Password"
             name="password"
+            size="small"
+            type={checked ? "text" : "password"}
             sx={{
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: 'white', // Default border color
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white", // Default border color
                 },
-                '&:hover fieldset': {
-                  borderColor: 'white', // Border color on hover
+                "&:hover fieldset": {
+                  borderColor: "white", // Border color on hover
                 },
-                '&.Mui-focused fieldset': {
-                  borderColor: 'white', // Border color when focused
+                "&.Mui-focused fieldset": {
+                  borderColor: "white", // Border color when focused
                 },
               },
             }}
-            // helperText={errors.companyname}
-            // error={!!errors.companyname}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <BusinessIcon sx={{color:'white'}}/>
+                  <PasswordIcon sx={{ color: "white" }} />
                 </InputAdornment>
               ),
+              style: { color: "white" },
             }}
             InputLabelProps={{
-              style: { color: '#fff' },
+              style: { color: "#fff" },
             }}
           />
         </Stack>
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={checked}
+              onChange={(e) => setChecked(e.target.checked)}
+              size="small"
+              sx={{
+                color: "white",
+                "&.Mui-checked": {
+                  color: "white",
+                },
+              }}
+            />
+          }
+          label="Show Password"
+          sx={{ color: "white", marginTop: "20px" }}
+        />
+
         <Stack>
-          <Button sx={{margin:'25px 0 25px 0',display:'flex',justifyContent:'flex-end'}}>Forget Password?</Button>
+          <button
+            type="button"
+            class="btn"
+            style={{ color: "white", backgroundColor: "#f28123" }}
+          >
+            LogIn
+          </button>
         </Stack>
-        <Stack sx={{backgroundColor:'blue',borderRadius:'15px'}}>
-          <Button autoFocus onClick={verify} sx={{color:'white'}}>
-            Submit
+        <Stack>
+          <Button
+            sx={{
+              margin: "20px 0 0px 0",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            Forget Password?
           </Button>
         </Stack>
-        {/* <div className="signin">
-          <h3>Sign In</h3>
-          <form>
-            <div>
-              <label htmlFor="email">Email: </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <br />
-
-            <div>
-              <label htmlFor="password">Password: </label>
-              <input
-                type="password"
-                value={auth}
-                onChange={(e) => setAuth(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <button onClick={verify}>Submit</button>
-            </div>
-          </form>
-        </div> */}
       </>
     </div>
   );

@@ -1,12 +1,12 @@
-import React from 'react'
-import Selecttab from './Selecttab'
+import React from "react";
+import Selecttab from "./Selecttab";
 
 const LoginPage = () => {
   return (
     <>
-    <Selecttab  />
+      <Selecttab />
     </>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

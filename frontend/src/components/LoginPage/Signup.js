@@ -7,6 +7,9 @@ import BusinessIcon from "@mui/icons-material/Business";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import PasswordIcon from "@mui/icons-material/Password";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import { client } from "../Client/Client";
 
 const intial = { name: "", username: "", password: "", confirmpassword: "" };
 
@@ -27,13 +30,12 @@ const Signup = () => {
 
   const submit = async () => {
     try {
-      const { response } = await axios.post(
-        "http://localhost:4000/api/project/signup",
-        user
-      );
+      const response = await client.post("/user/usersignup", user);
 
-      toast.success("Login Successfull");
-      setUser({ name: "", username: "", password: "", confirmpassword: "" });
+      if (response.status === 200) {
+        toast.success("Successfully Created");
+      }
+      setUser(intial);
     } catch (error) {
       console.log(error);
       if (error.response.data.error) {
@@ -48,16 +50,17 @@ const Signup = () => {
         <TextField
           label="name"
           name="name"
+          size="small"
           sx={{
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: 'white', // Default border color
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "white", // Default border color
               },
-              '&:hover fieldset': {
-                borderColor: 'white', // Border color on hover
+              "&:hover fieldset": {
+                borderColor: "white", // Border color on hover
               },
-              '&.Mui-focused fieldset': {
-                borderColor: 'white', // Border color when focused
+              "&.Mui-focused fieldset": {
+                borderColor: "white", // Border color when focused
               },
             },
           }}
@@ -68,28 +71,30 @@ const Signup = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <AccountCircleIcon  sx={{color:'white'}}/>
+                <AccountCircleIcon sx={{ color: "white" }} />
               </InputAdornment>
             ),
+            sx: { color: "white" },
           }}
           InputLabelProps={{
-            style: { color: '#fff' },
+            style: { color: "#fff" },
           }}
         />
 
         <TextField
           label="username"
           name="username"
+          size="small"
           sx={{
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: 'white', // Default border color
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "white", // Default border color
               },
-              '&:hover fieldset': {
-                borderColor: 'white', // Border color on hover
+              "&:hover fieldset": {
+                borderColor: "white", // Border color on hover
               },
-              '&.Mui-focused fieldset': {
-                borderColor: 'white', // Border color when focused
+              "&.Mui-focused fieldset": {
+                borderColor: "white", // Border color when focused
               },
             },
           }}
@@ -100,28 +105,30 @@ const Signup = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <BusinessIcon sx={{color:'white'}}/>
+                <AlternateEmailIcon sx={{ color: "white" }} />
               </InputAdornment>
             ),
+            sx: { color: "white" },
           }}
           InputLabelProps={{
-            style: { color: '#fff' },
+            style: { color: "#fff" },
           }}
         />
 
         <TextField
           label="Password"
           name="password"
+          size="small"
           sx={{
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: 'white', // Default border color
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "white", // Default border color
               },
-              '&:hover fieldset': {
-                borderColor: 'white', // Border color on hover
+              "&:hover fieldset": {
+                borderColor: "white", // Border color on hover
               },
-              '&.Mui-focused fieldset': {
-                borderColor: 'white', // Border color when focused
+              "&.Mui-focused fieldset": {
+                borderColor: "white", // Border color when focused
               },
             },
           }}
@@ -132,28 +139,30 @@ const Signup = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <BusinessIcon sx={{color:'white'}}/>
+                <PasswordIcon sx={{ color: "white" }} />
               </InputAdornment>
             ),
+            sx: { color: "white" },
           }}
           InputLabelProps={{
-            style: { color: '#fff' },
+            style: { color: "#fff" },
           }}
         />
 
         <TextField
           label="confirmpassword"
           name="confirmpassword"
+          size="small"
           sx={{
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: 'white', // Default border color
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "white", // Default border color
               },
-              '&:hover fieldset': {
-                borderColor: 'white', // Border color on hover
+              "&:hover fieldset": {
+                borderColor: "white", // Border color on hover
               },
-              '&.Mui-focused fieldset': {
-                borderColor: 'white', // Border color when focused
+              "&.Mui-focused fieldset": {
+                borderColor: "white", // Border color when focused
               },
             },
           }}
@@ -164,20 +173,23 @@ const Signup = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <BusinessIcon sx={{color:'white'}}/>
+                <PasswordIcon sx={{ color: "white" }} />
               </InputAdornment>
             ),
-
+            sx: { color: "white" },
           }}
           InputLabelProps={{
-            style: { color: '#fff',borderColor:'white' },
+            style: { color: "#fff", borderColor: "white" },
           }}
         />
-      </Stack>
-      <Stack sx={{backgroundColor:'blue',borderRadius:'15px',marginTop:'25px'}}>
-        <Button autoFocus onClick={submit} sx={{color:'white'}}>
-          Submit
-        </Button>
+        <button
+          type="button"
+          class="btn"
+          style={{ color: "white", backgroundColor: "#f28123" }}
+          onClick={submit}
+        >
+          Register
+        </button>
       </Stack>
     </>
   );
