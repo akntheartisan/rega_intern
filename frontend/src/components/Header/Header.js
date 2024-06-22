@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
+import { UserContext } from "../../App";
+import UserProfile from "./UserProfile";
 
 const Header = () => {
+  const { userData, setUserData } = useContext(UserContext);
 
+  console.log(userData);
 
   return (
     <>
@@ -98,9 +102,16 @@ const Header = () => {
                         <Link className="mobile-hide search-bar-icon" href="#">
                           <i className="fas fa-search" />
                         </Link>
-                        <Link className="mobile-hide search-bar-icon" to='/register'>
-                        <i class="fas fa-sign-in-alt" />
-                        </Link>
+                        {userData ? (
+                          <UserProfile/>
+                        ) : (
+                          <Link
+                            className="mobile-hide search-bar-icon"
+                            to="/register"
+                          >
+                            <i class="fas fa-sign-in-alt" />
+                          </Link>
+                        )}
                       </div>
                     </li>
                   </ul>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import "./Signin.css";
 import { useNavigate } from "react-router-dom";
 import { Stack, TextField, InputAdornment, Box } from "@mui/material";
@@ -10,10 +10,12 @@ import { toast } from "react-hot-toast";
 import PasswordIcon from "@mui/icons-material/Password";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import { client } from "../Client/Client";
+import { UserContext } from "../../App";
 
 const intial = { name: "", username: "", password: "", confirmpassword: "" };
 
 const Signup = () => {
+  const {userData,setUserData} = useContext(UserContext);
   const navigate = useNavigate();
   const [user, setUser] = useState(intial);
 
@@ -30,10 +32,13 @@ const Signup = () => {
 
   const submit = async () => {
     try {
-      const response = await client.post("/user/usersignup", user);
+      const response = await client.post("/user/usersignup", user,{withCredentials:true});
+
+      console.log(response.status);
 
       if (response.status === 200) {
         toast.success("Successfully Created");
+        getUserData();
       }
       setUser(intial);
     } catch (error) {
@@ -41,6 +46,19 @@ const Signup = () => {
       if (error.response.data.error) {
         toast.error(error.response.data.error);
       }
+    }
+  };
+
+  const getUserData = async (req, res, next) => {
+    try {
+      const response = await client.get("/user/protect",{withCredentials:true});
+      const user = response.data.user;
+      if(response.status === 200){
+        setUserData(user);
+        navigate('/');
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

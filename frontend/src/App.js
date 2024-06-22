@@ -6,34 +6,38 @@ import Contact from "./components/Contact/Contact";
 import { Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import LoginPage from "./components/LoginPage/LoginPage";
-import React, { useState, useContext } from "react";
+import React, { useState, createContext } from "react";
 import { Toaster } from "react-hot-toast";
 // import LoginPage from "./components/LoginPage/LoginPage";
 
+export const UserContext = createContext();
 function App() {
+  const [userData, setUserData] = useState("");
   return (
     <>
-      <Toaster
-        toastOptions={{
-          success: {
-            style: {
-              background: "#809c13",
-              color: "white",
+      <UserContext.Provider value={{userData,setUserData}}>
+        <Toaster
+          toastOptions={{
+            success: {
+              style: {
+                background: "#809c13",
+                color: "white",
+              },
             },
-          },
-          error: {
-            style: {
-              background: "#ff5252",
-              color: "white",
+            error: {
+              style: {
+                background: "#ff5252",
+                color: "white",
+              },
             },
-          },
-        }}
-      />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/register" element={<LoginPage />} />
-      </Routes>
+          }}
+        />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/register" element={<LoginPage />} />
+        </Routes>
+      </UserContext.Provider>
     </>
   );
 }
