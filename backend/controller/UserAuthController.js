@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const usermodel = require("../model/UserRegisterModel");
+
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const JWT_SECRET = "fhsdkfhksdhfjksdhfkjsdhiy";
 const JWT_EXPIRATION = "90d";
@@ -25,15 +27,66 @@ exports.userSignUp = async (req, res, next) => {
       });
     }
 
-    const newuser = await usermodel.create(req.body);
+    const newuser = await usermodel.create({
+      name,
+      username,
+      password,
+      confirmpassword,
+    });
+
+    // const newuserId = newuser._id;
+
+    // const userprofile = await userprofilemodel.save(newuserId);
 
     const token = jwt.sign({ id: newuser._id }, JWT_SECRET, {
       expiresIn: JWT_EXPIRATION,
     });
 
     if (newuser) {
-      return res.status(200).cookie("token", token, { httpOnly: true }).json({ newuser });
+      return res
+        .status(200)
+        .cookie("token", token, { httpOnly: true })
+        .json({ newuser });
     }
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+
+exports.userSignIn = async (req, res, next) => {
+  const { username, password } = req.body;
+  try {
+    const checkUser = await usermodel.findOne({ username }).select("+password");
+
+    console.log(checkUser);
+
+    if (!checkUser) {
+      return res.status(400).json({
+        status: "fail",
+        error: "Invalid Username",
+      });
+    }
+
+    const checkPassword = await bcrypt.compare(password, checkUser.password);
+
+    if (!checkPassword) {
+      return res.status(400).json({
+        status: "fail",
+        error: "Incorrect password.Please try again",
+      });
+    }
+
+    const token = jwt.sign({ id: checkUser._id }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRATION,
+    });
+
+    res
+      .status(200)
+      .cookie("token", token, { httpOnly: true })
+      .json({ checkUser });
   } catch (error) {
     res.status(400).json({
       status: "fail",
@@ -44,7 +97,7 @@ exports.userSignUp = async (req, res, next) => {
 
 exports.protect = async (req, res, next) => {
   let token;
-  console.log('req.cookies.jwt:', req.cookies.jwt);
+  console.log("req.cookies.jwt:", req.cookies.jwt);
 
   if (req.cookies && req.cookies.token) {
     token = req.cookies.token;
@@ -56,7 +109,6 @@ exports.protect = async (req, res, next) => {
   }
 
   try {
-    
     let decoded = jwt.verify(token, JWT_SECRET);
 
     const checkUser = await usermodel.findById(decoded.id);
@@ -73,10 +125,57 @@ exports.protect = async (req, res, next) => {
     req.user = checkUser;
     next();
   } catch (error) {
-    console.error('Token verification error:', error.message);
+    console.error("Token verification error:", error.message);
     return res.status(401).json({
       status: "fail",
       message: "Token verification failed",
     });
+  }
+};
+
+exports.profileUpdate = async (req, res, next) => {
+  const { id, mobile, address, landmark, district, state, pincode } = req.body;
+
+  try {
+    const profileData = await usermodel.findByIdAndUpdate(
+      id,
+      { mobile, address, landmark, district, state, pincode },
+      { new: true }
+    );
+    return res.status(200).json({ profileData });
+  } catch (error) {
+    return res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+
+exports.profileUpdate = async (req, res, next) => {
+  const { id, mobile, address, landmark, district, state, pincode } = req.body;
+
+  try {
+    const profileData = await usermodel.findByIdAndUpdate(
+      id,
+      { mobile, address, landmark, district, state, pincode },
+      { new: true }
+    );
+    return res.status(200).json({ profileData });
+  } catch (error) {
+    return res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+
+exports.getProfileData = async (req, res, next) => {
+  console.log(req.query.id);
+  try {
+    const getProfileData = await usermodel.findById(req.query.id);
+    req.profile = getProfileData;
+    next();
+  } catch (error) {
+    console.log(error);
   }
 };

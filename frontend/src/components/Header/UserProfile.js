@@ -1,22 +1,37 @@
 import * as React from "react";
+import { styled } from '@mui/material/styles';
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import { useState, useContext } from "react";
-import { Stack, TextField, InputAdornment, Box } from "@mui/material";
-import BusinessIcon from "@mui/icons-material/Business";
 import { UserContext } from "../../App";
-// import EditProfile from "./EditProfile";
-// import PasswordEdit from "./PasswordEdit";
-
 import { useNavigate } from "react-router-dom";
 import ProfileForm from "../Profile/ProfileForm";
+import LogoutIcon from '@mui/icons-material/Logout';
+
+const AccountButton = styled(Button)({
+  textTransform: 'none',
+  fontSize: 16,
+  padding: '6px 12px',
+  border: '1px solid',
+  lineHeight: 1.5,
+  backgroundColor: '#f28123',
+  borderColor: '#f28123',
+  '&:hover': {
+    backgroundColor: '#f28123',
+    borderColor: '#f28123',
+  },
+  '&:active': {
+    backgroundColor: '#f28123',
+    borderColor: '#f28123',
+  },
+  '&:focus': {
+    boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+  },
+});
+
+
 
 export default function UserProfile() {
   const navigate = useNavigate();
@@ -25,9 +40,8 @@ export default function UserProfile() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openProfile, setOpenProfile] = useState(false);
 
-
   const Profile = () => {
-    console.log('profile opened');
+    console.log("profile opened");
     setOpenProfile(true);
   };
 
@@ -48,15 +62,15 @@ export default function UserProfile() {
 
   return (
     <>
-      <Button
+      <AccountButton
+        variant="contained"
+        startIcon={<AccountCircleIcon sx={{ color: "white" }} />}
         id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
       >
-        <AccountCircleIcon sx={{ color: "white" }} />
-      </Button>
+        Hi, {userData.name}
+      </AccountButton>
+
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -67,8 +81,8 @@ export default function UserProfile() {
         }}
       >
         {/* <MenuItem>Profile</MenuItem> */}
-        <MenuItem onClick={Profile}>Profile</MenuItem>
-        <MenuItem onClick={logout}>Logout</MenuItem>
+        <MenuItem onClick={Profile} sx={{display:'flex',gap:'15px'}}><AccountCircleIcon/>Profile</MenuItem>
+        <MenuItem onClick={logout} sx={{display:'flex',gap:'15px'}}><LogoutIcon/>Logout</MenuItem>
       </Menu>
       <ProfileForm openProfile={openProfile} setOpenProfile={setOpenProfile} />
     </>

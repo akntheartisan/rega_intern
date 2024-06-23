@@ -10,10 +10,7 @@ const UserProfile = new mongoose.Schema({
     mobile:{
         type:String
     },
-    address1:{
-        type:String
-    },
-    address2:{
+    address:{
         type:String
     },
     landmark:{

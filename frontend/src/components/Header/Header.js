@@ -3,6 +3,30 @@ import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import { UserContext } from "../../App";
 import UserProfile from "./UserProfile";
+import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
+const AccountButton = styled(Button)({
+  textTransform: "none",
+  fontSize: 16,
+  padding: "6px 12px",
+  border: "1px solid",
+  lineHeight: 1.5,
+  backgroundColor: "#f28123",
+  borderColor: "#f28123",
+  "&:hover": {
+    backgroundColor: "#f28123",
+    borderColor: "#f28123",
+  },
+  "&:active": {
+    backgroundColor: "#f28123",
+    borderColor: "#f28123",
+  },
+  "&:focus": {
+    boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)",
+  },
+});
 
 const Header = () => {
   const { userData, setUserData } = useContext(UserContext);
@@ -96,20 +120,27 @@ const Header = () => {
                     </li>
                     <li>
                       <div className="header-icons">
-                        <Link className="shopping-cart" href="cart.html">
+                        {/* <Link className="shopping-cart" href="cart.html">
                           <i className="fas fa-shopping-cart" />
                         </Link>
                         <Link className="mobile-hide search-bar-icon" href="#">
                           <i className="fas fa-search" />
-                        </Link>
+                        </Link> */}
                         {userData ? (
-                          <UserProfile/>
+                          <UserProfile />
                         ) : (
                           <Link
                             className="mobile-hide search-bar-icon"
                             to="/register"
                           >
-                            <i class="fas fa-sign-in-alt" />
+                            <AccountButton
+                              variant="contained"
+                              startIcon={
+                                <AccountCircleIcon sx={{ color: "white" }} />
+                              }
+                            >
+                              SignIn
+                            </AccountButton>
                           </Link>
                         )}
                       </div>

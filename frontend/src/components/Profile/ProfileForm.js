@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -7,12 +7,84 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 // import { client } from "../../../Client/Clientaxios";
 import toast from "react-hot-toast";
+import { UserContext } from "../../App";
+import { client } from "../Client/Client";
 
 const ProfileForm = ({ openProfile, setOpenProfile }) => {
+  const { userData, setUserData } = useContext(UserContext);
+
+  console.log(userData);
+
+  const [profileData, setProfileData] = useState({
+    name: userData.name,
+    username: userData.username,
+    mobile: "",
+    address: "",
+    landmark: "",
+    district: "",
+    state: "",
+    pincode: "",
+  });
 
   const handleClose = () => {
     setOpenProfile(false);
   };
+
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setProfileData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const profileSubmit = async () => {
+    const id = userData._id;
+    console.log(id);
+    try {
+      const response = await client.post("/user/profileupdate", {
+        id,
+        ...profileData,
+      });
+
+      console.log(response.status);
+
+      if (response.status === 200) {
+        toast.success("Submitted Successfully");
+        setProfileData({
+          name: userData.name,
+          username: userData.username,
+          mobile: "",
+          address: "",
+          landmark: "",
+          district: "",
+          state: "",
+          pincode: "",
+        });
+        setOpenProfile(false);
+        getProfileData();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getProfileData = async ()=>{
+    const id = userData._id;
+    try {
+      const response = await client.get("/user/getprofiledata",{params:{id}});
+      const user = response.data.profile;
+      console.log(user);
+      if (response.status === 200) {
+        setProfileData(user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <React.Fragment>
@@ -22,15 +94,15 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Edit Product"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"User Profile"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <div className="container">
               <div className="row">
                 <div className="col-md-12 mt-1 mb-1">
-                <h5>Basic Details</h5>
+                  <h5>Basic Details</h5>
                 </div>
-                
+
                 <div className="col-md-4">
                   <div className="mb-3">
                     <label htmlFor="model" className="form-label">
@@ -39,10 +111,10 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
                     <input
                       type="text"
                       className="form-control"
-                      id="model"
+                      id="name"
                       name="name"
-                      // value={updatedProduct.model}
-                      // onChange={handleChange}
+                      value={profileData.name}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -54,10 +126,10 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
                     <input
                       type="text"
                       className="form-control"
-                      id="motor"
+                      id="username"
                       name="username"
-                      // value={updatedProduct.motor}
-                      // onChange={handleChange}
+                      value={profileData.username}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -69,44 +141,29 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
                     <input
                       type="text"
                       className="form-control"
-                      id="battery"
+                      id="mobile"
                       name="mobile"
-                      // value={updatedProduct.battery}
-                      // onChange={handleChange}
+                      value={profileData.mobile}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
 
                 <div className="col-md-12 mt-1 mb-1">
-                <h5>Contact Details</h5>
+                  <h5>Contact Details</h5>
                 </div>
                 <div className="col-md-12">
                   <div className="mb-3">
                     <label htmlFor="range" className="form-label">
-                      Address Line 1
+                      Address
                     </label>
-                    <input
+                    <textarea
                       type="text"
                       className="form-control"
-                      id="range"
-                      name="address1"
-                      // value={updatedProduct.range}
-                      // onChange={handleChange}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-12">
-                  <div className="mb-3">
-                    <label htmlFor="tyresize" className="form-label">
-                    Address Line 1
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="tyresize"
-                      name="address2"
-                      // value={updatedProduct.tyresize}
-                      // onChange={handleChange}
+                      id="address"
+                      name="address"
+                      value={profileData.address}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -118,10 +175,10 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
                     <input
                       type="text"
                       className="form-control"
-                      id="brakes"
+                      id="landmark"
                       name="landmark"
-                      // value={updatedProduct.brakes}
-                      // onChange={handleChange}
+                      value={profileData.landmark}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -133,10 +190,10 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
                     <input
                       type="text"
                       className="form-control"
-                      id="ground"
+                      id="district"
                       name="district"
-                      // value={updatedProduct.ground}
-                      // onChange={handleChange}
+                      value={profileData.district}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -148,10 +205,10 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
                     <input
                       type="text"
                       className="form-control"
-                      id="payload"
+                      id="state"
                       name="state"
-                      // value={updatedProduct.payload}
-                      // onChange={handleChange}
+                      value={profileData.state}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -163,10 +220,10 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
                     <input
                       type="text"
                       className="form-control"
-                      id="payload"
+                      id="pincode"
                       name="pincode"
-                      // value={updatedProduct.payload}
-                      // onChange={handleChange}
+                      value={profileData.pincode}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -176,7 +233,9 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button autoFocus>Update</Button>
+          <Button autoFocus onClick={profileSubmit}>
+            Update
+          </Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

@@ -1,19 +1,18 @@
 import React, { useState, useContext } from "react";
 import "./Signin.css";
 import { useNavigate } from "react-router-dom";
-import { Stack, TextField, InputAdornment, Box } from "@mui/material";
+import { Stack, TextField, InputAdornment } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import BusinessIcon from "@mui/icons-material/Business";
 import Button from "@mui/material/Button";
-import axios from "axios";
-// import { FormContext } from "../../App";
 import { toast } from "react-hot-toast";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import PasswordIcon from "@mui/icons-material/Password";
+import { client } from "../Client/Client";
+import { UserContext } from "../../App";
 
 const Signin = () => {
-  // const {setUser} = useContext(FormContext);
+  const { userData, setUserData } = useContext(UserContext);
   const navigate = useNavigate();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -22,22 +21,17 @@ const Signin = () => {
   async function verify() {
     const credential = { username, password };
     try {
-      const response = await axios.post(
-        "http://localhost:4000/api/project/signin",
-        credential,
-        { withCredentials: true }
-      );
+      const response = await client.post("/user/signin", credential, {
+        withCredentials: true,
+      });
       console.log(response.status);
-      setUserName("");
-      setPassword("");
+     
 
       if (response.status === 200) {
-        const userData = await getUserData();
-        console.log(userData);
-        // setUser(userData);
-        navigate("/admin");
-      } else {
-        navigate("/");
+        toast.success("Logged In");
+        setUserName("");
+        setPassword("");
+        getUserData();
       }
     } catch (error) {
       console.log(error);
@@ -47,18 +41,20 @@ const Signin = () => {
     }
   }
 
-  async function getUserData() {
+  const getUserData = async (req, res, next) => {
     try {
-      const userData = await axios.get(
-        "http://localhost:4000/api/project/authuser",
-        { withCredentials: true }
-      );
-      const user = userData.data.user;
-      return user;
+      const response = await client.get("/user/protect", {
+        withCredentials: true,
+      });
+      const user = response.data.user;
+      if (response.status === 200) {
+        setUserData(user);
+        navigate("/");
+      }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <div>
@@ -154,6 +150,7 @@ const Signin = () => {
           <button
             type="button"
             class="btn"
+            onClick={verify}
             style={{ color: "white", backgroundColor: "#f28123" }}
           >
             LogIn
