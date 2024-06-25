@@ -1,5 +1,5 @@
 import * as React from "react";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -8,30 +8,29 @@ import { useState, useContext } from "react";
 import { UserContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import ProfileForm from "../Profile/ProfileForm";
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from "@mui/icons-material/Logout";
+import { client } from "../Client/Client";
 
 const AccountButton = styled(Button)({
-  textTransform: 'none',
+  textTransform: "none",
   fontSize: 16,
-  padding: '6px 12px',
-  border: '1px solid',
+  padding: "6px 12px",
+  border: "1px solid",
   lineHeight: 1.5,
-  backgroundColor: '#f28123',
-  borderColor: '#f28123',
-  '&:hover': {
-    backgroundColor: '#f28123',
-    borderColor: '#f28123',
+  backgroundColor: "#f28123",
+  borderColor: "#f28123",
+  "&:hover": {
+    backgroundColor: "#f28123",
+    borderColor: "#f28123",
   },
-  '&:active': {
-    backgroundColor: '#f28123',
-    borderColor: '#f28123',
+  "&:active": {
+    backgroundColor: "#f28123",
+    borderColor: "#f28123",
   },
-  '&:focus': {
-    boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+  "&:focus": {
+    boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)",
   },
 });
-
-
 
 export default function UserProfile() {
   const navigate = useNavigate();
@@ -55,7 +54,13 @@ export default function UserProfile() {
     setAnchorEl(null);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await client.post("/user/logout", {}, { withCredentials: true });
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+
     setUserData("");
     navigate("/");
   };
@@ -81,8 +86,14 @@ export default function UserProfile() {
         }}
       >
         {/* <MenuItem>Profile</MenuItem> */}
-        <MenuItem onClick={Profile} sx={{display:'flex',gap:'15px'}}><AccountCircleIcon/>Profile</MenuItem>
-        <MenuItem onClick={logout} sx={{display:'flex',gap:'15px'}}><LogoutIcon/>Logout</MenuItem>
+        <MenuItem onClick={Profile} sx={{ display: "flex", gap: "15px" }}>
+          <AccountCircleIcon />
+          Profile
+        </MenuItem>
+        <MenuItem onClick={logout} sx={{ display: "flex", gap: "15px" }}>
+          <LogoutIcon />
+          Logout
+        </MenuItem>
       </Menu>
       <ProfileForm openProfile={openProfile} setOpenProfile={setOpenProfile} />
     </>

@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const JWT_SECRET = "fhsdkfhksdhfjksdhfkjsdhiy";
-const JWT_EXPIRATION = "90d";
+const JWT_EXPIRATION = "1hr";
 
 exports.userSignUp = async (req, res, next) => {
   const { name, username, password, confirmpassword } = req.body;

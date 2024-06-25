@@ -1,21 +1,37 @@
-import logo from "./logo.svg";
 import "./App.css";
-import Header from "./components/Header/Header";
 import Home from "./components/Home/Home";
 import Contact from "./components/Contact/Contact";
 import { Routes, Route } from "react-router-dom";
-import Footer from "./components/Footer/Footer";
 import LoginPage from "./components/LoginPage/LoginPage";
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-// import LoginPage from "./components/LoginPage/LoginPage";
+import { client } from "./components/Client/Client";
 
 export const UserContext = createContext();
 function App() {
   const [userData, setUserData] = useState("");
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const response = await client.get("/user/protect", {
+          withCredentials: true,
+        });
+        const user = response.data.user;
+        if (response.status === 200) {
+          setUserData(user);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getUserData();
+  }, []);
+
   return (
     <>
-      <UserContext.Provider value={{userData,setUserData}}>
+      <UserContext.Provider value={{ userData, setUserData }}>
         <Toaster
           toastOptions={{
             success: {

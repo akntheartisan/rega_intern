@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -72,10 +72,12 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
     }
   };
 
-  const getProfileData = async ()=>{
+ 
+
+  const getProfileData = useCallback(async () => {
     const id = userData._id;
     try {
-      const response = await client.get("/user/getprofiledata",{params:{id}});
+      const response = await client.get("/user/getprofiledata", { params: { id } });
       const user = response.data.profile;
       console.log(user);
       if (response.status === 200) {
@@ -84,7 +86,11 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
     } catch (error) {
       console.log(error);
     }
-  }
+  }, [userData]);
+
+  useEffect(() => {
+    getProfileData();
+  }, [getProfileData]);
 
   return (
     <React.Fragment>

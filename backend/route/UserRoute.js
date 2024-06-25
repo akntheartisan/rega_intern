@@ -19,4 +19,12 @@ router.get("/getprofiledata", cont.getProfileData, (req, res) => {
   });
 });
 
+router.post('/logout', (req, res) => {
+  res.cookie('token', '', { 
+    httpOnly: true,  
+    expires: new Date(0) // Setting the cookie expiration date to a past date
+  });
+  res.status(200).send({ message: 'Logged out successfully' });
+});
+
 module.exports = router;
