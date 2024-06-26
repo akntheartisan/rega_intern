@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import { useState, useContext } from "react";
 import { UserContext } from "../../App";
 import { useNavigate } from "react-router-dom";
@@ -89,6 +90,10 @@ export default function UserProfile() {
         <MenuItem onClick={Profile} sx={{ display: "flex", gap: "15px" }}>
           <AccountCircleIcon />
           Profile
+        </MenuItem>
+        <MenuItem sx={{ display: "flex", gap: "15px" }}>
+        <ShoppingCartIcon />
+          Cart
         </MenuItem>
         <MenuItem onClick={logout} sx={{ display: "flex", gap: "15px" }}>
           <LogoutIcon />

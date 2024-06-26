@@ -23,6 +23,7 @@ const initial = {
   payload: "",
   charging: "",
   frame: "",
+  price: "",
 };
 
 const Product = () => {
@@ -31,7 +32,6 @@ const Product = () => {
   const [product, setProduct] = useState(initial);
   const [errors, setErrors] = useState({});
   const [image, setImage] = useState(null);
- 
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -62,6 +62,7 @@ const Product = () => {
       "payload",
       "charging",
       "frame",
+      "price",
     ];
 
     fields.forEach((field) => {
@@ -94,8 +95,6 @@ const Product = () => {
       console.log(error);
     }
   };
-
-
 
   return (
     <>
@@ -139,6 +138,19 @@ const Product = () => {
               onChange={handleChange}
               name="model"
               helperText={errors.model}
+            />
+            </Stack>
+            <Stack direction={isMobile ? "column" : "row"} spacing={2}>
+            <TextField
+              fullWidth
+              label="Price"
+              variant="outlined"
+              size="small"
+              value={product.price}
+              error={!!errors.price}
+              onChange={handleChange}
+              name="price"
+              helperText={errors.price}
             />
             <TextField
               fullWidth
@@ -259,7 +271,7 @@ const Product = () => {
         </Stack>
       </Box>
       <Box sx={{ marginTop: "35px", marginBottom: "35px", padding: "15px" }}>
-        <ProductTable product={product} setProduct={setProduct}/>
+        <ProductTable product={product} setProduct={setProduct} />
       </Box>
     </>
   );

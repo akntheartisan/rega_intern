@@ -6,6 +6,7 @@ import LoginPage from "./components/LoginPage/LoginPage";
 import React, { useState, createContext, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { client } from "./components/Client/Client";
+import Cart from "./components/Cart/Cart";
 
 export const UserContext = createContext();
 function App() {
@@ -51,6 +52,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/cart" element={<Cart/>} />
           <Route path="/register" element={<LoginPage />} />
         </Routes>
       </UserContext.Provider>

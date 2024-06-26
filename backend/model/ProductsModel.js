@@ -40,6 +40,9 @@ const Product = new mongoose.Schema(
     frame: {
       type: String,
     },
+    price: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

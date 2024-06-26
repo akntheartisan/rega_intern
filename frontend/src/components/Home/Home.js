@@ -5,6 +5,7 @@ import ProductShow from './ProductShow/ProductShow'
 import SelfAd from './SelfAd/SelfAd'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
+import Product from './Product/Product'
 
 const Home = () => {
   return (
@@ -12,7 +13,7 @@ const Home = () => {
     <Header/>
     <Carousel/>
     <Features/>
-    <ProductShow/>
+    <Product/>
     <SelfAd/>
     <Footer/>
     </>
