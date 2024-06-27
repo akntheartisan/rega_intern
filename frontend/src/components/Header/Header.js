@@ -49,14 +49,14 @@ const Header = () => {
                   <ul>
                     <li className="current-list-item">
                       <Link to="/">Home</Link>
-                      <ul className="sub-menu">
+                      {/* <ul className="sub-menu">
                         <li>
                           <Link href="index.html">Static Home</Link>
                         </li>
                         <li>
                           <Link href="index_2.html">Slider Home</Link>
                         </li>
-                      </ul>
+                      </ul> */}
                     </li>
                     <li>
                       <Link href="about.html">About</Link>

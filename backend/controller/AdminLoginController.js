@@ -3,10 +3,10 @@ const adminmodel = require("../model/AdminLoginModel");
 const jwt = require("jsonwebtoken");
 
 exports.adminsignin = async (req, res, next) => {
-  console.log(req.body);
+  //console.log(req.body);
   try {
     const { username, password } = req.body;
-    console.log(username, password);
+    //console.log(username, password);
 
     if (!username || !password) {
       return res.status(400).json({
@@ -18,7 +18,7 @@ exports.adminsignin = async (req, res, next) => {
     const adminCheck = await adminmodel
       .findOne({ username })
       .select("+password");
-    console.log(adminCheck);
+    //console.log(adminCheck);
 
     if (!adminCheck) {
       return res.status(401).json({
@@ -41,7 +41,7 @@ exports.adminsignin = async (req, res, next) => {
       expiresIn: jwtExpiration,
     });
 
-    console.log(token);
+    //console.log(token);
 
     const cookieOptions = {
       expires: new Date(Date.now() + 90 * 24 * 3600 * 1000),
@@ -62,13 +62,13 @@ exports.adminsignin = async (req, res, next) => {
 };
 
 exports.protect = async (req, res, next) => {
-  console.log("thisismwtriggered");
+  //console.log("thisismwtriggered");
 
   // 1) Get the token from the cookies
   let token;
   if (req.cookies && req.cookies.jwt) {
     token = req.cookies.jwt;
-    console.log("protecttoken:" + token);
+    //console.log("protecttoken:" + token);
   } else {
     return res.status(401).json({
       status: "fail",
@@ -80,7 +80,7 @@ exports.protect = async (req, res, next) => {
   const jwtSecret = "sdflkjsadlfhasldfjsdlk";
   try {
     const decoded = jwt.verify(token, jwtSecret);
-    console.log(decoded.id);
+    //console.log(decoded.id);
 
     // 3) Check if user still exists
     const adminCheck = await adminmodel.findById(decoded.id);
@@ -91,7 +91,7 @@ exports.protect = async (req, res, next) => {
       });
     }
 
-    console.log(adminCheck);
+    //console.log(adminCheck);
 
     req.user = adminCheck;
     next();
@@ -104,10 +104,10 @@ exports.protect = async (req, res, next) => {
 };
 
 exports.passwordUpdate = async (req, res) => {
-  console.log("passwordupdate executed");
+  //console.log("passwordupdate executed");
   try {
     const { password, confirm, id } = req.body;
-    console.log(id, password, confirm);
+    //console.log(id, password, confirm);
 
     if (password !== confirm) {
       return res.status(400).json({
@@ -127,6 +127,6 @@ exports.passwordUpdate = async (req, res) => {
       })
     }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 };

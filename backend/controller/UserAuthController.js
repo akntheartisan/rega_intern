@@ -61,7 +61,7 @@ exports.userSignIn = async (req, res, next) => {
   try {
     const checkUser = await usermodel.findOne({ username }).select("+password");
 
-    console.log(checkUser);
+    //console.log(checkUser);
 
     if (!checkUser) {
       return res.status(400).json({
@@ -97,7 +97,7 @@ exports.userSignIn = async (req, res, next) => {
 
 exports.protect = async (req, res, next) => {
   let token;
-  console.log("req.cookies.jwt:", req.cookies.jwt);
+  //console.log("req.cookies.jwt:", req.cookies.jwt);
 
   if (req.cookies && req.cookies.token) {
     token = req.cookies.token;
@@ -113,7 +113,7 @@ exports.protect = async (req, res, next) => {
 
     const checkUser = await usermodel.findById(decoded.id);
 
-    console.log(checkUser);
+    //console.log(checkUser);
 
     if (!checkUser) {
       return res.status(401).json({
@@ -170,12 +170,12 @@ exports.profileUpdate = async (req, res, next) => {
 };
 
 exports.getProfileData = async (req, res, next) => {
-  console.log(req.query.id);
+  //console.log(req.query.id);
   try {
     const getProfileData = await usermodel.findById(req.query.id);
     req.profile = getProfileData;
     next();
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 };

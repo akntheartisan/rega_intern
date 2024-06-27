@@ -47,7 +47,7 @@ const Product = () => {
             product.productData.map((each) => {
               console.log(each.model);
               return (
-                <div className="col-md-4">
+                <div className="col-md-4" style={{display:'flex',justifyContent:'center'}}>
                   <Box
                     sx={{
                       "& > :not(style)": {
@@ -63,6 +63,7 @@ const Product = () => {
                         display: "flex",
                         flexDirection: "column",
                         padding: "0 30px 30px 30px",
+                        // border:"1px outset orange"
                       }}
                     >
                       <img

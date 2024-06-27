@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CartDetails = ({ props }) => {
   const [quantity, setQuantity] = useState(0);
 
-  let total = quantity*props.price;
+  let total = quantity * props.price;
   console.log(total);
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -65,7 +68,7 @@ const CartDetails = ({ props }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="total-data">   
+                      <tr className="total-data">
                         <td>
                           <strong>Subtotal: </strong>
                         </td>
@@ -86,27 +89,17 @@ const CartDetails = ({ props }) => {
                     </tbody>
                   </table>
                   <div className="cart-buttons">
-                    {/* <a href="cart.html" className="boxed-btn">
-                      Update Cart
-                    </a> */}
-                    <button href="checkout.html" className="boxed-btn black">
+                    <button
+                      onClick={() =>
+                        navigate("/checkout", {
+                          state: { props, total: total, quantity:quantity },
+                        })
+                      }
+                    >
                       Check Out
                     </button>
                   </div>
                 </div>
-                {/* <div className="coupon-section">
-                  <h3>Apply Coupon</h3>
-                  <div className="coupon-form-wrap">
-                    <form action="index.html">
-                      <p>
-                        <input type="text" placeholder="Coupon" />
-                      </p>
-                      <p>
-                        <input type="submit" defaultValue="Apply" />
-                      </p>
-                    </form>
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>

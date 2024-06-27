@@ -11,9 +11,9 @@ const upload = multer({ storage: storage });
 exports.uploadFile = upload.single("image");
 
 exports.resizeImage = async (req, res, next) => {
-  console.log("resizeimage controller");
+  //console.log("resizeimage controller");
   try {
-    console.log("Original File Size:", req.file.size);
+    //console.log("Original File Size:", req.file.size);
     req.fileBuffer = await sharp(req.file.buffer)
       .resize(250, 150, {
         fit: sharp.fit.inside,
@@ -21,16 +21,16 @@ exports.resizeImage = async (req, res, next) => {
       })
       .toFormat("png")
       .toBuffer();
-    console.log("Resized File Buffer Size:", req.fileBuffer.length);
+    //console.log("Resized File Buffer Size:", req.fileBuffer.length);
     next();
   } catch (err) {
-    console.log("Error resizing image:", err);
+    //console.log("Error resizing image:", err);
     res.status(500).json({ message: "Error resizing image" });
   }
 };
 
 exports.saveImage = async (req, res, next) => {
-  console.log("saveimage controller");
+  //console.log("saveimage controller");
   try {
     const fileName = `scooter_${Date.now()}.png`;
     const Stream = Cloudinary.uploader.upload_stream(
@@ -42,10 +42,10 @@ exports.saveImage = async (req, res, next) => {
       },
       (err, result) => {
         if (err) {
-          console.log("Error uploading to Cloudinary:", err);
+          //console.log("Error uploading to Cloudinary:", err);
           return res.status(404).json({ message: "Cannot save image" });
         } else {
-          console.log("Upload result:", result);
+          //console.log("Upload result:", result);
           req.result = result;
           next();
         }
@@ -53,7 +53,7 @@ exports.saveImage = async (req, res, next) => {
     );
     streamifier.createReadStream(req.fileBuffer).pipe(Stream);
   } catch (err) {
-    console.log("Error in saveImage:", err);
+    //console.log("Error in saveImage:", err);
     res.status(500).json({ message: "Error saving image" });
   }
 };
@@ -70,7 +70,7 @@ exports.productadd = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     res.status(400).json({
       status: "fail",
       error: "Something Wrong",
@@ -81,7 +81,7 @@ exports.productadd = async (req, res, next) => {
 exports.getProduct = async (req, res, next) => {
   try {
     let data = await projectmodel.find();
-    console.log(data);
+    //console.log(data);
     if (data) {
       return res.status(200).json({
         status: "success",
@@ -89,19 +89,19 @@ exports.getProduct = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 };
 
 exports.updateProject = async (req, res) => {
-  console.log("this update get triggered");
+  //console.log("this update get triggered");
   const id = req.body._id;
 
   try {
     let updateProduct = await projectmodel.findByIdAndUpdate(id, req.body, {
       new: true,
     });
-    console.log(updateProduct);
+    //console.log(updateProduct);
     if (updateProduct) {
       return res.status(200).json({
         status: "success",
@@ -115,12 +115,12 @@ exports.updateProject = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 };
 
 exports.deleteProduct = async (req, res) => {
-  console.log(req.body.id);
+  //console.log(req.body.id);
   try {
     let deleteProduct = await projectmodel.findByIdAndDelete(req.body.id);
     if (deleteProduct) {
@@ -130,6 +130,6 @@ exports.deleteProduct = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 };

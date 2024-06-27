@@ -5,6 +5,7 @@ const app = express();
 const adminroute = require("./route/AdminRoute");
 const userroute = require("./route/UserRoute");
 const productroute = require("./route/ProductRoute");
+const cartroute = require("./route/CartRoute");
 const cookieParser = require("cookie-parser");
 
 app.use(express.json());
@@ -31,6 +32,7 @@ app.use(cors(corsOptions));
 app.use("/admin", adminroute);
 app.use("/project", productroute);
 app.use("/user", userroute);
+app.use("/cart", cartroute);
 
 
 const mongo_uri =
