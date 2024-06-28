@@ -90,9 +90,17 @@ const CartDetails = ({ props }) => {
                   </table>
                   <div className="cart-buttons">
                     <button
+                      style={{
+                        backgroundColor: "rgb(242, 129, 35)",
+                        color: 'white',
+                        borderColor: "rgb(242, 129, 35)",
+                        padding: "10px 20px",
+                        borderRadius: "60px",
+                        marginTop: "15px",
+                      }}
                       onClick={() =>
                         navigate("/checkout", {
-                          state: { props, total: total, quantity:quantity },
+                          state: { props, total: total, quantity: quantity },
                         })
                       }
                     >

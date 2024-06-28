@@ -5,6 +5,8 @@ import { useLocation } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "../../App";
 import { client } from "../Client/Client";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const intial = {
   name: "",
@@ -16,11 +18,15 @@ const intial = {
   mobile: "",
 };
 const Checkout = () => {
+  const navigate = useNavigate();
+
   const { userData, setUserData } = useContext(UserContext);
   const [checked, setChecked] = useState(false);
   const [shipAddress, setShipAddress] = useState(intial);
   const [pod, setPod] = useState(false);
   const [online, setOnline] = useState(false);
+  const [model, setModel] = useState(true);
+  const [totalShow, setTotalShow] = useState(true);
 
   console.log(userData);
 
@@ -59,14 +65,17 @@ const Checkout = () => {
     }
   };
 
-  const addSelectedProduct = async () => {   
+  const addSelectedProduct = async () => {
     let userDetails;
     const productId = cartData._id;
+    const userId = userData._id;
 
-    if(checked){
-        userDetails = userData;
-    }else{
-        userDetails = shipAddress;
+    if (checked) {
+      userDetails = { ...userData, userId };
+      console.log(userDetails);
+    } else {
+      userDetails = { ...shipAddress, userId };
+      console.log(userDetails);
     }
 
     console.log(userDetails);
@@ -78,6 +87,15 @@ const Checkout = () => {
         total,
         quantity,
       });
+
+      if (response.status === 200) {
+        toast.success("your order has been placed");
+        setChecked(false);
+        setPod(false);
+        setModel(false);
+        setTotalShow(false);
+        navigate("/");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -213,6 +231,7 @@ const Checkout = () => {
                             value={checked}
                             onChange={(e) => setChecked(e.target.checked)}
                             id="flexCheckDefault"
+                            {...(checked ? { checked } : {})}
                           />
                           <h6
                             className="form-check-label"
@@ -366,6 +385,7 @@ const Checkout = () => {
                                     id="flexRadioDefault1"
                                     value={pod}
                                     onChange={handlePaymentDelivery}
+                                    {...(pod ? { checked } : {})}
                                   />
                                   <label
                                     className="form-check-label"
@@ -384,6 +404,7 @@ const Checkout = () => {
                                     id="flexRadioDefault2"
                                     value={online}
                                     onChange={handlePaymentOnline}
+                                    {...(pod ? { checked } : {})}
                                   />
                                   <label
                                     className="form-check-label"
@@ -420,8 +441,8 @@ const Checkout = () => {
                         </td>
                       </tr>
                       <tr>
-                        <td>{cartData.model}</td>
-                        <td>{total}</td>
+                        <td>{model ? cartData.model : ""}</td>
+                        <td>{totalShow ? total : ""}</td>
                       </tr>
                     </tbody>
                     <tbody className="checkout-details">
@@ -430,7 +451,7 @@ const Checkout = () => {
                           Total
                         </td>
                         <td style={{ fontSize: "14px", fontWeight: "500" }}>
-                          {total}
+                          {totalShow ? total : ""}
                         </td>
                       </tr>
                     </tbody>

@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const Cart = new mongoose.Schema(
   {
+    userId:{
+      type:String
+    },
     name: {
       type: String,
     },
@@ -14,14 +17,18 @@ const Cart = new mongoose.Schema(
     district:{
       type:String
     },
-    state:{
+    state:{ 
       type:String
     },
     pincode:{
       type:String
     },
-    productid: {
-      type: String,
+    mobile:{
+      type:String
+    },
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "product",
     },
     total: {
       type: String,
