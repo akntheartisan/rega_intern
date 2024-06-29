@@ -47,7 +47,10 @@ const Product = () => {
             product.productData.map((each) => {
               console.log(each.model);
               return (
-                <div className="col-md-4" style={{display:'flex',justifyContent:'center'}}>
+                <div
+                  className="col-md-4"
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
                   <Box
                     sx={{
                       "& > :not(style)": {
@@ -75,11 +78,27 @@ const Product = () => {
                           marginTop: "-25px",
                         }}
                       />
-                      <h4 style={{ textAlign: "center" }}>{each.model}</h4>
-                      <h5 style={{ textAlign: "center" }}>Price: Rs.{each.price}</h5>
+                      <h4 style={{ marginLeft:'5px' }}>{each.model}</h4>
+                      <h5 style={{ marginLeft:'5px' }}>
+                      ₹ {each.price}
+                      </h5>
 
                       <div style={{ display: "flex" }}>
                         <button
+                        onClick={() => navigate(`/productview`, { state: each })}
+                          style={{
+                            backgroundColor: "#f28123",
+                            borderColor: "#f28123",
+                            width: "100%",
+                            borderRadius: "8px",
+                            color: "white",
+                            padding: "10px",
+                            fontSize: "15px",
+                          }}
+                        >
+                          View Product
+                        </button>
+                        {/* <button
                           style={{
                             backgroundColor: "#f28123",
                             borderColor: "#f28123",
@@ -108,7 +127,7 @@ const Product = () => {
                         >
                           <ShoppingBagIcon />
                           &nbsp; Buy Now
-                        </button>
+                        </button> */}
                       </div>
                     </Paper>
                   </Box>

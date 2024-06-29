@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 import { client } from "./components/Client/Client";
 import Cart from "./components/Cart/Cart";
 import Checkout from "./components/Checkout/Checkout";
+import ProductView from "./components/ProductView/ProductView";
 
 export const UserContext = createContext();
 function App() {
@@ -53,6 +54,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/productview" element={<ProductView/>}/>
           <Route path="/cart" element={<Cart/>} />
           <Route path="/checkout" element={<Checkout/>}/>
           <Route path="/register" element={<LoginPage />} />

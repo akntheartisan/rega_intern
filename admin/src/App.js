@@ -1,13 +1,32 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import LoginForm from "./components/Adminlogin/LoginForm";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AdminDash from "./components/Admindash/AdminDash";
 import { Toaster } from "react-hot-toast";
+import { client } from "./Client/Clientaxios";
 
 export const AdminContext = createContext();
 function App() {
   const [admin, setAdmin] = useState("");
   console.log(admin);
+
+  useEffect(()=>{
+    const getProtected = async () => {
+      try {
+        const response = await client.get("/admin/authuser", {
+          withCredentials: true,
+        });
+        console.log(response.data.user);
+        const adminDetails = response.data.user;
+        if (adminDetails) {
+          setAdmin(adminDetails);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getProtected();
+  },[])
 
   return (
     <>

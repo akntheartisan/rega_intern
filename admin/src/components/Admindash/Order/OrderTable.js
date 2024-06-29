@@ -22,12 +22,13 @@ export default function OrderTable({ product, setProduct }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [orderData, setOrderData] = useState();
   const [updateOpen, setUpdateOpen] = React.useState("");
-  const [selectedProduct, setSelectedProduct] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState([]);
   const [deleteOpen, setDeleteOpen] = React.useState("");
   const [openOrderView, setOpenOrderView] = React.useState(false);
 
   const openEdit = (order) => {
-    setSelectedProduct(order);
+    setSelectedProduct((prev)=>[...prev,order]);
+    console.log(selectedProduct);
     setOpenOrderView(true);
   };
 
@@ -109,6 +110,17 @@ export default function OrderTable({ product, setProduct }) {
                   }}
                 >
                   Phone
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{
+                    minWidth: 170,
+                    backgroundColor: "black",
+                    color: "white",
+                    fontSize: "18px",
+                  }}
+                >
+                  Payment Mode
                 </TableCell>
                 <TableCell
                   align="center"

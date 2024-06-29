@@ -15,10 +15,6 @@ exports.resizeImage = async (req, res, next) => {
   try {
     //console.log("Original File Size:", req.file.size);
     req.fileBuffer = await sharp(req.file.buffer)
-      .resize(250, 150, {
-        fit: sharp.fit.inside,
-        withoutEnlargement: true,
-      })
       .toFormat("png")
       .toBuffer();
     //console.log("Resized File Buffer Size:", req.fileBuffer.length);

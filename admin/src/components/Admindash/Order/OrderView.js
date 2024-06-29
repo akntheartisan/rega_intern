@@ -5,6 +5,12 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
 export default function OrderView({
   openOrderView,
@@ -26,13 +32,38 @@ export default function OrderView({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Order Details"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableHead>
+                {/* <TableBody>
+                  {selectedProduct.map((each) => (
+                    <TableRow
+                      key={each.id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {each.name}
+                      </TableCell>
+                      <TableCell align="right">{each.calories}</TableCell>
+                      <TableCell align="right">{each.fat}</TableCell>
+                      <TableCell align="right">{each.carbs}</TableCell>
+                      <TableCell align="right">{each.protein}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody> */}
+              </Table>
+            </TableContainer>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
