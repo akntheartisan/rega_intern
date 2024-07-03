@@ -14,9 +14,7 @@ exports.resizeImage = async (req, res, next) => {
   //console.log("resizeimage controller");
   try {
     //console.log("Original File Size:", req.file.size);
-    req.fileBuffer = await sharp(req.file.buffer)
-      .toFormat("png")
-      .toBuffer();
+    req.fileBuffer = await sharp(req.file.buffer).toFormat("png").toBuffer();
     //console.log("Resized File Buffer Size:", req.fileBuffer.length);
     next();
   } catch (err) {
@@ -41,7 +39,7 @@ exports.saveImage = async (req, res, next) => {
           //console.log("Error uploading to Cloudinary:", err);
           return res.status(404).json({ message: "Cannot save image" });
         } else {
-          //console.log("Upload result:", result);
+          console.log("Upload result:", result);
           req.result = result;
           next();
         }
@@ -54,9 +52,28 @@ exports.saveImage = async (req, res, next) => {
   }
 };
 
+exports.savePrimary = async (req, res, next) => {
+  const { model } = req.body;
+  const { url, public_id } = req.result;
+  const modelLowerCase = model.toLowerCase();
+
+  try {
+    const newModel = await projectmodel.create({
+      model: modelLowerCase,
+      image: { url: url, pid: public_id },
+    });
+    if (newModel) {
+      res.status(200).json({
+        status: "success",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.productadd = async (req, res, next) => {
   try {
-    const { url, public_id } = req.result;
     const newProductData = { ...req.body, image: { url: url, pid: public_id } };
     let newProduct = await projectmodel.create(newProductData);
     if (newProduct) {
@@ -66,7 +83,7 @@ exports.productadd = async (req, res, next) => {
       });
     }
   } catch (error) {
-    //console.log(error);
+    //console.log(error); 
     res.status(400).json({
       status: "fail",
       error: "Something Wrong",
@@ -74,10 +91,24 @@ exports.productadd = async (req, res, next) => {
   }
 };
 
+exports.getPrimary = async (req, res, next) => {
+  try {
+    const primary = await projectmodel.distinct('model');
+    if(primary){
+      res.status(200).json({
+        status:'success',
+        data:primary
+      })
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.getProduct = async (req, res, next) => {
   try {
     let data = await projectmodel.find();
-    //console.log(data);
+
     if (data) {
       return res.status(200).json({
         status: "success",

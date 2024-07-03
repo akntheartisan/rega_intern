@@ -1,6 +1,40 @@
 const mongoose = require("mongoose");
 
-const Product = new mongoose.Schema(
+
+const SubProduct = new mongoose.Schema({
+  battery: {
+    type: String,
+  },
+  motor: {
+    type: String,
+  },
+  range: {
+    type: String,
+  },
+  tyresize: {
+    type: String,
+  },
+  brakes: {
+    type: String,
+  },
+  ground: {
+    type: String,
+  },
+  payload: {
+    type: String,
+  },
+  chargingtime: {
+    type: String,
+  },
+  frame: {
+    type: String,
+  },
+  price: {
+    type: String,
+  },
+}, { _id: true });
+
+const ProductSchema = new mongoose.Schema(
   {
     image: {
       url: {
@@ -10,41 +44,12 @@ const Product = new mongoose.Schema(
         type: String,
       },
     },
-    model:{
-        type:String
-    },
-    motor: {
+    model: {
       type: String,
     },
-    battery: {
-      type: String,
-    },
-    range: {
-      type: String,
-    },
-    tyresize: {
-      type: String,
-    },
-    brakes: {
-      type: String,
-    },
-    ground: {
-      type: String,
-    },
-    payload: {
-      type: String,
-    },
-    chargingtime: {
-      type: String,
-    },
-    frame: {
-      type: String,
-    },
-    price: {
-      type: String,
-    },
+    SubModel: [SubProduct],
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("product", Product);
+module.exports = mongoose.model("Product", ProductSchema);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { client } from "../../../Client/Clientaxios";
 import {
   Box,
@@ -11,6 +11,10 @@ import {
 import { useTheme } from "@mui/material/styles";
 import ProductTable from "./ProductTable";
 import { toast } from "react-hot-toast";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const initial = {
   model: "",
@@ -31,14 +35,14 @@ const Product = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("768px"));
   const [product, setProduct] = useState(initial);
   const [errors, setErrors] = useState({});
-  const [image, setImage] = useState(null);
+  const [primary, setPrimary] = useState("");
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-    }
-  };
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setImage(file);
+  //   }
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +51,23 @@ const Product = () => {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    getPrimayProduct();
+  }, []);
+
+  const getPrimayProduct = async () => {
+    try {
+      const response = await client.get("/project/getPrimary");
+      console.log(response);
+      const PrimaryProduct = response.data.data;
+      setPrimary(PrimaryProduct);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(product);
 
   const validateForm = () => {
     let newErrors = {};
@@ -80,7 +101,7 @@ const Product = () => {
     if (!validateForm()) return;
 
     const formData = new FormData();
-    formData.append("image", image);
+    // formData.append("image", image);
     Object.keys(product).forEach((key) => {
       formData.append(key, product[key]);
     });
@@ -118,52 +139,28 @@ const Product = () => {
           Product Entry Form
         </Typography>
         <Stack spacing={2}>
-          <Stack direction={isMobile ? "column" : "row"} spacing={2}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              size="small"
-              onChange={handleFileChange}
-              name="image"
-              type="file"
-              accept="image/*"
-            />
-            <TextField
-              fullWidth
-              label="Model"
-              variant="outlined"
-              size="small"
+          <FormControl sx={{ m: 4, minWidth: 480 }} size="small">
+            <InputLabel id="demo-select-small-label">Select Model</InputLabel>
+            <Select
+              // fullWidth
+              labelId="demo-select-small-label"
+              id="demo-select-small"
               value={product.model}
               error={!!errors.model}
-              onChange={handleChange}
+              label="Select Model"
               name="model"
               helperText={errors.model}
-            />
-            </Stack>
-            <Stack direction={isMobile ? "column" : "row"} spacing={2}>
-            <TextField
-              fullWidth
-              label="Price"
-              variant="outlined"
-              size="small"
-              value={product.price}
-              error={!!errors.price}
               onChange={handleChange}
-              name="price"
-              helperText={errors.price}
-            />
-            <TextField
-              fullWidth
-              label="Motor"
-              variant="outlined"
-              size="small"
-              value={product.motor}
-              error={!!errors.motor}
-              onChange={handleChange}
-              name="motor"
-              helperText={errors.motor}
-            />
-          </Stack>
+            >
+              {primary &&
+                primary.map((each) => (
+                  <MenuItem key={each} value={each}>
+                    {each}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
+
           <Stack direction={isMobile ? "column" : "row"} spacing={2}>
             <TextField
               fullWidth
@@ -186,6 +183,57 @@ const Product = () => {
               name="range"
               helperText={errors.range}
               error={!!errors.range}
+            />
+          </Stack>
+          <Stack direction={isMobile ? "column" : "row"} spacing={2}>
+            <TextField
+              fullWidth
+              label="Price"
+              variant="outlined"
+              size="small"
+              value={product.price}
+              error={!!errors.price}
+              onChange={handleChange}
+              name="price"
+              helperText={errors.price}
+            />
+
+            <TextField
+              fullWidth
+              label="Charging Time"
+              variant="outlined"
+              size="small"
+              value={product.charging}
+              onChange={handleChange}
+              name="charging"
+              helperText={errors.charging}
+              error={!!errors.charging}
+            />
+          </Stack>
+
+          <Stack direction={isMobile ? "column" : "row"} spacing={2}>
+            <TextField
+              fullWidth
+              label="Motor"
+              variant="outlined"
+              size="small"
+              value={product.motor}
+              error={!!errors.motor}
+              onChange={handleChange}
+              name="motor"
+              helperText={errors.motor}
+            />
+
+            <TextField
+              fullWidth
+              label="Payload"
+              variant="outlined"
+              size="small"
+              value={product.payload}
+              onChange={handleChange}
+              name="payload"
+              helperText={errors.payload}
+              error={!!errors.payload}
             />
           </Stack>
           <Stack direction={isMobile ? "column" : "row"} spacing={2}>
@@ -223,30 +271,6 @@ const Product = () => {
               name="ground"
               helperText={errors.ground}
               error={!!errors.ground}
-            />
-            <TextField
-              fullWidth
-              label="Payload"
-              variant="outlined"
-              size="small"
-              value={product.payload}
-              onChange={handleChange}
-              name="payload"
-              helperText={errors.payload}
-              error={!!errors.payload}
-            />
-          </Stack>
-          <Stack direction={isMobile ? "column" : "row"} spacing={2}>
-            <TextField
-              fullWidth
-              label="Charging Time"
-              variant="outlined"
-              size="small"
-              value={product.charging}
-              onChange={handleChange}
-              name="charging"
-              helperText={errors.charging}
-              error={!!errors.charging}
             />
             <TextField
               fullWidth
