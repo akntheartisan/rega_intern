@@ -145,6 +145,7 @@ const Header = () => {
                         )}
                       </div>
                     </li>
+                    
                   </ul>
                 </nav>
                 <Link className="mobile-show search-bar-icon" href="#">

@@ -12,6 +12,7 @@ const Product = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState([]);
   console.log(product.productData);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -79,9 +80,6 @@ const Product = () => {
                         }}
                       />
                       <h4 style={{ marginLeft:'5px' }}>{each.model}</h4>
-                      <h5 style={{ marginLeft:'5px' }}>
-                      ₹ {each.price}
-                      </h5>
 
                       <div style={{ display: "flex" }}>
                         <button

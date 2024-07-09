@@ -32,6 +32,7 @@ const Checkout = () => {
 
   const location = useLocation();
   const cartData = location.state.props;
+  console.log(cartData);
   const total = location.state.total;
   const quantity = location.state.quantity;
 
@@ -67,8 +68,9 @@ const Checkout = () => {
 
   const addSelectedProduct = async () => {
     let userDetails;
-    const productId = cartData._id;
+    const productId = cartData.modelId;
     const userId = userData._id;
+    const battery = cartData.battery;
 
     if (checked) {
       userDetails = { ...userData, userId };
@@ -86,6 +88,7 @@ const Checkout = () => {
         productId,
         total,
         quantity,
+        battery
       });
 
       if (response.status === 200) {

@@ -37,6 +37,8 @@ const Product = () => {
   const [errors, setErrors] = useState({});
   const [primary, setPrimary] = useState("");
 
+  console.log(product);
+
   // const handleFileChange = (e) => {
   //   const file = e.target.files[0];
   //   if (file) {
@@ -101,13 +103,13 @@ const Product = () => {
     if (!validateForm()) return;
 
     const formData = new FormData();
-    // formData.append("image", image);
+
     Object.keys(product).forEach((key) => {
       formData.append(key, product[key]);
     });
 
     try {
-      const response = await client.post("/project/productadd", formData);
+      const response = await client.post("/project/productadd", product);
       if (response.status === 200) {
         toast.success("New Product Added Successfully");
         setProduct(initial);

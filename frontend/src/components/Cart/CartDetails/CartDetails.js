@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CartDetails = ({ props }) => {
+
+  console.log(props);
   const [quantity, setQuantity] = useState(0);
 
   let total = quantity * props.price;
@@ -33,6 +35,7 @@ const CartDetails = ({ props }) => {
                       <tr className="table-head-row">
                         <th className="product-image">Product Image</th>
                         <th className="product-name">Model</th>
+                        <th className="product-name">Variant</th>
                         <th className="product-price">Price(₹)</th>
                         <th className="product-quantity">Quantity</th>
                         <th className="product-total">Total</th>
@@ -41,9 +44,10 @@ const CartDetails = ({ props }) => {
                     <tbody>
                       <tr className="table-body-row">
                         <td className="product-image">
-                          <img src={props.image.url} alt />
+                          <img src={props.image} alt />
                         </td>
                         <td className="product-name">{props.model}</td>
+                        <td className="product-name">{props.battery}</td>
                         <td className="product-price">{props.price}</td>
                         <td className="product-quantity">
                           <input

@@ -73,17 +73,46 @@ exports.savePrimary = async (req, res, next) => {
 };
 
 exports.productadd = async (req, res, next) => {
+  const {
+    model,
+    motor,
+    battery,
+    range,
+    tyresize,
+    brakes,
+    ground,
+    payload,
+    charging,
+    frame,
+    price,
+  } = req.body;
+
   try {
-    const newProductData = { ...req.body, image: { url: url, pid: public_id } };
-    let newProduct = await projectmodel.create(newProductData);
-    if (newProduct) {
-      res.status(200).json({
-        status: "success",
-        message: "Product Add Successfully",
-      });
-    }
+    let findModel = await projectmodel.find({ model });
+    if (findModel) {
+      await projectmodel.updateOne(
+          { model: model },
+          {
+              $push: {
+                  SubModel: {
+                      motor,
+                      battery,
+                      range,
+                      tyresize,
+                      brakes,
+                      ground,
+                      payload,
+                      charging,
+                      frame,
+                      price,
+                  },
+              },
+          }
+      );
+      
+  }
   } catch (error) {
-    //console.log(error); 
+    //console.log(error);
     res.status(400).json({
       status: "fail",
       error: "Something Wrong",
@@ -93,12 +122,12 @@ exports.productadd = async (req, res, next) => {
 
 exports.getPrimary = async (req, res, next) => {
   try {
-    const primary = await projectmodel.distinct('model');
-    if(primary){
+    const primary = await projectmodel.distinct("model");
+    if (primary) {
       res.status(200).json({
-        status:'success',
-        data:primary
-      })
+        status: "success",
+        data: primary,
+      });
     }
   } catch (error) {
     console.log(error);

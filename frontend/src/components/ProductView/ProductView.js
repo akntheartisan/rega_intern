@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import Header from "../Header/Header";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./ProductView.css";
 import motor from "./car-engine (2).png";
 import accumulator from "./accumulator.png";
@@ -12,10 +12,79 @@ import mobilesurf from "./mobilesurf.png";
 import bikereceive from "./bikereceive.png";
 import CallIcon from "@mui/icons-material/Call";
 import Footer from "../Footer/Footer";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import FlashOnIcon from "@mui/icons-material/FlashOn";
+import { UserContext } from "../../App";
+
 
 const ProductView = () => {
+
+  const {userData,setUserData} = useContext(UserContext);
+  const navigate = useNavigate();
   const location = useLocation();
   const product = location.state;
+  const [selected, setSelected] = useState("");
+
+  console.log(product);
+
+  const getSelectModel = (battery) => {
+    const selectedModel = product.SubModel.find(
+      (each) => each.battery === battery
+    );
+    setSelected(selectedModel);
+  };
+
+  const buynow = () => {
+    const image = product.image.url;
+    const model = product.model;
+    let battery;
+    let price;
+    let modelId;
+    if (!selected) {
+      battery = product.SubModel[0].battery;
+      price = product.SubModel[0].price;
+      modelId = product.SubModel[0]._id;
+    } else {
+      battery = selected.battery;
+      price = selected.price;
+      modelId = selected._id;
+    }
+
+    const details = {image,model,battery,price,modelId};
+
+    navigate("/checkout", { state: details });
+  };
+
+  const addcart = ()=>{
+
+    if(!userData){
+      navigate("/register");
+    }else{
+
+      const image = product.image.url;
+      const model = product.model;
+      let battery;
+      let price;
+      let modelId;
+      if (!selected) {
+        battery = product.SubModel[0].battery;
+        price = product.SubModel[0].price;
+        modelId = product.SubModel[0]._id;
+      } else {
+        battery = selected.battery;
+        price = selected.price;
+        modelId = selected._id;
+      }
+  
+      const details = {image,model,battery,price,modelId};
+  
+      navigate("/cart", { state: details });
+
+    }
+
+  }
 
   return (
     <>
@@ -49,20 +118,25 @@ const ProductView = () => {
               }}
             >
               <button
+
+              onClick={addcart}
                 style={{
-                  backgroundColor: "#f28123",
-                  borderColor: "#f28123",
+                  backgroundColor: "#ff9f00",
+                  borderColor: "#ff9f00",
                   width: "50%",
                   borderRadius: "12px",
                   color: "white",
                   padding: "10px",
                   fontSize: "15px",
+                  fontWeight: "650",
                 }}
               >
-                View Product
+                <ShoppingCartIcon />
+                &nbsp; ADD TO CART
               </button>{" "}
               &nbsp;
               <button
+                onClick={buynow}
                 style={{
                   backgroundColor: "#f28123",
                   borderColor: "#f28123",
@@ -71,9 +145,11 @@ const ProductView = () => {
                   color: "white",
                   padding: "10px",
                   fontSize: "15px",
+                  fontWeight: "650",
                 }}
               >
-                View Product
+                <FlashOnIcon />
+                &nbsp; BUY NOW
               </button>
             </div>
             <div
@@ -87,7 +163,7 @@ const ProductView = () => {
               }}
             >
               <div>
-                <p style={{ margin: "0px",fontWeight:'600' }}>
+                <p style={{ margin: "0px", fontWeight: "600" }}>
                   Any Questions regarding the bike?
                 </p>
                 <p style={{ margin: "0px" }}>Let us help you</p>
@@ -109,7 +185,28 @@ const ProductView = () => {
           </div>
           <div className="col-md-8 mt-5">
             <h4>{product.model}</h4>
-            <h6>₹ {product.price}</h6>
+            <h6>₹ {!selected ? product.SubModel[0].price : selected.price}</h6>
+
+            <h5>Battery Variants</h5>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                width: "60%",
+                margin: "0 0 15px 0",
+              }}
+            >
+              {product.SubModel.map((each) => (
+                <Button
+                  variant="outlined"
+                  key={each._id}
+                  onClick={() => getSelectModel(each.battery)}
+                >
+                  {each.battery}
+                </Button>
+              ))}
+            </div>
+
             <div className="spec">
               <h6
                 style={{
@@ -133,7 +230,7 @@ const ProductView = () => {
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Motor</p>
                     <p style={{ fontSize: "16px", fontWeight: "500" }}>
-                      {product.motor}
+                      {!selected ? product.SubModel[0].motor : selected.motor}
                     </p>
                   </div>
                 </div>
@@ -142,7 +239,9 @@ const ProductView = () => {
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Battery</p>
                     <p style={{ fontSize: "16px", fontWeight: "500" }}>
-                      {product.battery}
+                      {!selected
+                        ? product.SubModel[0].battery
+                        : selected.battery}
                     </p>
                   </div>
                 </div>
@@ -151,7 +250,7 @@ const ProductView = () => {
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Range</p>
                     <p style={{ fontSize: "16px", fontWeight: "500" }}>
-                      {product.range}
+                      {!selected ? product.SubModel[0].range : selected.range}
                     </p>
                   </div>
                 </div>
@@ -160,7 +259,9 @@ const ProductView = () => {
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Tyre</p>
                     <p style={{ fontSize: "16px", fontWeight: "500" }}>
-                      {product.tyresize}
+                      {!selected
+                        ? product.SubModel[0].tyresize
+                        : selected.tyresize}
                     </p>
                   </div>
                 </div>
@@ -169,7 +270,7 @@ const ProductView = () => {
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Brakes</p>
                     <p style={{ fontSize: "16px", fontWeight: "500" }}>
-                      {product.brakes}
+                      {!selected ? product.SubModel[0].brakes : selected.brakes}
                     </p>
                   </div>
                 </div>
@@ -180,7 +281,7 @@ const ProductView = () => {
                       Ground Clearance
                     </p>
                     <p style={{ fontSize: "16px", fontWeight: "500" }}>
-                      {product.ground}
+                      {!selected ? product.SubModel[0].ground : selected.ground}
                     </p>
                   </div>
                 </div>
@@ -189,7 +290,9 @@ const ProductView = () => {
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Payload</p>
                     <p style={{ fontSize: "16px", fontWeight: "500" }}>
-                      {product.payload}
+                      {!selected
+                        ? product.SubModel[0].payload
+                        : selected.payload}
                     </p>
                   </div>
                 </div>
@@ -200,7 +303,9 @@ const ProductView = () => {
                       Charging Time
                     </p>
                     <p style={{ fontSize: "16px", fontWeight: "500" }}>
-                      {product.motor}
+                      {!selected
+                        ? product.SubModel[0].charging
+                        : selected.charging}
                     </p>
                   </div>
                 </div>
@@ -209,13 +314,12 @@ const ProductView = () => {
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Frame</p>
                     <p style={{ fontSize: "16px", fontWeight: "500" }}>
-                      {product.frame}
+                      {!selected ? product.SubModel[0].frame : selected.frame}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-
             <div className="payingmethod mt-4 mb-5">
               <h6
                 style={{

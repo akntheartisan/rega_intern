@@ -6,7 +6,8 @@ const productmodel = require("../model/ProductsModel");
 exports.addCart = async (req, res, next) => {
   const { userId, name, username, address, district, state, pincode, mobile } =
     req.body.userDetails;
-  const { productId, total, quantity } = req.body;
+    
+  const { productId, total, quantity, battery } = req.body;
 
   console.log(req.body);
 
@@ -23,6 +24,7 @@ exports.addCart = async (req, res, next) => {
       productId,
       total,
       quantity,
+      battery
     });
 
     if (orderPlace) {
