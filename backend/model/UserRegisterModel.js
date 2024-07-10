@@ -1,6 +1,28 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
+const PurchasedItems = new mongoose.Schema({
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "product",
+  },
+  model: {
+    type: String,
+  },
+  battery: {
+    type: String,
+  },
+  total: {
+    type: String,
+  },
+  quantity: {
+    type: String,
+  },
+  deliverystatus: {
+    type: String,
+  },
+},{_id:true});
+
 const UserRegister = new mongoose.Schema(
   {
     name: {
@@ -38,6 +60,8 @@ const UserRegister = new mongoose.Schema(
     pincode: {
       type: String,
     },
+
+    Purchased: [PurchasedItems],
   },
   { timestamps: true }
 );

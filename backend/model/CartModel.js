@@ -3,34 +3,17 @@ const mongoose = require("mongoose");
 const Cart = new mongoose.Schema(
   {
     userId:{
-      type:String
-    },
-    name: {
-      type: String,
-    },
-    username:{
-      type:String
-    },
-    address:{
-      type:String
-    },
-    district:{
-      type:String
-    },
-    state:{ 
-      type:String
-    },
-    pincode:{
-      type:String
-    },
-    mobile:{
-      type:String
+      type:mongoose.Schema.Types.ObjectId,
+      ref:'userregister',
     },
     productId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "product",
     },
     battery:{
+      type:String
+    },
+    model:{
       type:String
     },
     total: {

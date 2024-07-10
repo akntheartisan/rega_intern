@@ -7,6 +7,7 @@ import { UserContext } from "../../App";
 import { client } from "../Client/Client";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import CheckoutHeader from "./CheckoutHeader";
 
 const intial = {
   name: "",
@@ -31,9 +32,10 @@ const Checkout = () => {
   console.log(userData);
 
   const location = useLocation();
-  const cartData = location.state.props;
+  const cartData = location.state.props || location.state;
   console.log(cartData);
-  const total = location.state.total;
+  const actualTotal = location.state.total;
+  const total = actualTotal ? actualTotal : cartData.price;
   const quantity = location.state.quantity;
 
   const handleBillChange = (e) => {
@@ -58,19 +60,22 @@ const Checkout = () => {
   const placeorder = () => {
     if (pod) {
       console.log("payment on delivery");
-      addSelectedProduct();
+      addSelectedProduct("offline");
     }
 
     if (online) {
       console.log("online payment");
+      addSelectedProduct("online");
+
     }
   };
 
-  const addSelectedProduct = async () => {
+  const addSelectedProduct = async (paymentMode) => {
     let userDetails;
     const productId = cartData.modelId;
     const userId = userData._id;
     const battery = cartData.battery;
+    const model = cartData.model;
 
     if (checked) {
       userDetails = { ...userData, userId };
@@ -88,8 +93,16 @@ const Checkout = () => {
         productId,
         total,
         quantity,
-        battery
+        battery,
+        model,
+        paymentMode
       });
+
+      console.log(response);
+
+      if(paymentMode === 'online' && response.status === 200){
+           initPayment(response.data.transaction);
+      }
 
       if (response.status === 200) {
         toast.success("your order has been placed");
@@ -97,18 +110,34 @@ const Checkout = () => {
         setPod(false);
         setModel(false);
         setTotalShow(false);
-        navigate("/");
+        navigate('/');
+        
       }
     } catch (error) {
       console.log(error);
     }
   };
 
+  const initPayment = (data)=>{
+    const options = {
+      key:"rzp_test_ooBBvuCJO2yhPh",
+      amount:200,
+      currency:data.currency,
+      name:'REGA SCOOTER',
+      description:'Test Transaction',
+      order:data.id,
+    };
+
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
+  }
+
   return (
     <>
-      <Header />
+      {/* <Header /> */}
+      <CheckoutHeader/>
       <div>
-        <div className="breadcrumb-section breadcrumb-bg">
+        {/* <div className="breadcrumb-section breadcrumb-bg">
           <div className="container">
             <div className="row">
               <div className="col-lg-8 offset-lg-2 text-center">
@@ -118,8 +147,8 @@ const Checkout = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="checkout-section mt-150 mb-150">
+        </div> */}
+        <div className="checkout-section mt-5 mb-5">
           <div className="container">
             <div className="row">
               <div className="col-lg-8">
@@ -174,17 +203,17 @@ const Checkout = () => {
                                 <input
                                   type="text"
                                   value={userData.district}
-                                  placeholder="Address"
+                                  placeholder="district"
                                 />
                                 <input
                                   type="text"
                                   value={userData.state}
-                                  placeholder="Address"
+                                  placeholder="state"
                                 />
                                 <input
                                   type="text"
                                   value={userData.pincode}
-                                  placeholder="Address"
+                                  placeholder="pincode"
                                 />
                               </p>
                               <p>
@@ -445,7 +474,7 @@ const Checkout = () => {
                       </tr>
                       <tr>
                         <td>{model ? cartData.model : ""}</td>
-                        <td>{totalShow ? total : ""}</td>
+                        <td>{total ? total : cartData.price}</td>
                       </tr>
                     </tbody>
                     <tbody className="checkout-details">
@@ -454,24 +483,27 @@ const Checkout = () => {
                           Total
                         </td>
                         <td style={{ fontSize: "14px", fontWeight: "500" }}>
-                          {totalShow ? total : ""}
+                          {total ? total : cartData.price}
                         </td>
                       </tr>
                     </tbody>
                   </table>
-                  <button
-                    onClick={placeorder}
-                    style={{
-                      backgroundColor: "#F28123",
-                      color: "white",
-                      borderColor: "#F28123",
-                      padding: "10px 20px",
-                      borderRadius: "60px",
-                      marginTop: "15px",
-                    }}
-                  >
-                    Place Order
-                  </button>
+
+                  {(pod || online)  && (
+                    <button
+                      onClick={placeorder}
+                      style={{
+                        backgroundColor: "#F28123",
+                        color: "white",
+                        borderColor: "#F28123",
+                        padding: "10px 20px",
+                        borderRadius: "60px",
+                        marginTop: "15px",
+                      }}
+                    >
+                      Place Order
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
