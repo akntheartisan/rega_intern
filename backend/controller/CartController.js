@@ -11,10 +11,11 @@ exports.addCart = async (req, res, next) => {
 
   const { productId, total, quantity, battery, model, paymentMode } = req.body;
 
+  console.log('paymentMode:' + paymentMode);
+
   try {
     if (paymentMode === "offline") {
-
-      console.log('offline');
+      console.log("offline");
       const orderPlace = await cartmodel.create({
         userId,
         model,
@@ -44,35 +45,54 @@ exports.addCart = async (req, res, next) => {
       }
 
       if (orderPlace) {
-        return res.status(200).json({
-          status: "success",
+        return res.json({
+          status: "offline success",
           message: "order has been placed successfully",
         });
       }
-    } else if(paymentMode === 'online'){
+    } else if (paymentMode === "online") {
 
-      console.log('online');
+      console.log("payment mode : online");
 
-          const razorPayInstance = new razorpay({
-            key_id : "rzp_test_ooBBvuCJO2yhPh",
-            key_secret : "Sza1b1bUrEAKO4ITERLLVGYi"
-          });
+      const razorPayInstance = new razorpay({
+        key_id: "rzp_test_ooBBvuCJO2yhPh",
+        key_secret: "Sza1b1bUrEAKO4ITERLLVGYi",
+      });
 
-          const options = {
-            amount : total * 100,
-            currency: "INR",
-            receipt : crypto.randomBytes(10).toString("hex")
-          };
+      const options = {
+        amount: total * 100,
+        currency: "INR",
+        receipt: crypto.randomBytes(10).toString("hex"),
+      };
 
-          razorPayInstance.orders.create(options,(err,order)=>{
-            if(err){
-              console.log(err);
-            }else{
-              res.status(200).json({transaction:order});
-            }
-          });
+      razorPayInstance.orders.create(options, (err, order) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.json({ message:'verification success',transaction: order });
+        }
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
+exports.verify = async (req, res) => {
+  console.log('verify:' + req.body);
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSign = crypto
+      .createHmac("sha256", Sza1b1bUrEAKO4ITERLLVGYi)
+      .update(sign.toString())
+      .digest("hex");
 
+    if (razorpay_signature === expectedSign) {
+      return res.status(200).json({ message: "Payment Verified Sucessfully" });
+    } else {
+      return res.status(400).json({ message: "Invalid Signature" });
     }
   } catch (error) {
     console.log(error);

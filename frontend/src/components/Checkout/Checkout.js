@@ -66,7 +66,6 @@ const Checkout = () => {
     if (online) {
       console.log("online payment");
       addSelectedProduct("online");
-
     }
   };
 
@@ -85,8 +84,6 @@ const Checkout = () => {
       console.log(userDetails);
     }
 
-    console.log(userDetails);
-
     try {
       const response = await client.post("/cart/addCart", {
         userDetails,
@@ -95,13 +92,11 @@ const Checkout = () => {
         quantity,
         battery,
         model,
-        paymentMode
+        paymentMode,
       });
 
-      console.log(response);
-
-      if(paymentMode === 'online' && response.status === 200){
-           initPayment(response.data.transaction);
+      if (paymentMode === "online" && response.status === 200) {
+        initPayment(response.data.transaction);
       }
 
       if (response.status === 200) {
@@ -110,32 +105,43 @@ const Checkout = () => {
         setPod(false);
         setModel(false);
         setTotalShow(false);
-        navigate('/');
-        
+        // navigate("/");
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const initPayment = (data)=>{
+  const initPayment = (data) => {
+
+    let verify;
+
     const options = {
-      key:"rzp_test_ooBBvuCJO2yhPh",
-      amount:200,
-      currency:data.currency,
-      name:'REGA SCOOTER',
-      description:'Test Transaction',
-      order:data.id,
+      key: "rzp_test_ooBBvuCJO2yhPh",
+      amount: 200,
+      currency: data.currency,
+      name: "REGA SCOOTER",
+      description: "Test Transaction",
+      order: data.id,
+      handler: async (response) => {
+        try {
+          verify = await client.post("/cart/verify", response);
+          console.log(verify);
+        } catch (error) {
+          console.log(error);
+        }
+      },
     };
 
-    const rzp1 = new window.Razorpay(options);
-    rzp1.open();
-  }
+   
+      const rzp1 = new window.Razorpay(options);
+      rzp1.open();
+  };
 
   return (
     <>
       {/* <Header /> */}
-      <CheckoutHeader/>
+      <CheckoutHeader />
       <div>
         {/* <div className="breadcrumb-section breadcrumb-bg">
           <div className="container">
@@ -489,7 +495,7 @@ const Checkout = () => {
                     </tbody>
                   </table>
 
-                  {(pod || online)  && (
+                  {(pod || online) && (
                     <button
                       onClick={placeorder}
                       style={{
