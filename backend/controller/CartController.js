@@ -15,7 +15,7 @@ exports.addCart = async (req, res, next) => {
 
   try {
     if (paymentMode === "offline") {
-      console.log("offline");
+        console.log("offline");
       const orderPlace = await cartmodel.create({
         userId,
         model,
@@ -46,7 +46,7 @@ exports.addCart = async (req, res, next) => {
 
       if (orderPlace) {
         return res.json({
-          status: "offline success",
+          success: "offline order success",
           message: "order has been placed successfully",
         });
       }
@@ -67,9 +67,10 @@ exports.addCart = async (req, res, next) => {
 
       razorPayInstance.orders.create(options, (err, order) => {
         if (err) {
-          console.log(err);
+          console.log(err.error.description);
+          res.json({error:err.error.description});
         } else {
-          res.json({ message:'verification success',transaction: order });
+          res.json({ success:'verification success',transaction: order });
         }
       });
     }

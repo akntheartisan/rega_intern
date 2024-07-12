@@ -84,6 +84,8 @@ const Checkout = () => {
       console.log(userDetails);
     }
 
+
+
     try {
       const response = await client.post("/cart/addCart", {
         userDetails,
@@ -95,11 +97,17 @@ const Checkout = () => {
         paymentMode,
       });
 
-      if (paymentMode === "online" && response.status === 200) {
+      console.log(response.data.error);
+
+      if (paymentMode === "online" && response.data.error === 'Amount exceeds maximum amount allowed') {
+        alert('exceed');
+        toast.error("Amount exceed");
+      }else{
         initPayment(response.data.transaction);
       }
 
-      if (response.status === 200) {
+   
+      if (response.data.success === 'offline order success') {
         toast.success("your order has been placed");
         setChecked(false);
         setPod(false);
