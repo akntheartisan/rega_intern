@@ -68,7 +68,7 @@ exports.addCart = async (req, res, next) => {
       razorPayInstance.orders.create(options, (err, order) => {
         if (err) {
           console.log(err.error.description);
-          res.json({error:err.error.description});
+          res.json({error:'Amount exceed'});
         } else {
           res.json({ success:'verification success',transaction: order });
         }
@@ -80,7 +80,7 @@ exports.addCart = async (req, res, next) => {
 };
 
 exports.verify = async (req, res) => {
-  console.log('verify:' + req.body);
+  console.log('verify:');
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
       req.body;

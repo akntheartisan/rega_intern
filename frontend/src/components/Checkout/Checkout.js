@@ -84,8 +84,6 @@ const Checkout = () => {
       console.log(userDetails);
     }
 
-
-
     try {
       const response = await client.post("/cart/addCart", {
         userDetails,
@@ -99,8 +97,7 @@ const Checkout = () => {
 
       console.log(response.data.error);
 
-      if (paymentMode === "online" && response.data.error === 'Amount exceeds maximum amount allowed') {
-        alert('exceed');
+      if (paymentMode === "online" && response.data.error === 'Amount exceed') {
         toast.error("Amount exceed");
       }else{
         initPayment(response.data.transaction);
@@ -121,9 +118,8 @@ const Checkout = () => {
   };
 
   const initPayment = (data) => {
-
     let verify;
-
+  
     const options = {
       key: "rzp_test_ooBBvuCJO2yhPh",
       amount: 200,
@@ -131,21 +127,24 @@ const Checkout = () => {
       name: "REGA SCOOTER",
       description: "Test Transaction",
       order: data.id,
-      handler: async (response) => {
+      handler: async (response) => { 
+        console.log('Test Transaction');
         try {
           verify = await client.post("/cart/verify", response);
-          console.log(verify);
+          console.log('verify');
         } catch (error) {
           console.log(error);
         }
-      },
+      }
     };
-
-   
+ 
+    if(verify){
       const rzp1 = new window.Razorpay(options);
       rzp1.open();
+    }
+    
   };
-
+  
   return (
     <>
       {/* <Header /> */}
