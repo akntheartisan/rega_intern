@@ -97,14 +97,13 @@ const Checkout = () => {
 
       console.log(response.data.error);
 
-      if (paymentMode === "online" && response.data.error === 'Amount exceed') {
+      if (paymentMode === "online" && response.data.error === "Amount exceed") {
         toast.error("Amount exceed");
-      }else{
+      } else {
         initPayment(response.data.transaction);
       }
 
-   
-      if (response.data.success === 'offline order success') {
+      if (response.data.success === "offline order success") {
         toast.success("your order has been placed");
         setChecked(false);
         setPod(false);
@@ -119,32 +118,73 @@ const Checkout = () => {
 
   const initPayment = (data) => {
     let verify;
-  
+
     const options = {
       key: "rzp_test_ooBBvuCJO2yhPh",
       amount: 200,
       currency: data.currency,
       name: "REGA SCOOTER",
       description: "Test Transaction",
-      order: data.id,
-      handler: async (response) => { 
-        console.log('Test Transaction');
+      order_id: data.id,
+      handler: async (response) => {
+        console.log("Test Transaction:");
+        console.log(response);
+
+        response.razorpay_order_id = data.id;
+        response.razorpay_signature = response.razorpay_signature;
         try {
           verify = await client.post("/cart/verify", response);
-          console.log('verify');
+          console.log(verify);
+
+          if (verify.data.message === "Payment Verified Sucessfully") {
+            addCartOnlinePayment(
+              response.razorpay_order_id,
+              response.razorpay_payment_id
+            );
+          }
         } catch (error) {
           console.log(error);
         }
-      }
+      },
     };
- 
-    if(verify){
-      const rzp1 = new window.Razorpay(options);
-      rzp1.open();
-    }
-    
+
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
   };
-  
+
+  const addCartOnlinePayment = async (order, payment) => {
+    let userDetails;
+    const productId = cartData.modelId;
+    const userId = userData._id;
+    const battery = cartData.battery;
+    const model = cartData.model;
+    const order_id = order;
+    const payment_id = payment;
+
+    if (checked) {
+      userDetails = { ...userData, userId };
+      console.log(userDetails);
+    } else {
+      userDetails = { ...shipAddress, userId };
+      console.log(userDetails);
+    }
+
+    try {
+      const response = await client.post("/cart/addCartOnline", {
+        userDetails,
+        productId,
+        total,
+        quantity,
+        battery,
+        model,
+        order_id,
+        payment_id,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       {/* <Header /> */}

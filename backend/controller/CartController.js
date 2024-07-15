@@ -60,7 +60,7 @@ exports.addCart = async (req, res, next) => {
       });
 
       const options = {
-        amount: total * 100,
+        amount: 2 * 100,
         currency: "INR",
         receipt: crypto.randomBytes(10).toString("hex"),
       };
@@ -77,18 +77,21 @@ exports.addCart = async (req, res, next) => {
   } catch (error) {
     console.log(error);
   }
-};
+}; 
 
 exports.verify = async (req, res) => {
   console.log('verify:');
+  console.log(req.body);
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
       req.body;
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSign = crypto
-      .createHmac("sha256", Sza1b1bUrEAKO4ITERLLVGYi)
+      .createHmac("sha256", 'Sza1b1bUrEAKO4ITERLLVGYi')
       .update(sign.toString())
       .digest("hex");
+
+    console.log(razorpay_signature,expectedSign);
 
     if (razorpay_signature === expectedSign) {
       return res.status(200).json({ message: "Payment Verified Sucessfully" });
@@ -99,6 +102,10 @@ exports.verify = async (req, res) => {
     console.log(error);
   }
 };
+
+exports.addCartOnline = async(req,res)=>{
+  
+}
 
 exports.getCart = async (req, res, next) => {
   console.log("getcart");

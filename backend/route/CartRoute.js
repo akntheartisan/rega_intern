@@ -5,6 +5,7 @@ const cont = require('../controller/CartController')
 
 router.post('/addCart',cont.addCart);
 router.post('/verify',cont.verify);
-router.get('/getCart',cont.getCart); 
+router.get('/getCart',cont.getCart);
+router.post('/addCartOnline',cont.addCartOnline); 
 
 module.exports = router;
