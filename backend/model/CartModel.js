@@ -25,6 +25,12 @@ const Cart = new mongoose.Schema(
     deliverystatus: {
       type: String,
     },
+    order_id:{
+      type:String,
+    },
+    payment_id:{
+      type:String,
+    }
   },
   { timestamps: true }
 );

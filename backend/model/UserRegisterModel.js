@@ -21,6 +21,12 @@ const PurchasedItems = new mongoose.Schema({
   deliverystatus: {
     type: String,
   },
+  order_id:{
+    type:String,
+  },
+  payment_id:{
+    type:String,
+  }
 },{_id:true});
 
 const UserRegister = new mongoose.Schema(

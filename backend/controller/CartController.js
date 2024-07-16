@@ -104,7 +104,47 @@ exports.verify = async (req, res) => {
 };
 
 exports.addCartOnline = async(req,res)=>{
-  
+  console.log(req.body);
+  const { userId } = req.body.userDetails;
+
+  const { productId, total, quantity, battery, model, order_id,payment_id } = req.body;
+  try {
+
+    const orderPlace = await cartmodel.create({
+      userId,
+      model,
+      productId,
+      total,
+      quantity,
+      battery,
+      order_id,
+      payment_id
+    });
+
+    const findUser = await usermodel.findById(userId);
+    console.log(findUser);
+    if (findUser) {
+      const addPurchasedItem = await usermodel.updateOne(
+        { _id: userId },
+        {
+          $push: {
+            Purchased: {
+              model,
+              productId,
+              total,
+              quantity,
+              battery,
+              order_id,
+              payment_id
+            },
+          },
+        }
+      );
+    }
+    
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 exports.getCart = async (req, res, next) => {

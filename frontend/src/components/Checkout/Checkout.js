@@ -85,7 +85,7 @@ const Checkout = () => {
     }
 
     try {
-      const response = await client.post("/cart/addCart", {
+      const cartOffline = await client.post("/cart/addCart", {
         userDetails,
         productId,
         total,
@@ -95,15 +95,15 @@ const Checkout = () => {
         paymentMode,
       });
 
-      console.log(response.data.error);
+      console.log(cartOffline.data.error);
 
-      if (paymentMode === "online" && response.data.error === "Amount exceed") {
+      if (paymentMode === "online" && cartOffline.data.error === "Amount exceed") {
         toast.error("Amount exceed");
       } else {
-        initPayment(response.data.transaction);
+        initPayment(cartOffline.data.transaction);
       }
 
-      if (response.data.success === "offline order success") {
+      if (cartOffline.data.success === "offline order success") {
         toast.success("your order has been placed");
         setChecked(false);
         setPod(false);
@@ -170,7 +170,7 @@ const Checkout = () => {
     }
 
     try {
-      const response = await client.post("/cart/addCartOnline", {
+      const cartOnline = await client.post("/cart/addCartOnline", {
         userDetails,
         productId,
         total,
