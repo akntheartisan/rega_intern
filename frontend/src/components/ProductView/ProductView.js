@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, createContext, useEffect } from "react";
 import Header from "../Header/Header";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ProductView.css";
@@ -18,14 +18,16 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 import { UserContext } from "../../App";
 
-
+export const addCartContext = createContext();
 const ProductView = () => {
-
-  const {userData,setUserData} = useContext(UserContext);
+  const { userData, setUserData } = useContext(UserContext);
   const navigate = useNavigate();
   const location = useLocation();
   const product = location.state;
   const [selected, setSelected] = useState("");
+  const [selectProduct, setSelectProduct] = useState([]);
+
+  console.log(selectProduct);
 
   console.log(product);
 
@@ -52,17 +54,15 @@ const ProductView = () => {
       modelId = selected._id;
     }
 
-    const details = {image,model,battery,price,modelId};
+    const details = { image, model, battery, price, modelId };
 
     navigate("/checkout", { state: details });
   };
 
-  const addcart = ()=>{
-
-    if(!userData){
+  const addcart = () => {
+    if (!userData) {
       navigate("/register");
-    }else{
-
+    } else {
       const image = product.image.url;
       const model = product.model;
       let battery;
@@ -77,14 +77,17 @@ const ProductView = () => {
         price = selected.price;
         modelId = selected._id;
       }
-  
-      const details = {image,model,battery,price,modelId};
-  
-      navigate("/cart", { state: details });
 
+      const details = { image, model, battery, price, modelId };
+
+      setSelectProduct((prev) => [...prev, { details }]);
+
+      localStorage.setItem('selectProduct', JSON.stringify(selectProduct));
+
+      // navigate("/cart", { state: details });
     }
+  };
 
-  }
 
   return (
     <>
@@ -118,8 +121,7 @@ const ProductView = () => {
               }}
             >
               <button
-
-              onClick={addcart}
+                onClick={addcart}
                 style={{
                   backgroundColor: "#ff9f00",
                   borderColor: "#ff9f00",
@@ -133,7 +135,7 @@ const ProductView = () => {
               >
                 <ShoppingCartIcon />
                 &nbsp; ADD TO CART
-              </button>{" "}
+              </button>
               &nbsp;
               <button
                 onClick={buynow}

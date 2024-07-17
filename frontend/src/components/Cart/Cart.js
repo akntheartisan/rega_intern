@@ -5,13 +5,13 @@ import Footer from "../Footer/Footer";
 import { useLocation } from "react-router-dom";
 
 const Cart = () => {
-    const location = useLocation();
-    const state = location.state;
-    console.log(state);
+    // const location = useLocation();
+    // const state = location.state;
+    // console.log(state);
   return (
     <>
       <Header />
-      <CartDetails props={state}/>
+      <CartDetails/>
       <Footer />
     </>
   );
