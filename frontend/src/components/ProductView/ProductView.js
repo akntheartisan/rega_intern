@@ -17,19 +17,15 @@ import Button from "@mui/material/Button";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 import { UserContext } from "../../App";
+import { client } from "../Client/Client";
+import ReactImageMagnify from "react-image-magnify";
 
-export const addCartContext = createContext();
 const ProductView = () => {
   const { userData, setUserData } = useContext(UserContext);
   const navigate = useNavigate();
   const location = useLocation();
   const product = location.state;
   const [selected, setSelected] = useState("");
-  const [selectProduct, setSelectProduct] = useState([]);
-
-  console.log(selectProduct);
-
-  console.log(product);
 
   const getSelectModel = (battery) => {
     const selectedModel = product.SubModel.find(
@@ -63,6 +59,7 @@ const ProductView = () => {
     if (!userData) {
       navigate("/register");
     } else {
+      const userId = userData._id;
       const image = product.image.url;
       const model = product.model;
       let battery;
@@ -78,16 +75,18 @@ const ProductView = () => {
         modelId = selected._id;
       }
 
-      const details = { image, model, battery, price, modelId };
-
-      setSelectProduct((prev) => [...prev, { details }]);
-
-      localStorage.setItem('selectProduct', JSON.stringify(selectProduct));
-
-      // navigate("/cart", { state: details });
+      const details = { userId, model, modelId };
+      addBucketList(details);
     }
   };
 
+  const addBucketList = async (list) => {
+    try {
+      const addBucketList = await client.post("/bucket/addnew", list);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -111,8 +110,26 @@ const ProductView = () => {
           >
             <img
               src={product.image.url}
+              alt="img"
               style={{ objectFit: "cover", marginTop: "-160px" }}
             />
+          {/* <div style={{ objectFit: "cover", marginTop: "-160px" }}>
+          <ReactImageMagnify
+              {...{
+                smallImage: {
+                  alt: "Wristwatch by Ted Baker London",
+                  isFluidWidth: true,
+                  src: product.image.url,
+                },
+                largeImage: {
+                  src: product.image.url,
+                  width: 1200,
+                  height: 750,
+                },
+              }}
+            />
+          </div> */}
+        
             <div
               style={{
                 marginTop: "-100px",
