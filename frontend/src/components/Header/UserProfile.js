@@ -45,6 +45,10 @@ export default function UserProfile() {
     setOpenProfile(true);
   };
 
+  const cart = () => {
+    navigate('/cart');
+  }
+
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -91,7 +95,7 @@ export default function UserProfile() {
           <AccountCircleIcon />
           Profile
         </MenuItem>
-        <MenuItem sx={{ display: "flex", gap: "15px" }}>
+        <MenuItem onClick={cart} sx={{ display: "flex", gap: "15px" }}>
         <ShoppingCartIcon />
           Cart
         </MenuItem>
