@@ -3,28 +3,28 @@ import { useNavigate } from "react-router-dom";
 import { client } from "../../Client/Client";
 import { UserContext } from "../../../App";
 
-
-
-const CartDetails = () => {
-
-  const { userData, setUserData } = useContext(UserContext);
+const CartDetails = ({ id }) => {
+  // const { userData, setUserData } = useContext(UserContext);
   const [quantity, setQuantity] = useState(0);
+  const [bucket, setBucket] = useState("");
 
-  useEffect(()=>{
-    getBucketList()
-  });
+  useEffect(() => {
+    if (id) {
+      getBucketList();
+    }
+  }, [id]);
 
-  const getBucketList = async ()=>{
-      const id = userData._id;
-      console.log(id);
+  const getBucketList = async () => {
     try {
-      const getBucketList = await client.get('/bucket/getBucket',{params:{id:id}});
+      const getBucketList = await client.get("/bucket/getBucket", {
+        params: { id: id },
+      });
       console.log(getBucketList);
+      setBucket(getBucketList.data.data);
     } catch (error) {
       console.log(error);
     }
-
-  }
+  };
 
   // let total = quantity * props.price;
   // console.log(total);
@@ -62,22 +62,25 @@ const CartDetails = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="table-body-row">
-                        <td className="product-image">
-                          {/* <img src={} alt /> */}
-                        </td>
-                        <td className="product-name">{}</td>
-                        <td className="product-name">{}</td>
-                        <td className="product-price">{}</td>
-                        <td className="product-quantity">
-                          <input
-                            type="number"
-                            value={quantity}
-                            onChange={(e) => setQuantity(e.target.value)}
-                          />
-                        </td>
-                        <td className="product-total">{quantity}</td>
-                      </tr>
+                      {bucket &&
+                        bucket.map((each) => (
+                          <tr className="table-body-row">
+                            <td>
+                              <img src={each.image} alt='model'  style={{width:'150px'}}/>
+                            </td>
+                            <td className="product-name">{each.model}</td>
+                            <td className="product-name">{each.subModelDetails.battery}</td>
+                            <td className="product-price">{each.subModelDetails.price}</td>
+                            <td className="product-quantity">
+                              <input
+                                type="number"
+                                value={quantity}
+                                onChange={(e) => setQuantity(e.target.value)}
+                              />
+                            </td>
+                            <td className="product-total">{quantity}</td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>
@@ -98,12 +101,12 @@ const CartDetails = () => {
                         </td>
                         {/* <td>₹ {total}</td> */}
                       </tr>
-                      {/* <tr className="total-data">
+                      <tr className="total-data">
                         <td>
                           <strong>Shipping: </strong>
                         </td>
                         <td>$45</td>
-                      </tr> */}
+                      </tr>
                       <tr className="total-data">
                         <td>
                           <strong>Total: </strong>
@@ -116,7 +119,7 @@ const CartDetails = () => {
                     <button
                       style={{
                         backgroundColor: "rgb(242, 129, 35)",
-                        color: 'white',
+                        color: "white",
                         borderColor: "rgb(242, 129, 35)",
                         padding: "10px 20px",
                         borderRadius: "60px",

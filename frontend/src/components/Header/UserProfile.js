@@ -46,7 +46,8 @@ export default function UserProfile() {
   };
 
   const cart = () => {
-    navigate('/cart');
+    const id = userData._id;
+    navigate('/cart',{ state: { id } });
   }
 
   const open = Boolean(anchorEl);
