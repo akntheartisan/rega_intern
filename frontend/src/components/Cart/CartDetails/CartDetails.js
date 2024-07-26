@@ -5,13 +5,13 @@ import { UserContext } from "../../../App";
 
 const CartDetails = ({ id }) => {
   // const { userData, setUserData } = useContext(UserContext);
-  const [quantity, setQuantity] = useState(0);
-  const [bucket, setBucket] = useState("");
+
+  const [bucket, setBucket] = useState([]);
 
   useEffect(() => {
-    if (id) {
+    
       getBucketList();
-    }
+    
   }, [id]);
 
   const getBucketList = async () => {
@@ -24,6 +24,24 @@ const CartDetails = ({ id }) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleQuantity = (e, id) => {
+    const updatedQuantity = e.target.value;
+    const updatedBucket = bucket.map((item) => {
+      if (item.subModelDetails._id === id) {
+        return { ...item, quantity: updatedQuantity };
+      }
+      return item;
+    });
+
+    setBucket(updatedBucket);
+  };
+
+  const calculateTotal = () => {
+    return bucket.reduce((total, item) => {
+      return total + item.quantity * item.subModelDetails.price;
+    }, 0);
   };
 
   // let total = quantity * props.price;
@@ -64,21 +82,38 @@ const CartDetails = ({ id }) => {
                     <tbody>
                       {bucket &&
                         bucket.map((each) => (
-                          <tr className="table-body-row">
+                          <tr
+                            className="table-body-row"
+                            key={each.subModelDetails._id}
+                          >
                             <td>
-                              <img src={each.image} alt='model'  style={{width:'150px'}}/>
+                              <img
+                                src={each.image}
+                                alt="model"
+                                style={{ width: "150px" }}
+                              />
                             </td>
                             <td className="product-name">{each.model}</td>
-                            <td className="product-name">{each.subModelDetails.battery}</td>
-                            <td className="product-price">{each.subModelDetails.price}</td>
+                            <td className="product-name">
+                              {each.subModelDetails.battery}
+                            </td>
+                            <td className="product-price">
+                              {each.subModelDetails.price}
+                            </td>
                             <td className="product-quantity">
                               <input
                                 type="number"
-                                value={quantity}
-                                onChange={(e) => setQuantity(e.target.value)}
+                                value={each.quantity}
+                                onChange={(e) =>
+                                  handleQuantity(e, each.subModelDetails._id)
+                                }
                               />
                             </td>
-                            <td className="product-total">{quantity}</td>
+                            <td className="product-total">
+                              {each.quantity * each.subModelDetails.price
+                                ? each.quantity * each.subModelDetails.price
+                                : 0}
+                            </td>
                           </tr>
                         ))}
                     </tbody>
@@ -87,7 +122,7 @@ const CartDetails = ({ id }) => {
               </div>
               <div className="col-lg-4">
                 <div className="total-section">
-                  <table className="total-table">
+                <table className="total-table">
                     <thead className="total-table-head">
                       <tr className="table-total-row">
                         <th>Total</th>
@@ -99,19 +134,13 @@ const CartDetails = ({ id }) => {
                         <td>
                           <strong>Subtotal: </strong>
                         </td>
-                        {/* <td>₹ {total}</td> */}
-                      </tr>
-                      <tr className="total-data">
-                        <td>
-                          <strong>Shipping: </strong>
-                        </td>
-                        <td>$45</td>
+                        <td>₹ {calculateTotal() ? calculateTotal() : 0}</td>
                       </tr>
                       <tr className="total-data">
                         <td>
                           <strong>Total: </strong>
                         </td>
-                        {/* <td>₹ {total}</td> */}
+                        <td>₹ {calculateTotal() ? calculateTotal() : 0}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -127,7 +156,7 @@ const CartDetails = ({ id }) => {
                       }}
                       onClick={() =>
                         navigate("/checkout", {
-                          // state: { props, total: total, quantity: quantity },
+                          state: { cartDetails : bucket,total: calculateTotal() },
                         })
                       }
                     >

@@ -18,7 +18,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 import { UserContext } from "../../App";
 import { client } from "../Client/Client";
-import ReactImageMagnify from "react-image-magnify";
+// import ReactImageMagnify from "react-image-magnify";
 
 const ProductView = () => {
   const { userData, setUserData } = useContext(UserContext);

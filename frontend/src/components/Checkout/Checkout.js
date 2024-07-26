@@ -32,11 +32,11 @@ const Checkout = () => {
   console.log(userData);
 
   const location = useLocation();
-  const cartData = location.state.props || location.state;
+  const cartData = location.state.bucket || location.state;
   console.log(cartData);
-  const actualTotal = location.state.total;
-  const total = actualTotal ? actualTotal : cartData.price;
-  const quantity = location.state.quantity;
+  const total = location.state.total;
+  // const total = actualTotal ? actualTotal : cartData.price;
+  // const quantity = location.state.quantity;
 
   const handleBillChange = (e) => {
     const { name, value } = e.target;
@@ -89,7 +89,7 @@ const Checkout = () => {
         userDetails,
         productId,
         total,
-        quantity,
+        quantity : 0,
         battery,
         model,
         paymentMode,
@@ -174,7 +174,7 @@ const Checkout = () => {
         userDetails,
         productId,
         total,
-        quantity,
+        quantity :0,
         battery,
         model,
         order_id,
@@ -527,7 +527,7 @@ const Checkout = () => {
                       </tr>
                       <tr>
                         <td>{model ? cartData.model : ""}</td>
-                        <td>{total ? total : cartData.price}</td>
+                        <td>{actualTotal}</td>
                       </tr>
                     </tbody>
                     <tbody className="checkout-details">
@@ -536,7 +536,7 @@ const Checkout = () => {
                           Total
                         </td>
                         <td style={{ fontSize: "14px", fontWeight: "500" }}>
-                          {total ? total : cartData.price}
+                          {actualTotal}
                         </td>
                       </tr>
                     </tbody>
