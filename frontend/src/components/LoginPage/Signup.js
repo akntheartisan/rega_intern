@@ -18,14 +18,44 @@ const Signup = () => {
   const {userData,setUserData} = useContext(UserContext);
   const navigate = useNavigate();
   const [user, setUser] = useState(intial);
-
+  const [errors,setErrors] = useState({passwordCheck:"",confirmPasswordCheck:""})
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+      if(e.target.name === "password"){
+        console.log(e.target.value);
+        const typedPassword = e.target.value;
+        const UpperCase = /[A-Z]/.test(typedPassword);
+        const LowerCase = /[a-z]/.test(typedPassword);
+        const Digit = /\d/.test(typedPassword);
+        const SpecialChar = /[!@#$%^&*()_-]/.test(typedPassword);
+        const passwordLength = typedPassword.length;
+
+        if(!UpperCase || !LowerCase || !Digit || !SpecialChar || passwordLength < 8 ){
+          setErrors({passwordCheck:"must contain 8 characters"})
+        }else{
+          setErrors({passwordCheck:""})
+        }
+      }
+
+      if(e.target.name === 'confirmpassword'){
+
+        const typedConfirmPassword = e.target.value;
+        if(typedConfirmPassword !== user.password){
+          setErrors({confirmPasswordCheck:"Password must be same"})
+        }
+        else{
+          setErrors({confirmPasswordCheck:""})
+        }
+
+      }
 
     setUser((prev) => ({
       ...prev,
       [name]: value,
     }));
+
   };
 
   console.log(user);
@@ -150,8 +180,8 @@ const Signup = () => {
               },
             },
           }}
-          // helperText={errors.companyname}
-          // error={!!errors.companyname}
+          helperText={errors.passwordCheck}
+          error={!!errors.passwordCheck}
           value={user.password}
           onChange={handleChange}
           InputProps={{
@@ -184,8 +214,8 @@ const Signup = () => {
               },
             },
           }}
-          // helperText={errors.companyname}
-          // error={!!errors.companyname}
+          helperText={errors.confirmPasswordCheck}
+          error={!!errors.confirmPasswordCheck}
           value={user.confirmpassword}
           onChange={handleChange}
           InputProps={{

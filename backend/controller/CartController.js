@@ -9,21 +9,29 @@ exports.addCart = async (req, res, next) => {
   console.log(req.body);
   const { userId } = req.body.userDetails;
 
-  const { productId, total, quantity, battery, model, paymentMode } = req.body;
+  const { cartData, total,  paymentMode } = req.body;
 
   console.log('paymentMode:' + paymentMode);
 
   try {
     if (paymentMode === "offline") {
         console.log("offline");
-      const orderPlace = await cartmodel.create({
-        userId,
-        model,
-        productId,
-        total,
-        quantity,
-        battery,
-      });
+        const orderPlace = await cartmodel.create({
+          userId,
+          PurchasedData: []
+        });
+    
+        await cartmodel.updateOne(
+          { _id: orderPlace._id },
+          {
+            $push: {
+              PurchasedData: {
+                total,
+                cartData: cartData.cartDetails.map(item => item)
+              }
+            }
+          }
+        );
 
       const findUser = await usermodel.findById(userId);
       console.log(findUser);
@@ -33,11 +41,8 @@ exports.addCart = async (req, res, next) => {
           {
             $push: {
               Purchased: {
-                model,
-                productId,
                 total,
-                quantity,
-                battery,
+                cartData : cartData.cartDetails.map(item => item)
               },
             },
           }
@@ -45,7 +50,7 @@ exports.addCart = async (req, res, next) => {
       }
 
       if (orderPlace) {
-        return res.json({
+        return res.status(200).json({
           success: "offline order success",
           message: "order has been placed successfully",
         });
@@ -60,7 +65,7 @@ exports.addCart = async (req, res, next) => {
       });
 
       const options = {
-        amount: 2 * 100,
+        amount: total * 100,
         currency: "INR",
         receipt: crypto.randomBytes(10).toString("hex"),
       };
@@ -107,19 +112,27 @@ exports.addCartOnline = async(req,res)=>{
   console.log(req.body);
   const { userId } = req.body.userDetails;
 
-  const { productId, total, quantity, battery, model, order_id,payment_id } = req.body;
+
+  const {   cartData,total, order_id,payment_id } = req.body;
   try {
 
     const orderPlace = await cartmodel.create({
       userId,
-      model,
-      productId,
-      total,
-      quantity,
-      battery,
-      order_id,
-      payment_id
+      PurchasedData: [] 
     });
+
+
+    await cartmodel.updateOne(
+      { _id: orderPlace._id },
+      {
+        $push: {
+          PurchasedData: {
+            total,
+            cartData: cartData.cartDetails.map(item => item)
+          }
+        }
+      }
+    );
 
     const findUser = await usermodel.findById(userId);
     console.log(findUser);
@@ -129,11 +142,8 @@ exports.addCartOnline = async(req,res)=>{
         {
           $push: {
             Purchased: {
-              model,
-              productId,
               total,
-              quantity,
-              battery,
+              cartData : cartData.cartDetails.map(item => item),
               order_id,
               payment_id
             },

@@ -2,21 +2,12 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 const PurchasedItems = new mongoose.Schema({
-  productId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "product",
-  },
-  model: {
-    type: String,
-  },
-  battery: {
-    type: String,
-  },
+  
   total: {
     type: String,
   },
-  quantity: {
-    type: String,
+  cartData:{
+    type:Array
   },
   deliverystatus: {
     type: String,

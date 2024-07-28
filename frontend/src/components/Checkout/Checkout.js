@@ -24,8 +24,8 @@ const Checkout = () => {
   const { userData, setUserData } = useContext(UserContext);
   const [checked, setChecked] = useState(false);
   const [shipAddress, setShipAddress] = useState(intial);
-  const [pod, setPod] = useState(false);
-  const [online, setOnline] = useState(false);
+  const [pod, setPod] = useState();
+  const [online, setOnline] = useState();
   const [model, setModel] = useState(true);
   const [totalShow, setTotalShow] = useState(true);
 
@@ -33,6 +33,7 @@ const Checkout = () => {
 
   const location = useLocation();
   const cartData = location.state.bucket || location.state;
+  const cartItemsQuantity = location.state.cartItemsQuantity;
   console.log(cartData);
   const total = location.state.total;
   // const total = actualTotal ? actualTotal : cartData.price;
@@ -71,10 +72,9 @@ const Checkout = () => {
 
   const addSelectedProduct = async (paymentMode) => {
     let userDetails;
-    const productId = cartData.modelId;
+  
     const userId = userData._id;
-    const battery = cartData.battery;
-    const model = cartData.model;
+
 
     if (checked) {
       userDetails = { ...userData, userId };
@@ -87,23 +87,14 @@ const Checkout = () => {
     try {
       const cartOffline = await client.post("/cart/addCart", {
         userDetails,
-        productId,
         total,
-        quantity : 0,
-        battery,
-        model,
         paymentMode,
+        cartData,
       });
 
-      console.log(cartOffline.data.error);
+      console.log(typeof(cartOffline.status));
 
-      if (paymentMode === "online" && cartOffline.data.error === "Amount exceed") {
-        toast.error("Amount exceed");
-      } else {
-        initPayment(cartOffline.data.transaction);
-      }
-
-      if (cartOffline.data.success === "offline order success") {
+      if (cartOffline.status === 200) {
         toast.success("your order has been placed");
         setChecked(false);
         setPod(false);
@@ -111,6 +102,14 @@ const Checkout = () => {
         setTotalShow(false);
         // navigate("/");
       }
+
+      if (cartOffline.data.error === "Amount exceed") {
+        toast.error("Amount exceed");
+      } else {
+        initPayment(cartOffline.data.transaction);
+      }
+
+  
     } catch (error) {
       console.log(error);
     }
@@ -154,10 +153,7 @@ const Checkout = () => {
 
   const addCartOnlinePayment = async (order, payment) => {
     let userDetails;
-    const productId = cartData.modelId;
     const userId = userData._id;
-    const battery = cartData.battery;
-    const model = cartData.model;
     const order_id = order;
     const payment_id = payment;
 
@@ -172,11 +168,8 @@ const Checkout = () => {
     try {
       const cartOnline = await client.post("/cart/addCartOnline", {
         userDetails,
-        productId,
         total,
-        quantity :0,
-        battery,
-        model,
+        cartData,
         order_id,
         payment_id,
       });
@@ -509,34 +502,30 @@ const Checkout = () => {
               </div>
               <div className="col-lg-4">
                 <div className="order-details-wrap">
-                  <table className="order-details">
+                  <table className="order-details" style={{ width:"100%"}}>
                     <thead>
                       <tr>
-                        <th>Your order Details</th>
-                        <th>Price</th>
+                        <th colSpan={2}>Price Details (Incl., of all taxes)</th>
                       </tr>
                     </thead>
-                    <tbody className="order-details-body">
+                    <tbody className="order-details-body" >
                       <tr>
-                        <td style={{ fontSize: "17px", fontWeight: "500" }}>
-                          Product
+                        <td style={{ fontSize: "14px", fontWeight: "500" }}>
+                          Product {`(${cartItemsQuantity} Items)`}
                         </td>
-                        <td style={{ fontSize: "17px", fontWeight: "500" }}>
-                          Total
+                        <td style={{ fontSize: "14px", fontWeight: "500" }}>
+                        &#8377; {total}
                         </td>
                       </tr>
-                      <tr>
-                        <td>{model ? cartData.model : ""}</td>
-                        <td>{actualTotal}</td>
-                      </tr>
+                  
                     </tbody>
                     <tbody className="checkout-details">
                       <tr>
-                        <td style={{ fontSize: "14px", fontWeight: "500" }}>
+                        <td style={{ fontSize: "17px", fontWeight: "500" }}>
                           Total
                         </td>
-                        <td style={{ fontSize: "14px", fontWeight: "500" }}>
-                          {actualTotal}
+                        <td style={{ fontSize: "17px", fontWeight: "500" }}>
+                          &#8377; {total}
                         </td>
                       </tr>
                     </tbody>

@@ -7,11 +7,11 @@ const CartDetails = ({ id }) => {
   // const { userData, setUserData } = useContext(UserContext);
 
   const [bucket, setBucket] = useState([]);
+  const cartItemsQuantity = bucket.length;
+  console.log(bucket);
 
   useEffect(() => {
-    
-      getBucketList();
-    
+    getBucketList();
   }, [id]);
 
   const getBucketList = async () => {
@@ -73,7 +73,6 @@ const CartDetails = ({ id }) => {
                       <tr className="table-head-row">
                         <th className="product-image">Product Image</th>
                         <th className="product-name">Model</th>
-                        <th className="product-name">Variant</th>
                         <th className="product-price">Price(₹)</th>
                         <th className="product-quantity">Quantity</th>
                         <th className="product-total">Total</th>
@@ -93,10 +92,12 @@ const CartDetails = ({ id }) => {
                                 style={{ width: "150px" }}
                               />
                             </td>
-                            <td className="product-name">{each.model}</td>
                             <td className="product-name">
+                              {each.model}
+                              <br />
                               {each.subModelDetails.battery}
                             </td>
+
                             <td className="product-price">
                               {each.subModelDetails.price}
                             </td>
@@ -122,7 +123,7 @@ const CartDetails = ({ id }) => {
               </div>
               <div className="col-lg-4">
                 <div className="total-section">
-                <table className="total-table">
+                  <table className="total-table">
                     <thead className="total-table-head">
                       <tr className="table-total-row">
                         <th>Total</th>
@@ -156,7 +157,11 @@ const CartDetails = ({ id }) => {
                       }}
                       onClick={() =>
                         navigate("/checkout", {
-                          state: { cartDetails : bucket,total: calculateTotal() },
+                          state: {
+                            cartDetails: bucket,
+                            cartItemsQuantity: cartItemsQuantity,
+                            total: calculateTotal(),
+                          },
                         })
                       }
                     >
