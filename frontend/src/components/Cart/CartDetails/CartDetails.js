@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { client } from "../../Client/Client";
 import { UserContext } from "../../../App";
+import EmptyCart from "./EmptyCart";
 
 const CartDetails = ({ id }) => {
   // const { userData, setUserData } = useContext(UserContext);
@@ -52,18 +53,7 @@ const CartDetails = ({ id }) => {
   return (
     <>
       <div>
-        {/* <div className="breadcrumb-section breadcrumb-bg">
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-8 offset-lg-2 text-center">
-                <div className="breadcrumb-text">
-                  <h1>Cart</h1>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
-        <div className="cart-section mt-5 mb-5">
+       { bucket.length === 0 ? <EmptyCart/> : <div className="cart-section mt-5 mb-5">
           <div className="container">
             <div className="row">
               <div className="col-lg-8 col-md-12">
@@ -172,7 +162,8 @@ const CartDetails = ({ id }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div>}
+       
       </div>
     </>
   );

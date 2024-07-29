@@ -17,15 +17,28 @@ exports.addCart = async (req, res, next) => {
     if (paymentMode === "offline") {
       console.log("offline");
 
-      const orderPlace = await cartmodel.create({
-        userId,
-        PurchasedData: [
-          {
-            total,
-            cartData: cartData.cartDetails.map((item) => item),
-          },
-        ],
-      });
+      // const orderPlace = await cartmodel.create({
+      //   userId,
+      //   PurchasedData: [
+      //     {
+      //       total,
+      //       cartData: cartData.cartDetails.map((item) => item),
+      //     },
+      //   ],
+      // });
+
+      const orderPlace  = await cartmodel.updateOne(
+        {_id:userId},
+        {
+          $push:{
+            PurchasedData:{
+              total,
+              cartData: cartData.cartDetails.map((item) => item),
+            }
+          }
+        },
+        {upsert:true}
+      )
 
       const findUser = await usermodel.findById(userId);
       if (findUser) {
@@ -128,22 +141,35 @@ exports.addCartOnline = async (req, res, next) => {
 
   const { cartData, total, order_id, payment_id } = req.body;
   try {
-    const orderPlace = await cartmodel.create({
-      userId,
-      PurchasedData: [],
-    });
+    // const orderPlace = await cartmodel.create({
+    //   userId,
+    //   PurchasedData: [],
+    // });
 
-    await cartmodel.updateOne(
-      { _id: orderPlace._id },
+    // await cartmodel.updateOne(
+    //   { _id: orderPlace._id },
+    //   {
+    //     $push: {
+    //       PurchasedData: {
+    //         total,
+    //         cartData: cartData.cartDetails.map((item) => item),
+    //       },
+    //     },
+    //   }
+    // );
+
+    const orderPlace  = await cartmodel.updateOne(
+      {_id:userId},
       {
-        $push: {
-          PurchasedData: {
+        $push:{
+          PurchasedData:{
             total,
             cartData: cartData.cartDetails.map((item) => item),
-          },
-        },
-      }
-    );
+          }
+        }
+      },
+      {upsert:true}
+    )
 
     const findUser = await usermodel.findById(userId);
     console.log(findUser);
