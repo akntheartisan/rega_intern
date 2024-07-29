@@ -52,7 +52,7 @@ const CartDetails = ({ id }) => {
   return (
     <>
       <div>
-        <div className="breadcrumb-section breadcrumb-bg">
+        {/* <div className="breadcrumb-section breadcrumb-bg">
           <div className="container">
             <div className="row">
               <div className="col-lg-8 offset-lg-2 text-center">
@@ -62,8 +62,8 @@ const CartDetails = ({ id }) => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="cart-section mt-150 mb-150">
+        </div> */}
+        <div className="cart-section mt-5 mb-5">
           <div className="container">
             <div className="row">
               <div className="col-lg-8 col-md-12">

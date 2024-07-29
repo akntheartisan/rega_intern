@@ -18,6 +18,8 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 import { UserContext } from "../../App";
 import { client } from "../Client/Client";
+import CheckoutHeader from "../Checkout/CheckoutHeader";
+import CheckoutFooter from "../Checkout/CheckoutFooter";
 // import ReactImageMagnify from "react-image-magnify";
 
 const ProductView = () => {
@@ -90,18 +92,7 @@ const ProductView = () => {
 
   return (
     <>
-      <Header />
-      <div className="breadcrumb-section breadcrumb-bg">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-8 offset-lg-2 text-center">
-              <div className="breadcrumb-text">
-                <h1>Product View</h1>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <CheckoutHeader/>
       <div className="container-fluid">
         <div className="row">
           <div
@@ -393,7 +384,7 @@ const ProductView = () => {
           </div>
         </div>
       </div>
-      <Footer />
+      <Footer/>
     </>
   );
 };
