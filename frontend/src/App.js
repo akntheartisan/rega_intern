@@ -9,6 +9,8 @@ import { client } from "./components/Client/Client";
 import Cart from "./components/Cart/Cart";
 import Checkout from "./components/Checkout/Checkout";
 import ProductView from "./components/ProductView/ProductView";
+import UserDash from "./components/UserDash/UserDash";
+import ProfileForm from "./components/Profile/ProfileForm";
 
 export const UserContext = createContext();
 function App() {
@@ -58,6 +60,8 @@ function App() {
           <Route path="/cart" element={<Cart/>} />
           <Route path="/checkout" element={<Checkout/>}/>
           <Route path="/register" element={<LoginPage />} />
+          <Route path="/userdash" element={<UserDash />} />
+          <Route path="/profileform" element={<ProfileForm />} />
         </Routes>
       </UserContext.Provider>
     </>

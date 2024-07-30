@@ -1,6 +1,7 @@
 import React from 'react'
 import './emptycart.css'
 import Paper from '@mui/material/Paper';
+import bike from './bike.gif';
 
 const EmptyCart = () => {
     const divertProduct = ()=>{
@@ -11,6 +12,7 @@ const EmptyCart = () => {
 
     <div className='emptycart'>
     <Paper elevation={5} sx={{padding:'50px'}}>
+      {/* <img src={bike}/> */}
         <h5>Your Cart is Empty</h5>
         <p style={{textAlign:'center'}}>Add items to it now.</p>
         <button

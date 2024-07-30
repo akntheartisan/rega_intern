@@ -12,12 +12,12 @@ exports.addBucket = async (req, res) => {
       {
         $push: {
           list: {
-            "model":model,
-            "subModelId":modelId,
+            model: model,
+            subModelId: modelId,
           },
         },
       },
-      {upsert:true}
+      { upsert: true }
     );
 
     console.log(addBucket);
@@ -26,13 +26,12 @@ exports.addBucket = async (req, res) => {
   }
 };
 
-exports.getBucket = async (req,res) => {
+exports.getBucket = async (req, res) => {
   // console.log(req.query);
 
-  const {id} = req.query;
+  const { id } = req.query;
 
   try {
-   
     const getBucket = await bucketmodel.findById(id);
     console.log(getBucket.list);
 
@@ -51,27 +50,26 @@ exports.getBucket = async (req,res) => {
                 $expr: {
                   $and: [
                     { $eq: ["$SubModel._id", "$$subModelId"] },
-                    { $eq: ["$model", "$$modelName"] }
-                  ]
-                }
-              }
+                    { $eq: ["$model", "$$modelName"] },
+                  ],
+                },
+              },
             },
-            { $project: { _id: 0, image: "$image.url", SubModel: 1 } }
+            { $project: { _id: 0, image: "$image.url", SubModel: 1 } },
           ],
-          as: "productDetails"
-        }
+          as: "productDetails",
+        },
       },
       // Reshape the documents
-      
+
       {
         $project: {
           model: "$list.model",
           image: { $arrayElemAt: ["$productDetails.image", 0] },
-          subModelDetails: { $arrayElemAt: ["$productDetails.SubModel", 0]}
-          
-        }
+          subModelDetails: { $arrayElemAt: ["$productDetails.SubModel", 0] },
+        },
       },
-    ])
+    ]);
 
     console.log(result);
 
@@ -81,8 +79,27 @@ exports.getBucket = async (req,res) => {
         data: result,
       });
     }
-    
   } catch (error) {
     console.log(error);
   }
-}
+};
+
+exports.deleteBucket = async (req, res) => {
+  console.log("deletebucket"); 
+  const { id, userId } = req.body; 
+  console.log(id, userId);
+
+  try {
+    const userBucket = await bucketmodel.findOneAndUpdate(
+      { _id: userId },
+      { $pull: { list: { subModelId: id } } },
+      {new:true}
+    );
+     console.log(userBucket);
+    return res.status(200).json({
+      message:'bucket item deleted',
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

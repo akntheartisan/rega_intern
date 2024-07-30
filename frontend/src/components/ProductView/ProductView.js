@@ -202,7 +202,6 @@ const ProductView = () => {
               style={{
                 display: "flex",
                 justifyContent: "space-around",
-                width: "60%",
                 margin: "0 0 15px 0",
               }}
             >

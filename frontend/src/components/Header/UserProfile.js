@@ -42,7 +42,7 @@ export default function UserProfile() {
 
   const Profile = () => {
     console.log("profile opened");
-    setOpenProfile(true);
+    navigate('/userdash');
   };
 
   const cart = () => {

@@ -10,7 +10,8 @@ import toast from "react-hot-toast";
 import { UserContext } from "../../App";
 import { client } from "../Client/Client";
 
-const ProfileForm = ({ openProfile, setOpenProfile }) => {
+
+const ProfileForm = () => {
   const { userData, setUserData } = useContext(UserContext);
 
   console.log(userData);
@@ -25,11 +26,6 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
     state: "",
     pincode: "",
   });
-
-  const handleClose = () => {
-    setOpenProfile(false);
-  };
-
 
 
   const handleChange = (e) => {
@@ -64,7 +60,7 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
           state: "",
           pincode: "",
         });
-        setOpenProfile(false);
+        
         getProfileData();
       }
     } catch (error) {
@@ -93,16 +89,7 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
   }, [getProfileData]);
 
   return (
-    <React.Fragment>
-      <Dialog
-        open={openProfile}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"User Profile"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+      <>
             <div className="container">
               <div className="row">
                 <div className="col-md-12 mt-1 mb-1">
@@ -235,16 +222,9 @@ const ProfileForm = ({ openProfile, setOpenProfile }) => {
                 </div>
               </div>
             </div>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button autoFocus onClick={profileSubmit}>
-            Update
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </React.Fragment>
+        
+     
+    </>
   );
 };
 
