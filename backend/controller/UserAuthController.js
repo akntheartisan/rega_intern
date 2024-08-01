@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
 const usermodel = require("../model/UserRegisterModel");
-
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-
 const JWT_SECRET = "fhsdkfhksdhfjksdhfkjsdhiy";
 const JWT_EXPIRATION = "1hr";
+const sendMail = require('../Utility/Mail');
 
 exports.userSignUp = async (req, res, next) => {
   const { name, username, password, confirmpassword } = req.body;
@@ -177,5 +176,49 @@ exports.getProfileData = async (req, res, next) => {
     next();
   } catch (error) {
     //console.log(error);
+  }
+};
+
+exports.deleteAccount = async (req, res) => {
+  const { id } = req.body;
+  console.log(id);
+
+  try {
+    const deletedAccount = await usermodel.findByIdAndDelete(id);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.forgotpassword = async (req, res, next) => {
+  const { mail } = req.body;
+  console.log(mail);
+
+  try {
+    const user = await usermodel.findOne({ username: mail });
+    console.log(user);
+
+    if (!user) {
+      return res.status(402).json({
+        status: "fail",
+        message: "there is no user for this mail",
+      });
+    }
+
+    const resetToken = user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+
+    const url = `http://localhost:3000/users/resetPassword/${resetToken}`;
+    const message = `this is the password reset link ${url} /n click here.`;
+
+    await sendMail({
+      email: user.username,
+      subject: "your password reset message",
+      message: message,
+    });
+
+
+  } catch (error) {
+    console.log(error);
   }
 };

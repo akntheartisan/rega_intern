@@ -1,24 +1,27 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
-const PurchasedItems = new mongoose.Schema({
-  
-  total: {
-    type: String,
+const PurchasedItems = new mongoose.Schema(
+  {
+    total: {
+      type: String,
+    },
+    cartData: {
+      type: Array,
+    },
+    deliverystatus: {
+      type: String,
+    },
+    order_id: {
+      type: String,
+    },
+    payment_id: {
+      type: String,
+    },
   },
-  cartData:{
-    type:Array
-  },
-  deliverystatus: {
-    type: String,
-  },
-  order_id:{
-    type:String,
-  },
-  payment_id:{
-    type:String,
-  }
-},{_id:true});
+  { _id: true }
+);
 
 const UserRegister = new mongoose.Schema(
   {
@@ -57,6 +60,10 @@ const UserRegister = new mongoose.Schema(
     pincode: {
       type: String,
     },
+    passwordResetToken: {
+      type: String,
+    },
+    passwordResetExpiresAt: Number,
 
     Purchased: [PurchasedItems],
   },
@@ -69,5 +76,18 @@ UserRegister.pre("save", async function (next) {
   this.confirmpassword = undefined;
   next();
 });
+
+UserRegister.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.passwordResetExpiresAt = new Date(Date.now() + 10 * 60 * 1000).getTime();
+
+  return resetToken;
+};
 
 module.exports = mongoose.model("userregister", UserRegister);

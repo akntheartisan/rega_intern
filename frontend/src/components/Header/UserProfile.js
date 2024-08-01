@@ -105,7 +105,7 @@ export default function UserProfile() {
           Logout
         </MenuItem>
       </Menu>
-      <ProfileForm openProfile={openProfile} setOpenProfile={setOpenProfile} />
+      {/* <ProfileForm openProfile={openProfile} setOpenProfile={setOpenProfile} /> */}
     </>
   );
 }

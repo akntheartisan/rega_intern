@@ -27,4 +27,8 @@ router.post('/logout', (req, res) => {
   res.status(200).send({ message: 'Logged out successfully' });
 });
 
+router.post("/deleteAccount", cont.deleteAccount);
+
+router.post("/forgotpassword", cont.forgotpassword);
+
 module.exports = router;

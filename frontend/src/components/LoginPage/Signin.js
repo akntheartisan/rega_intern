@@ -41,7 +41,7 @@ const Signin = () => {
     }
   }
 
-  const getUserData = async (req, res, next) => {
+  const getUserData = async () => {
     try {
       const response = await client.get("/user/protect", {
         withCredentials: true,
@@ -55,6 +55,11 @@ const Signin = () => {
       console.log(error);
     }
   };
+
+  const forgotPassword = ()=>{
+    navigate('/forgetPasswordPage');
+  }
+
 
   return (
     <div>
@@ -157,15 +162,19 @@ const Signin = () => {
           </button>
         </Stack>
         <Stack>
-          <Button
-            sx={{
+          <button
+          onClick={forgotPassword}
+            style={{
               margin: "20px 0 0px 0",
               display: "flex",
               justifyContent: "flex-end",
+              background:'transparent',
+              border:'none',
+              color:'white'
             }}
           >
             Forget Password?
-          </Button>
+          </button>
         </Stack>
       </>
     </div>

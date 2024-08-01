@@ -11,6 +11,8 @@ import Checkout from "./components/Checkout/Checkout";
 import ProductView from "./components/ProductView/ProductView";
 import UserDash from "./components/UserDash/UserDash";
 import ProfileForm from "./components/Profile/ProfileForm";
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
 
 export const UserContext = createContext();
 function App() {
@@ -61,7 +63,10 @@ function App() {
           <Route path="/checkout" element={<Checkout/>}/>
           <Route path="/register" element={<LoginPage />} />
           <Route path="/userdash" element={<UserDash />} />
-          <Route path="/profileform" element={<ProfileForm />} />
+          <Route path="/forgetPasswordPage" element={<ForgotPassword />} />
+          <Route path="/users/resetPassword/:id" element={<ResetPassword />} />
+         
+
         </Routes>
       </UserContext.Provider>
     </>
