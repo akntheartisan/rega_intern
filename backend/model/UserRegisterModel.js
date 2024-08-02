@@ -38,10 +38,6 @@ const UserRegister = new mongoose.Schema(
       required: true,
       select: false,
     },
-    confirmpassword: {
-      type: String,
-      required: true,
-    },
     mobile: {
       type: String,
     },
@@ -73,7 +69,6 @@ const UserRegister = new mongoose.Schema(
 UserRegister.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 12);
-  this.confirmpassword = undefined;
   next();
 });
 

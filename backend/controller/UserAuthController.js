@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const JWT_SECRET = "fhsdkfhksdhfjksdhfkjsdhiy";
 const JWT_EXPIRATION = "1hr";
 const sendMail = require('../Utility/Mail');
+const crypto = require("crypto");
 
 exports.userSignUp = async (req, res, next) => {
   const { name, username, password, confirmpassword } = req.body;
@@ -199,7 +200,7 @@ exports.forgotpassword = async (req, res, next) => {
     console.log(user);
 
     if (!user) {
-      return res.status(402).json({
+      res.status(402).json({
         status: "fail",
         message: "there is no user for this mail",
       });
@@ -217,8 +218,39 @@ exports.forgotpassword = async (req, res, next) => {
       message: message,
     });
 
+    res.status(200).json({
+      status:"success",
+    })
+
 
   } catch (error) {
     console.log(error);
   }
 };
+
+exports.resetPassword = async (req,res,next)=>{
+  const {password,resetToken} = req.body;
+  console.log(password,resetToken);
+
+  const encryptedToken =  crypto
+  .createHash("sha256")
+  .update(resetToken)
+  .digest("hex");
+
+  console.log(encryptedToken);
+try {
+  const user = await usermodel.findOne({passwordResetToken:encryptedToken});
+  console.log(user);
+  if(user){
+    user.password = password;
+    await user.save();
+
+    res.status(200).json({
+      status:'success'
+    })
+  }
+} catch (error) {
+  console.log(error);
+}
+ 
+}

@@ -2,9 +2,17 @@ import React, { useState } from "react";
 import { Paper } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import toast from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
+import { client } from "../Client/Client";
 
 const ResetPassword = () => {
-  const [credential, setCredential] = useState({password:"",confirmPassword:""});
+  const navigate = useNavigate();
+  const { id } = useParams();
+  console.log(id);
+  const [credential, setCredential] = useState({
+    password: "",
+    confirmPassword: "",
+  });
   const [error, setError] = useState({
     passwordCheck: "",
     confirmPasswordCheck: "",
@@ -54,23 +62,32 @@ const ResetPassword = () => {
         }));
       }
     }
-      
-    setCredential((prev)=>({...prev,[name]:value}));
 
+    setCredential((prev) => ({ ...prev, [name]: value }));
   };
 
   const submitResetPassword = async () => {
     if (credential.password === "" && credential.confirmPassword === "") {
       toast.error("please fill all the field");
+    }
+      const {password,confirmPassword} = credential;
 
       try {
+        const passwordReset = await client.post("/user/resetPassword", {
+          password,
+          confirmPassword,
+          resetToken: id,
+        });
 
-        
-        
+        if(passwordReset.status === 200){
+          toast.success('Password has been successfully changed');
+          navigate('/register');
+
+        }
       } catch (error) {
-        
+        console.log(error);
       }
-    }
+  
   };
   return (
     <>

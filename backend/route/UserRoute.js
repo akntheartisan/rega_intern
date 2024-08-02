@@ -30,5 +30,6 @@ router.post('/logout', (req, res) => {
 router.post("/deleteAccount", cont.deleteAccount);
 
 router.post("/forgotpassword", cont.forgotpassword);
+router.post("/resetPassword", cont.resetPassword);
 
 module.exports = router;

@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { useNavigate } from "react-router-dom";
 import { client } from "../Client/Client";
+import toast from "react-hot-toast";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -15,8 +16,20 @@ const ForgotPassword = () => {
       const forgotPasswordMail = await client.post("/user/forgotpassword", {
         mail: mail,
       });
+
+      console.log(forgotPasswordMail.response);
+
+      if(forgotPasswordMail.status === 200){
+        toast.success('Password Reset Link has been sent to your mail');
+        setMail('');
+      }
+    
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      if(error.response.status === 402){
+        toast.error('This Mail is not registered');
+        setMail('');
+      }
     }
   };
   return (
@@ -41,6 +54,7 @@ const ForgotPassword = () => {
                 onChange={(e) => {
                   setMail(e.target.value);
                 }}
+                required
               />
               <div
                 style={{
