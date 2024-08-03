@@ -8,6 +8,8 @@ import { client } from "../Client/Client";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import CheckoutHeader from "./CheckoutHeader";
+import minus from "./minus-button.png";
+import add from "./add.png";
 
 const intial = {
   name: "",
@@ -28,14 +30,18 @@ const Checkout = () => {
   const [online, setOnline] = useState();
   const [model, setModel] = useState(true);
   const [totalShow, setTotalShow] = useState(true);
+  const [singleQuantity, setSingleQuantity] = useState(0);
 
   console.log(userData);
 
   const location = useLocation();
-  const cartData = location.state.bucket || location.state;
+  const cartData = location.state.cartDetails;
+  const singleCartData = location.state.singleItem;
   const cartItemsQuantity = location.state.cartItemsQuantity;
+  console.log(singleCartData);
   console.log(cartData);
-  const total = location.state.total;
+  const singleQuantityPrice = singleQuantity ? singleQuantity * singleCartData.price : 0;
+  const total = location.state.total ? location.state.total : singleQuantityPrice;
   // const total = actualTotal ? actualTotal : cartData.price;
   // const quantity = location.state.quantity;
 
@@ -72,9 +78,8 @@ const Checkout = () => {
 
   const addSelectedProduct = async (paymentMode) => {
     let userDetails;
-  
-    const userId = userData._id;
 
+    const userId = userData._id;
 
     if (checked) {
       userDetails = { ...userData, userId };
@@ -92,7 +97,7 @@ const Checkout = () => {
         cartData,
       });
 
-      console.log(typeof(cartOffline.status));
+      console.log(typeof cartOffline.status);
 
       if (cartOffline.status === 200) {
         toast.success("your order has been placed");
@@ -108,8 +113,6 @@ const Checkout = () => {
       } else {
         initPayment(cartOffline.data.transaction);
       }
-
-  
     } catch (error) {
       console.log(error);
     }
@@ -175,6 +178,18 @@ const Checkout = () => {
       });
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const addQuantity = () => {
+    setSingleQuantity((prev) => prev + 1);
+  };
+
+  const minusQuantity = () => {
+    if (singleQuantity === 0) {
+      return false;
+    } else {
+      setSingleQuantity((prev) => prev - 1);
     }
   };
 
@@ -420,6 +435,122 @@ const Checkout = () => {
                         </div>
                       </div>
                     </div>
+
+                    <div className="card single-accordion">
+                      <div className="card-header" id="headingSummary">
+                        <h5 className="mb-0">
+                          <button
+                            className="btn btn-link collapsed"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#headingSummary1"
+                            aria-expanded="false"
+                            aria-controls="collapseThree"
+                          >
+                            Product Summary
+                          </button>
+                        </h5>
+                      </div>
+                      <div
+                        id="headingSummary1"
+                        className="collapse"
+                        aria-labelledby="headingSummary"
+                        data-parent="#accordionExample"
+                      >
+                        {singleCartData ? (
+                          <div className="card-body">
+                            <div
+                              className="card-details"
+                              style={{ display: "flex" }}
+                            >
+                              <div>
+                                <img
+                                  src={singleCartData.image}
+                                  style={{
+                                    width: "150px",
+                                    height: "150px",
+                                    objectFit: "cover",
+                                  }}
+                                />
+                              </div>
+                              <div style={{ alignSelf: "center" }}>
+                                <p style={{ marginBottom: "10px" }}>
+                                  <strong>Model</strong> :{" "}
+                                  {singleCartData.model}
+                                </p>
+                                <p style={{ marginBottom: "10px" }}>
+                                  <strong>Battery Variant :</strong>{" "}
+                                  {singleCartData.battery}
+                                </p>
+                                <p style={{ marginBottom: "10px" }}>
+                                  <strong>Price :</strong>{" "}
+                                  {singleCartData.price}
+                                </p>
+                                <div style={{ display: "flex" }}>
+                                  <button
+                                    onClick={minusQuantity}
+                                    style={{
+                                      background: "none",
+                                      border: "none",
+                                    }}
+                                  >
+                                    <img src={minus} />
+                                  </button>
+                                  <input
+                                    className="form-control"
+                                    type="text"
+                                    style={{ width: "50px" }}
+                                    value={singleQuantity}
+                                  />
+                                  <button
+                                    onClick={addQuantity}
+                                    style={{
+                                      background: "none",
+                                      border: "none",
+                                    }}
+                                  >
+                                    <img src={add} />
+                                  </button>
+                                </div>
+                              </div> 
+                            </div>
+                          </div>
+                        ) : (
+                          
+                          {cartData.map((each, index) => (
+                            <div className="card-body" key={index}>
+                              <div className="card-details" style={{ display: "flex" }}>
+                                <div>
+                                  <img
+                                    src={each.image}
+                                    alt={`Product ${index}`}
+                                    style={{
+                                      width: "150px",
+                                      height: "150px",
+                                      objectFit: "cover",
+                                    }}
+                                  />
+                                </div>
+                                <div style={{ alignSelf: "center" }}>
+                                  <p style={{ marginBottom: "10px" }}>
+                                    <strong>Model</strong> : {each.model}
+                                  </p>
+                                  <p style={{ marginBottom: "10px" }}>
+                                    <strong>Battery Variant :</strong> {each.battery}
+                                  </p>
+                                  <p style={{ marginBottom: "10px" }}>
+                                    <strong>Price :</strong> {each.price}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                          
+                          
+                        )}
+                      </div>
+                    </div>
+
                     <div className="card single-accordion">
                       <div className="card-header" id="headingThree">
                         <h5 className="mb-0">
@@ -502,22 +633,22 @@ const Checkout = () => {
               </div>
               <div className="col-lg-4">
                 <div className="order-details-wrap">
-                  <table className="order-details" style={{ width:"100%"}}>
+                  <table className="order-details" style={{ width: "100%" }}>
                     <thead>
                       <tr>
                         <th colSpan={2}>Price Details (Incl., of all taxes)</th>
                       </tr>
                     </thead>
-                    <tbody className="order-details-body" >
+                    <tbody className="order-details-body">
                       <tr>
                         <td style={{ fontSize: "14px", fontWeight: "500" }}>
-                          Product {`(${cartItemsQuantity} Items)`}
+                          Product ({cartItemsQuantity ? cartItemsQuantity : 1}{" "}
+                          Items)
                         </td>
                         <td style={{ fontSize: "14px", fontWeight: "500" }}>
-                        &#8377; {total}
+                          &#8377; {total}
                         </td>
                       </tr>
-                  
                     </tbody>
                     <tbody className="checkout-details">
                       <tr>

@@ -53,8 +53,9 @@ const ProductView = () => {
     }
 
     const details = { image, model, battery, price, modelId };
+    
 
-    navigate("/checkout", { state: details });
+    navigate("/checkout", { state: {singleItem:details} });
   };
 
   const addcart = () => {
