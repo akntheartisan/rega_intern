@@ -6,10 +6,13 @@ const bucketmodel = require("../model/BuckerListModel");
 const razorpay = require("razorpay");
 const crypto = require("crypto");
 
-exports.addCart = async (req, res, next) => {
+exports.addCart = async (req, res, next) => { 
   const { userId } = req.body.userDetails;
   console.log(userId);
   const { cartData, total, paymentMode } = req.body;
+
+  console.log(typeof(cartData));
+  
 
   console.log("paymentMode:", paymentMode);
 
@@ -33,7 +36,7 @@ exports.addCart = async (req, res, next) => {
           $push:{
             PurchasedData:{
               total,
-              cartData: cartData.cartDetails.map((item) => item),
+              cartData: cartData.map((item) => item),
             }
           }
         },
@@ -48,7 +51,7 @@ exports.addCart = async (req, res, next) => {
             $push: {
               Purchased: {
                 total,
-                cartData: cartData.cartDetails.map((item) => item),
+                cartData: cartData.map((item) => item),
               },
             },
           }

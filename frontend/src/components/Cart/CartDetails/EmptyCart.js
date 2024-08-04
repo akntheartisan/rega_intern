@@ -2,9 +2,13 @@ import React from 'react'
 import './emptycart.css'
 import Paper from '@mui/material/Paper';
 import bike from './bike.gif';
+import { useNavigate } from 'react-router-dom';
 
 const EmptyCart = () => {
+  const navigate = useNavigate();
     const divertProduct = ()=>{
+
+      navigate('/');
 
     }
   return (

@@ -31,17 +31,22 @@ const Checkout = () => {
   const [model, setModel] = useState(true);
   const [totalShow, setTotalShow] = useState(true);
   const [singleQuantity, setSingleQuantity] = useState(0);
+  const [cartData,setCartData] = useState();
 
   console.log(userData);
 
   const location = useLocation();
-  const cartData = location.state.cartDetails;
+  const multiCartData = location.state.cartDetails;
   const singleCartData = location.state.singleItem;
   const cartItemsQuantity = location.state.cartItemsQuantity;
   console.log(singleCartData);
-  console.log(cartData);
-  const singleQuantityPrice = singleQuantity ? singleQuantity * singleCartData.price : 0;
-  const total = location.state.total ? location.state.total : singleQuantityPrice;
+  console.log(multiCartData);
+  const singleQuantityPrice = singleQuantity
+    ? singleQuantity * singleCartData.price
+    : 0;
+  const total = location.state.total
+    ? location.state.total
+    : singleQuantityPrice;
   // const total = actualTotal ? actualTotal : cartData.price;
   // const quantity = location.state.quantity;
 
@@ -80,7 +85,16 @@ const Checkout = () => {
     let userDetails;
 
     const userId = userData._id;
+    
+    let singleCartArray = [];
+    
+    if(typeof(singleCartData) === "object"){
+        singleCartArray.push(singleCartData)
+    }
+   
 
+    console.log(cartData);
+    
     if (checked) {
       userDetails = { ...userData, userId };
       console.log(userDetails);
@@ -94,7 +108,7 @@ const Checkout = () => {
         userDetails,
         total,
         paymentMode,
-        cartData,
+        cartData: multiCartData ? multiCartData : singleCartArray,
       });
 
       console.log(typeof cartOffline.status);
@@ -160,6 +174,13 @@ const Checkout = () => {
     const order_id = order;
     const payment_id = payment;
 
+    let singleCartArray = [];
+    
+    if(typeof(singleCartData) === "object"){
+        singleCartArray.push(singleCartData)
+    }
+ 
+
     if (checked) {
       userDetails = { ...userData, userId };
       console.log(userDetails);
@@ -172,7 +193,7 @@ const Checkout = () => {
       const cartOnline = await client.post("/cart/addCartOnline", {
         userDetails,
         total,
-        cartData,
+        cartData: multiCartData ? multiCartData : singleCartArray,
         order_id,
         payment_id,
       });
@@ -436,28 +457,28 @@ const Checkout = () => {
                       </div>
                     </div>
 
-                    <div className="card single-accordion">
-                      <div className="card-header" id="headingSummary">
-                        <h5 className="mb-0">
-                          <button
-                            className="btn btn-link collapsed"
-                            type="button"
-                            data-toggle="collapse"
-                            data-target="#headingSummary1"
-                            aria-expanded="false"
-                            aria-controls="collapseThree"
-                          >
-                            Product Summary
-                          </button>
-                        </h5>
-                      </div>
-                      <div
-                        id="headingSummary1"
-                        className="collapse"
-                        aria-labelledby="headingSummary"
-                        data-parent="#accordionExample"
-                      >
-                        {singleCartData ? (
+                    {singleCartData && (
+                      <div className="card single-accordion">
+                        <div className="card-header" id="headingSummary">
+                          <h5 className="mb-0">
+                            <button
+                              className="btn btn-link collapsed"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#headingSummary1"
+                              aria-expanded="false"
+                              aria-controls="collapseThree"
+                            >
+                              Product Summary
+                            </button>
+                          </h5>
+                        </div>
+                        <div
+                          id="headingSummary1"
+                          className="collapse"
+                          aria-labelledby="headingSummary"
+                          data-parent="#accordionExample"
+                        >
                           <div className="card-body">
                             <div
                               className="card-details"
@@ -471,6 +492,7 @@ const Checkout = () => {
                                     height: "150px",
                                     objectFit: "cover",
                                   }}
+                                  alt="model"
                                 />
                               </div>
                               <div style={{ alignSelf: "center" }}>
@@ -512,44 +534,71 @@ const Checkout = () => {
                                     <img src={add} />
                                   </button>
                                 </div>
-                              </div> 
-                            </div>
-                          </div>
-                        ) : (
-                          
-                          {cartData.map((each, index) => (
-                            <div className="card-body" key={index}>
-                              <div className="card-details" style={{ display: "flex" }}>
-                                <div>
-                                  <img
-                                    src={each.image}
-                                    alt={`Product ${index}`}
-                                    style={{
-                                      width: "150px",
-                                      height: "150px",
-                                      objectFit: "cover",
-                                    }}
-                                  />
-                                </div>
-                                <div style={{ alignSelf: "center" }}>
-                                  <p style={{ marginBottom: "10px" }}>
-                                    <strong>Model</strong> : {each.model}
-                                  </p>
-                                  <p style={{ marginBottom: "10px" }}>
-                                    <strong>Battery Variant :</strong> {each.battery}
-                                  </p>
-                                  <p style={{ marginBottom: "10px" }}>
-                                    <strong>Price :</strong> {each.price}
-                                  </p>
-                                </div>
                               </div>
                             </div>
-                          ))}
-                          
-                          
-                        )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
+
+                    {multiCartData && (
+                      <div className="card single-accordion">
+                        <div className="card-header" id="headingSummary">
+                          <h5 className="mb-0">
+                            <button
+                              className="btn btn-link collapsed"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#headingSummary2"
+                              aria-expanded="false"
+                              aria-controls="collapseThree"
+                            >
+                              Product Summary
+                            </button>
+                          </h5>
+                        </div>
+                        <div
+                          id="headingSummary2"
+                          className="collapse"
+                          aria-labelledby="headingSummary"
+                          data-parent="#accordionExample"
+                        >
+                          <div className="card-body">
+                            {multiCartData.map((each, index) => {
+                              return (
+                                <div
+                                  className="card-details"
+                                  style={{ display: "flex" }}
+                                  key={index}
+                                >
+                                  <div>
+                                    <img
+                                      src={each.image}
+                                      style={{
+                                        width: "150px",
+                                        height: "150px",
+                                        objectFit: "cover",
+                                      }}
+                                      alt="model"
+                                    />
+                                  </div>
+                                  <div style={{ alignSelf: "center" }}>
+                                    <p style={{ marginBottom: "10px" }}>
+                                      <strong>Model</strong> : {each.model}
+                                    </p>
+                                    <p style={{ marginBottom: "10px" }}>
+                                      <strong>Battery Variant :</strong>{" "}
+                                      {each.subModelDetails.battery}
+                                    </p>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                                <hr/>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="card single-accordion">
                       <div className="card-header" id="headingThree">
