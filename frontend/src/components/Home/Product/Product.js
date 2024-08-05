@@ -12,7 +12,7 @@ const Product = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState([]);
   console.log(product.productData);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -66,24 +66,29 @@ const Product = () => {
                       sx={{
                         display: "flex",
                         flexDirection: "column",
-                        padding: "0 30px 30px 30px",
+                        padding: "0 0px 30px 0px",
                         // border:"1px outset orange"
                       }}
                     >
-                      <img
-                        src={each.image.url}
-                        style={{
-                          width: "100%",
-                          height: "250px",
-                          objectFit: "cover",
-                          marginTop: "-25px",
-                        }}
-                      />
-                      <h4 style={{ marginLeft:'5px' }}>{each.model}</h4>
+                      <div style={{backgroundColor:'#f0f0f0'}}>
+                        <img
+                          src={each.image.url}
+                          style={{
+                            width: "100%",
+                            height: "250px",
+                            objectFit: "cover",
+                            marginTop: "-25px",
+                          }}
+                        />
+                      </div>
+
+                      <h4 style={{ marginLeft: "5px" }}>{each.model}</h4>
 
                       <div style={{ display: "flex" }}>
                         <button
-                        onClick={() => navigate(`/productview`, { state: each })}
+                          onClick={() =>
+                            navigate(`/productview`, { state: each })
+                          }
                           style={{
                             backgroundColor: "#f28123",
                             borderColor: "#f28123",
