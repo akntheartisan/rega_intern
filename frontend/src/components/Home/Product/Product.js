@@ -7,6 +7,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import { Link, useNavigate } from "react-router-dom";
 import Cart from "../../Cart/Cart";
+import "./product.css";
 
 const Product = () => {
   const navigate = useNavigate();
@@ -30,6 +31,8 @@ const Product = () => {
     fetchData();
   }, []);
 
+  console.log(product.productData);
+
   return (
     <>
       <div className="container" style={{ padding: "20px" }}>
@@ -46,23 +49,29 @@ const Product = () => {
 
           {product.productData &&
             product.productData.map((each) => {
-              console.log(each.model);
+              console.log(each.SubModel);
               return (
                 <div
-                  className="col-md-4"
-                  style={{ display: "flex", justifyContent: "center" }}
+                  className="col-md-4 productshow"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                  }}
+                  key={each._id}
+                  onClick={() => navigate(`/productview`, { state: each })}
                 >
                   <Box
                     sx={{
                       "& > :not(style)": {
                         m: 1,
                         width: 300,
-                        height: 400,
+                        height: 425,
                       },
                     }}
                   >
                     <Paper
-                      elevation={4}
+                      elevation={5}
                       sx={{
                         display: "flex",
                         flexDirection: "column",
@@ -70,7 +79,7 @@ const Product = () => {
                         // border:"1px outset orange"
                       }}
                     >
-                      <div style={{backgroundColor:'#f0f0f0'}}>
+                      <div style={{ backgroundColor: "#f0f0f0" }}>
                         <img
                           src={each.image.url}
                           style={{
@@ -82,55 +91,69 @@ const Product = () => {
                         />
                       </div>
 
-                      <h4 style={{ marginLeft: "5px" }}>{each.model}</h4>
-
-                      <div style={{ display: "flex" }}>
-                        <button
-                          onClick={() =>
-                            navigate(`/productview`, { state: each })
-                          }
+                      <div style={{ padding: "10px" }}>
+                        <p
                           style={{
-                            backgroundColor: "#f28123",
-                            borderColor: "#f28123",
-                            width: "100%",
-                            borderRadius: "8px",
-                            color: "white",
-                            padding: "10px",
-                            fontSize: "15px",
+                            fontSize: "17px",
+                            color: "#cccccc",
+                            margin: "0px 0px 0px 0px",
                           }}
                         >
-                          View Product
-                        </button>
-                        {/* <button
+                          {each.model}
+                        </p>
+                        <p
                           style={{
-                            backgroundColor: "#f28123",
-                            borderColor: "#f28123",
-                            width: "100%",
-                            borderRadius: "8px",
-                            color: "white",
-                            padding: "10px",
-                            fontSize: "15px",
+                            fontSize: "19px",
+                            color: "#3c3c3c",
+                            fontWeight: "550",
+                            margin: "0px 0px 0px 0px",
                           }}
                         >
-                          <ShoppingCartIcon />
-                          &nbsp; Add Cart
-                        </button>
+                          {each.model}
+                        </p>
+                        <span style={{ color: "#616161" }}>
+                          {each.SubModel[0].battery}
+                        </span>
                         &nbsp;&nbsp;&nbsp;
-                        <button
-                          onClick={() => navigate(`/cart`, { state: each })}
+                        <span style={{ color: "#616161" }}>
+                          {each.SubModel[0].motor}
+                        </span>
+                        <br />
+                        <span style={{ color: "#616161" }}>
+                          {each.SubModel[0].range}
+                        </span>
+                        &nbsp;&nbsp;&nbsp;
+                        <span style={{ color: "#616161" }}>
+                          {each.SubModel[0].payload}
+                        </span>
+                        <hr />
+                        <span
                           style={{
-                            backgroundColor: "#f28123",
-                            borderColor: "#f28123",
-                            width: "100%",
-                            borderRadius: "8px",
-                            color: "white",
-                            padding: "10px",
-                            fontSize: "15px",
+                            fontSize: "18px",
+                            color: "#fbb72c",
+                            fontWeight: "600",
                           }}
                         >
-                          <ShoppingBagIcon />
-                          &nbsp; Buy Now
-                        </button> */}
+                          ₹ {each.SubModel[0].price}
+                        </span>
+                        {/* <div style={{ display: "flex" }}>
+                          <button
+                            onClick={() =>
+                              navigate(`/productview`, { state: each })
+                            }
+                            style={{
+                              backgroundColor: "#f28123",
+                              borderColor: "#f28123",
+                              width: "100%",
+                              borderRadius: "8px",
+                              color: "white",
+                              padding: "10px",
+                              fontSize: "15px",
+                            }}
+                          >
+                            View Product
+                          </button>
+                        </div> */}
                       </div>
                     </Paper>
                   </Box>
