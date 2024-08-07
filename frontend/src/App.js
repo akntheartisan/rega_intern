@@ -13,6 +13,7 @@ import UserDash from "./components/UserDash/UserDash";
 import ProfileForm from "./components/Profile/ProfileForm";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
+import ScrollToTop from "./components/ScrollToTop";
 
 export const UserContext = createContext();
 function App() {
@@ -55,6 +56,7 @@ function App() {
             },
           }}
         />
+       <ScrollToTop/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
@@ -65,8 +67,6 @@ function App() {
           <Route path="/userdash" element={<UserDash />} />
           <Route path="/forgetPasswordPage" element={<ForgotPassword />} />
           <Route path="/users/resetPassword/:id" element={<ResetPassword />} />
-         
-
         </Routes>
       </UserContext.Provider>
     </>

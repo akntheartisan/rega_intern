@@ -78,6 +78,7 @@ export default function UserProfile() {
         startIcon={<AccountCircleIcon sx={{ color: "white" }} />}
         id="basic-button"
         onClick={handleClick}
+        fullWidth
       >
         Hi, {userData.name}
       </AccountButton>

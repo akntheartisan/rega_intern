@@ -6,6 +6,7 @@ import UserProfile from "./UserProfile";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import MobileViewMenu from "../MobileViewMenu/MobileViewMenu";
 
 const AccountButton = styled(Button)({
   textTransform: "none",
@@ -145,13 +146,11 @@ const Header = () => {
                         )}
                       </div>
                     </li>
-                    
                   </ul>
                 </nav>
                 <Link className="mobile-show search-bar-icon" href="#">
-                  <i className="fas fa-search" />
+                  <MobileViewMenu/>
                 </Link>
-                <div className="mobile-menu" />
               </div>
             </div>
           </div>

@@ -1,0 +1,17 @@
+.responsive_link{
+    color: white;
+    font-size: 20px;
+}
+
+.responsive_link:hover{
+    color: #f28123
+}
+
+.active_link{
+    color: red
+}
+
+.responsive_link_wrapper{
+    text-align:center;
+    padding: 10px
+}
