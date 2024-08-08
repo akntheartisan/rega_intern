@@ -7,10 +7,10 @@ import Divider from "@mui/material/Divider";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { UserContext } from "../../App";
 import UserProfile from "../Header/UserProfile";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { styled } from "@mui/material/styles";
-import './mobileView.css'
+import "./mobileView.css";
 
 const AccountButton = styled(Button)({
   textTransform: "none",
@@ -34,11 +34,18 @@ const AccountButton = styled(Button)({
 });
 
 const MobileViewMenu = () => {
+  const navigate = useNavigate();
   const { userData, setUserData } = useContext(UserContext);
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
+    // navigate('/userdash');
+  };
+
+  const handleClick = (newOpen) => () => {
+    setOpen(newOpen);
+    // navigate('/userdash');
   };
   return (
     <>
@@ -48,13 +55,19 @@ const MobileViewMenu = () => {
         </Button>
         <Drawer open={open} onClose={toggleDrawer(false)}>
           <Box
-            sx={{ width: 250, background:'#0c1923',height:'100vh' }}
+            sx={{ width: 250, background: "#0c1923", height: "100vh" }}
             role="presentation"
             // onClick={toggleDrawer(false)}
           >
-            <List sx={{padding:'10px'}}>
+            <List sx={{ padding: "10px",width:'100%' }}>
               {userData ? (
-                <UserProfile />
+             
+                <NavLink
+                className="signin_userdash"
+                 to={'/userdash'}
+                >
+                 <AccountCircleIcon/> Hi, {userData.name}
+                </NavLink>
               ) : (
                 <Link to="/register">
                   <AccountButton
@@ -66,20 +79,44 @@ const MobileViewMenu = () => {
                   </AccountButton>
                 </Link>
               )}
-              <Divider style={{color:'#f28123'}}/>
+             
             </List>
-            
+
             <List className="responsive_link_wrapper">
-               <NavLink className="responsive_link" activeClassName="active_link" to={'/'}>Home</NavLink>
+              <NavLink
+                className="responsive_link"
+                activeClassName="active_link"
+                to={"/"}
+              >
+                Home
+              </NavLink>
             </List>
             <List className="responsive_link_wrapper">
-               <NavLink className="responsive_link" activeClassName="active_link" to={'/'}>About Us</NavLink>
+              <NavLink
+                className="responsive_link"
+                activeClassName="active_link"
+                to={"/userdash"}
+              >
+                About Us
+              </NavLink>
             </List>
             <List className="responsive_link_wrapper">
-               <NavLink className="responsive_link" activeClassName="active_link" to={'/'}>Product</NavLink>
+              <NavLink
+                className="responsive_link"
+                activeClassName="active_link"
+                to={"/"}
+              >
+                Product
+              </NavLink>
             </List>
             <List className="responsive_link_wrapper">
-               <NavLink className="responsive_link" activeClassName="active_link" to={'/contact'}>Contact</NavLink>
+              <NavLink
+                className="responsive_link"
+                activeClassName="active_link"
+                to={"/contact"}
+              >
+                Contact
+              </NavLink>
             </List>
           </Box>
         </Drawer>

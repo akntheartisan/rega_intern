@@ -63,6 +63,13 @@ exports.userSignIn = async (req, res, next) => {
 
     //console.log(checkUser);
 
+    if(username === '' || password === ''){
+      return res.status(401).json({
+        status: "fail",
+        error: "Please fill all fields",
+      });
+    }
+
     if (!checkUser) {
       return res.status(400).json({
         status: "fail",

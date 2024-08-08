@@ -5,8 +5,11 @@ import { UserContext } from "../../../App";
 import EmptyCart from "./EmptyCart";
 import IconButton from "@mui/material/IconButton";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
+import toast from "react-hot-toast";
 
 const CartDetails = ({ id }) => {
+
+  const navigate = useNavigate();
   const { userData, setUserData } = useContext(UserContext);
 
   const [bucket, setBucket] = useState([]);
@@ -46,11 +49,38 @@ const CartDetails = ({ id }) => {
       return total + item.quantity * item.subModelDetails.price;
     }, 0);
   };
+  
+  const checkout = () => {
+    const total = calculateTotal();
+
+    console.log(total);
+    
+  
+    if (!total) {
+      toast.error('Please select quantity');
+      return false;
+    }
+
+    if(total >= 500000){
+      toast.error('Choose within a budget of 5 Lakhs');
+      return false;
+    }
+
+      navigate("/checkout", {
+        state: {
+          cartDetails: bucket,
+          cartItemsQuantity: cartItemsQuantity,
+          total: total,
+        },
+      });
+      return true;
+    
+  };
 
   // let total = quantity * props.price;
   // console.log(total);
 
-  const navigate = useNavigate();
+ 
 
   const deleteCartItem = async (id) => {
     const userId = userData._id;
@@ -87,6 +117,7 @@ const CartDetails = ({ id }) => {
                           <th className="product-price">Price(₹)</th>
                           <th className="product-quantity">Quantity</th>
                           <th className="product-total">Total</th>
+                          <th className="product-quantity">Remove</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -102,22 +133,7 @@ const CartDetails = ({ id }) => {
                                   alt="model"
                                   style={{ width: "150px" }}
                                 />
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "flex-start",
-                                  }}
-                                >
-                                  <IconButton
-                                    onClick={() =>
-                                      deleteCartItem(each.subModelDetails._id)
-                                    }
-                                  >
-                                    <RemoveShoppingCartIcon
-                                      sx={{ color: "red" }}
-                                    />
-                                  </IconButton>
-                                </div>
+                             
                               </td>
                               <td className="product-name">
                                 {each.model}
@@ -141,6 +157,24 @@ const CartDetails = ({ id }) => {
                                 {each.quantity * each.subModelDetails.price
                                   ? each.quantity * each.subModelDetails.price
                                   : 0}
+                              </td>
+                              <td>
+                              <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <IconButton
+                                    onClick={() =>
+                                      deleteCartItem(each.subModelDetails._id)
+                                    }
+                                  >
+                                    <RemoveShoppingCartIcon
+                                      sx={{ color: "red" }}
+                                    />
+                                  </IconButton>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -182,15 +216,7 @@ const CartDetails = ({ id }) => {
                           borderRadius: "60px",
                           marginTop: "15px",
                         }}
-                        onClick={() =>
-                          navigate("/checkout", {
-                            state: {
-                              cartDetails: bucket,
-                              cartItemsQuantity: cartItemsQuantity,
-                              total: calculateTotal(),
-                            },
-                          })
-                        }
+                        onClick={checkout}                       
                       >
                         Check Out
                       </button>

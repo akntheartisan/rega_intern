@@ -18,21 +18,32 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 import { UserContext } from "../../App";
 import { client } from "../Client/Client";
-import CheckoutHeader from "../Checkout/CheckoutHeader";
 import CheckoutFooter from "../Checkout/CheckoutFooter";
+import CheckoutHeader from "../Checkout/CheckoutHeader";
+import ProductViewHeader from "./ProductViewHeader";
 // import ReactImageMagnify from "react-image-magnify";
+import GridLoader from "react-spinners/ClipLoader";
 
 const ProductView = () => {
   const { userData, setUserData } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
   const product = location.state;
   const [selected, setSelected] = useState("");
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
+  }, [loading]);
+
   const getSelectModel = (battery) => {
     const selectedModel = product.SubModel.find(
       (each) => each.battery === battery
     );
+    setLoading(true);
     setSelected(selectedModel);
   };
 
@@ -53,9 +64,8 @@ const ProductView = () => {
     }
 
     const details = { image, model, battery, price, modelId };
-    
 
-    navigate("/checkout", { state: {singleItem:details} });
+    navigate("/checkout", { state: { singleItem: details } });
   };
 
   const addcart = () => {
@@ -93,7 +103,8 @@ const ProductView = () => {
 
   return (
     <>
-    <CheckoutHeader/>
+      <ProductViewHeader />
+  
       <div className="container-fluid">
         <div className="row">
           <div
@@ -105,23 +116,7 @@ const ProductView = () => {
               alt="img"
               style={{ objectFit: "cover", marginTop: "-160px" }}
             />
-          {/* <div style={{ objectFit: "cover", marginTop: "-160px" }}>
-          <ReactImageMagnify
-              {...{
-                smallImage: {
-                  alt: "Wristwatch by Ted Baker London",
-                  isFluidWidth: true,
-                  src: product.image.url,
-                },
-                largeImage: {
-                  src: product.image.url,
-                  width: 1200,
-                  height: 750,
-                },
-              }}
-            />
-          </div> */}
-        
+
             <div
               style={{
                 marginTop: "-100px",
@@ -226,16 +221,11 @@ const ProductView = () => {
                 Bike Specifications
               </h6>
               <hr />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  flexWrap: "wrap",
-                  gap: "20px",
-                  padding: "15px",
-                }}
-              >
-                <div style={{ display: "flex" }}>
+              <div className="row" style={{ padding: "20px" }}>
+                <div
+                  className="col-md-12 col-lg-4  mb-3"
+                  style={{ display: "flex" }}
+                >
                   <img src={motor} alt="Car" />
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Motor</p>
@@ -244,7 +234,10 @@ const ProductView = () => {
                     </p>
                   </div>
                 </div>
-                <div style={{ display: "flex" }}>
+                <div
+                  className="col-md-12 col-lg-4 mb-3"
+                  style={{ display: "flex" }}
+                >
                   <img src={accumulator} alt="Car" />
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Battery</p>
@@ -255,7 +248,10 @@ const ProductView = () => {
                     </p>
                   </div>
                 </div>
-                <div style={{ display: "flex" }}>
+                <div
+                  className="col-md-12 col-lg-4 mb-3"
+                  style={{ display: "flex" }}
+                >
                   <img src={motor} alt="Car" />
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Range</p>
@@ -264,7 +260,10 @@ const ProductView = () => {
                     </p>
                   </div>
                 </div>
-                <div style={{ display: "flex" }}>
+                <div
+                  className="col-md-12 col-lg-4 mb-3"
+                  style={{ display: "flex" }}
+                >
                   <img src={tyre} alt="Car" />
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Tyre</p>
@@ -275,7 +274,10 @@ const ProductView = () => {
                     </p>
                   </div>
                 </div>
-                <div style={{ display: "flex" }}>
+                <div
+                  className="col-md-12 col-lg-4 mb-3"
+                  style={{ display: "flex" }}
+                >
                   <img src={hand} alt="Car" />
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Brakes</p>
@@ -284,7 +286,10 @@ const ProductView = () => {
                     </p>
                   </div>
                 </div>
-                <div style={{ display: "flex" }}>
+                <div
+                  className="col-md-12 col-lg-4 mb-3"
+                  style={{ display: "flex" }}
+                >
                   <img src={motor} alt="Car" />
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>
@@ -295,7 +300,10 @@ const ProductView = () => {
                     </p>
                   </div>
                 </div>
-                <div style={{ display: "flex" }}>
+                <div
+                  className="col-md-12 col-lg-4 mb-3"
+                  style={{ display: "flex" }}
+                >
                   <img src={motor} alt="Car" />
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Payload</p>
@@ -306,7 +314,10 @@ const ProductView = () => {
                     </p>
                   </div>
                 </div>
-                <div style={{ display: "flex" }}>
+                <div
+                  className="col-md-12 col-lg-4 mb-3"
+                  style={{ display: "flex" }}
+                >
                   <img src={battery} alt="Car" />
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>
@@ -319,7 +330,10 @@ const ProductView = () => {
                     </p>
                   </div>
                 </div>
-                <div style={{ display: "flex" }}>
+                <div
+                  className="col-md-12 col-lg-4 mb-3"
+                  style={{ display: "flex" }}
+                >
                   <img src={frame} alt="Car" />
                   <div>
                     <p style={{ margin: "0", color: "#767f88" }}>Frame</p>
@@ -384,7 +398,7 @@ const ProductView = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

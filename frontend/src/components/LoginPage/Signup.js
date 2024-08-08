@@ -23,6 +23,18 @@ const Signup = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    if(name === 'name' || name === 'username'|| name === 'password' || name === 'confirmpassword'){
+      if(value.charCodeAt(0) === 32){
+        return false;
+      }
+    }
+
+    if(name === 'name'){
+      if(/\d/.test(value) || /[!@#$%^&*()_-]/.test(value)){
+        return false;
+      }
+    }
+
       if(e.target.name === "password"){
         console.log(e.target.value);
         const typedPassword = e.target.value;
@@ -116,6 +128,7 @@ const Signup = () => {
           // error={!!errors.name}
           value={user.name}
           onChange={handleChange}
+          
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

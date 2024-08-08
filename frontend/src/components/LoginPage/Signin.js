@@ -17,6 +17,7 @@ const Signin = () => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
+  const [errors, setErrors] = useState({ username: "", password: "" });
 
   async function verify() {
     const credential = { username, password };
@@ -25,7 +26,6 @@ const Signin = () => {
         withCredentials: true,
       });
       console.log(response.status);
-     
 
       if (response.status === 200) {
         toast.success("Logged In");
@@ -56,10 +56,27 @@ const Signin = () => {
     }
   };
 
-  const forgotPassword = ()=>{
-    navigate('/forgetPasswordPage');
-  }
+  const forgotPassword = () => {
+    navigate("/forgetPasswordPage");
+  };
 
+  const credentialEnter = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "username") {
+      if(value.charCodeAt(0) === 32){
+        return false;
+      }
+      setUserName(value);
+    }
+
+    if (name === "password") {
+      if(value.charCodeAt(0) === 32){
+        return false;
+      }
+      setPassword(value);
+    }
+  };
 
   return (
     <div>
@@ -72,20 +89,20 @@ const Signin = () => {
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "white", // Default border color
+                  borderColor: "white",
                 },
                 "&:hover fieldset": {
-                  borderColor: "white", // Border color on hover
+                  borderColor: "white",
                 },
                 "&.Mui-focused fieldset": {
-                  borderColor: "white", // Border color when focused
+                  borderColor: "white",
                 },
               },
             }}
-            // helperText={errors.name}
-            // error={!!errors.name}
+            helperText={errors.username}
+            error={!!errors.username}
             value={username}
-            onChange={(e) => setUserName(e.target.value)}
+            onChange={credentialEnter}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -118,7 +135,7 @@ const Signin = () => {
               },
             }}
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={credentialEnter}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -163,14 +180,14 @@ const Signin = () => {
         </Stack>
         <Stack>
           <button
-          onClick={forgotPassword}
+            onClick={forgotPassword}
             style={{
               margin: "20px 0 0px 0",
               display: "flex",
               justifyContent: "flex-end",
-              background:'transparent',
-              border:'none',
-              color:'white'
+              background: "transparent",
+              border: "none",
+              color: "white",
             }}
           >
             Forget Password?

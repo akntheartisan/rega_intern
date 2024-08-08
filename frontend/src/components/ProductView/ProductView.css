@@ -6,3 +6,15 @@
   border: 1px solid rgba(54, 53, 53, 0.2);
   border-radius: 10px;
 }
+.checkhead{
+
+  background-color: #051922;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+
+}
+
+.checkhead .checklogo{
+  width: 150px;
+}
