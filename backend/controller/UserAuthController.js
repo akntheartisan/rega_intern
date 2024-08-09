@@ -79,7 +79,7 @@ exports.userSignIn = async (req, res, next) => {
 
     const checkPassword = await bcrypt.compare(password, checkUser.password);
 
-    if (!checkPassword) {
+    if (!checkPassword) { 
       return res.status(400).json({
         status: "fail",
         error: "Incorrect password.Please try again",
@@ -260,4 +260,26 @@ try {
   console.log(error);
 }
  
+}
+
+exports.getOrderedProducts = async (req,res)=>{
+  const {id} = req.query;
+  console.log(id);
+
+  try {
+    const getOrderedProducts = await usermodel.findById(id);
+    console.log(getOrderedProducts.Purchased);
+    const purchased = getOrderedProducts.Purchased;
+
+    if(getOrderedProducts){
+      res.status(200).json({
+        purchased
+      })
+    }
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+  
 }

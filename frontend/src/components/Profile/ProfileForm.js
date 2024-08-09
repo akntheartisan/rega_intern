@@ -21,11 +21,25 @@ const ProfileForm = ({ userData }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+  if (["mobile", "pincode"].includes(name)) {
+    if (/[^0-9]|\s/.test(value)) {
+      return false;
+    }
+  }
+
+  if (["landmark", "district", "state"].includes(name)) {
+    if (/[^a-zA-Z\s]/.test(value) || value.charCodeAt(0) === 32) {
+      return false;
+    }
+  }
+
     setProfileData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
+
+  console.log(profileData);
 
   const profileSubmit = async () => {
     const id = userData._id;
@@ -222,6 +236,7 @@ const ProfileForm = ({ userData }) => {
                   name="pincode"
                   value={profileData.pincode}
                   onChange={handleChange}
+                  maxLength={6}
                 />
               </div>
             </div>

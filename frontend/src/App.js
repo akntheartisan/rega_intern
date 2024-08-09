@@ -14,6 +14,7 @@ import ProfileForm from "./components/Profile/ProfileForm";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import ScrollToTop from "./components/ScrollToTop";
+import Orders from "./components/Orders/Orders";
 
 export const UserContext = createContext();
 function App() {
@@ -62,6 +63,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/productview" element={<ProductView/>}/>
           <Route path="/cart" element={<Cart/>} />
+          <Route path="/orders" element={<Orders/>} />
           <Route path="/checkout" element={<Checkout/>}/>
           <Route path="/register" element={<LoginPage />} />
           <Route path="/userdash" element={<UserDash />} />

@@ -24,6 +24,12 @@ const UserDash = () => {
     navigate("/cart", { state: { id } });
   };
 
+  const orders = () => {
+    const id = userData._id;
+    console.log("cart");
+    navigate("/orders", { state: { id } });
+  };
+
   const logout = async () => {
     try {
       await client.post("/user/logout", {}, { withCredentials: true });
@@ -133,7 +139,7 @@ const UserDash = () => {
                     backgroundColor: "transparent",
                     marginLeft: "50px",
                   }}
-                  onClick={cart}
+                  onClick={orders}
                 >
                   Orders
                 </button>
