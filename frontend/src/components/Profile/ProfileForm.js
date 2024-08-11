@@ -18,20 +18,32 @@ const ProfileForm = ({ userData }) => {
     pincode: "",
   });
 
+  const [error, setError] = useState({
+    mobile: "",
+    address: "",
+    landmark: "",
+    district: "",
+    state: "",
+    pincode: "",
+  });
+
+  console.log(error.mobile,error.address);
+  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-  if (["mobile", "pincode"].includes(name)) {
-    if (/[^0-9]|\s/.test(value)) {
-      return false;
+    if (["mobile", "pincode"].includes(name)) {
+      if (/[^0-9]|\s/.test(value)) {
+        return false;
+      }
     }
-  }
 
-  if (["landmark", "district", "state"].includes(name)) {
-    if (/[^a-zA-Z\s]/.test(value) || value.charCodeAt(0) === 32) {
-      return false;
+    if (["landmark", "district", "state"].includes(name)) {
+      if (/[^a-zA-Z\s]/.test(value) || value.charCodeAt(0) === 32) {
+        return false;
+      }
     }
-  }
 
     setProfileData((prev) => ({
       ...prev,
@@ -41,34 +53,74 @@ const ProfileForm = ({ userData }) => {
 
   console.log(profileData);
 
+  const validateFunction = () => {
+    let isValid = true;
+    let errors = {};
+
+    if (profileData.mobile === "") {
+      errors.mobile = "Please fill the detail";
+      isValid = false;
+    }
+
+    if (profileData.address === "") {
+      errors.address = "Please fill the detail";
+      isValid = false;
+    }
+
+    if (profileData.landmark === "") {
+      errors.landmark = "Please fill the detail";
+      isValid = false;
+    }
+
+    if (profileData.district === "") {
+      errors.district = "Please fill the detail";
+      isValid = false;
+    }
+
+    if (profileData.state === "") {
+      errors.state = "Please fill the detail";
+      isValid = false;
+    }
+
+    if (profileData.pincode === "") {
+      errors.pincode = "Please fill the detail";
+      isValid = false;
+    }
+
+    setError(errors);
+    return isValid;
+  };
+
   const profileSubmit = async () => {
-    const id = userData._id;
-    console.log(id);
-    try {
-      const response = await client.post("/user/profileupdate", {
-        id,
-        ...profileData,
-      });
-
-      console.log(response.status);
-
-      if (response.status === 200) {
-        toast.success("Submitted Successfully");
-        setProfileData({
-          name: userData.name,
-          username: userData.username,
-          mobile: "",
-          address: "",
-          landmark: "",
-          district: "",
-          state: "",
-          pincode: "",
+    if (validateFunction()) {
+      const id = userData._id;
+      console.log(id);
+      try {
+        const response = await client.post("/user/profileupdate", {
+          id,
+          ...profileData,
         });
 
-        getProfileData();
+        console.log(response.status);
+
+        if (response.status === 200) {
+          toast.success("Submitted Successfully");
+          setProfileData({
+            name: userData.name,
+            username: userData.username,
+            mobile: "",
+            address: "",
+            landmark: "",
+            district: "",
+            state: "",
+            pincode: "",
+          });
+
+          getProfileData();
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -157,7 +209,15 @@ const ProfileForm = ({ userData }) => {
                   name="mobile"
                   value={profileData.mobile}
                   onChange={handleChange}
+                  maxLength={10}
                 />
+                {error.mobile ? (
+                  <span style={{ color: "red", fontStyle: "normal" }}>
+                    Please fill this detail*
+                  </span>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
 
@@ -177,6 +237,13 @@ const ProfileForm = ({ userData }) => {
                   value={profileData.address}
                   onChange={handleChange}
                 />
+                   {error.address ? (
+                  <span style={{ color: "red", fontStyle: "normal" }}>
+                    Please fill this detail*
+                  </span>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             <div className="col-md-6">
@@ -192,6 +259,13 @@ const ProfileForm = ({ userData }) => {
                   value={profileData.landmark}
                   onChange={handleChange}
                 />
+                   {error.landmark ? (
+                  <span style={{ color: "red", fontStyle: "normal" }}>
+                    Please fill this detail*
+                  </span>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             <div className="col-md-6">
@@ -207,6 +281,13 @@ const ProfileForm = ({ userData }) => {
                   value={profileData.district}
                   onChange={handleChange}
                 />
+                   {error.district ? (
+                  <span style={{ color: "red", fontStyle: "normal" }}>
+                    Please fill this detail*
+                  </span>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             <div className="col-md-6">
@@ -222,6 +303,13 @@ const ProfileForm = ({ userData }) => {
                   value={profileData.state}
                   onChange={handleChange}
                 />
+                  {error.state ? (
+                  <span style={{ color: "red", fontStyle: "normal" }}>
+                    Please fill this detail*
+                  </span>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             <div className="col-md-6">
@@ -238,6 +326,13 @@ const ProfileForm = ({ userData }) => {
                   onChange={handleChange}
                   maxLength={6}
                 />
+                   {error.pincode ? (
+                  <span style={{ color: "red", fontStyle: "normal" }}>
+                    Please fill this detail*
+                  </span>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
 

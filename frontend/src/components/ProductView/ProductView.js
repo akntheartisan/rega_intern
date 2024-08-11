@@ -21,29 +21,24 @@ import { client } from "../Client/Client";
 import CheckoutFooter from "../Checkout/CheckoutFooter";
 import CheckoutHeader from "../Checkout/CheckoutHeader";
 import ProductViewHeader from "./ProductViewHeader";
-// import ReactImageMagnify from "react-image-magnify";
-import GridLoader from "react-spinners/ClipLoader";
+
 
 const ProductView = () => {
   const { userData, setUserData } = useContext(UserContext);
-  const [loading, setLoading] = useState(false);
+
 
   const navigate = useNavigate();
   const location = useLocation();
   const product = location.state;
   const [selected, setSelected] = useState("");
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
-  }, [loading]);
+
 
   const getSelectModel = (battery) => {
     const selectedModel = product.SubModel.find(
       (each) => each.battery === battery
     );
-    setLoading(true);
+
     setSelected(selectedModel);
   };
 
