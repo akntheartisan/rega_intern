@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import DriveFileMoveIcon from "@mui/icons-material/DriveFileMove";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import { useState, useContext } from "react";
 import { UserContext } from "../../App";
@@ -48,6 +49,11 @@ export default function UserProfile() {
   const cart = () => {
     const id = userData._id;
     navigate('/cart',{ state: { id } });
+  }
+
+  const order = () => {
+    const id = userData._id;
+    navigate('/orders',{ state: { id } });
   }
 
   const open = Boolean(anchorEl);
@@ -100,6 +106,10 @@ export default function UserProfile() {
         <MenuItem onClick={cart} sx={{ display: "flex", gap: "15px" }}>
         <ShoppingCartIcon />
           Cart
+        </MenuItem>
+        <MenuItem onClick={order} sx={{ display: "flex", gap: "15px" }}>
+        <DriveFileMoveIcon />
+          My Orders
         </MenuItem>
         <MenuItem onClick={logout} sx={{ display: "flex", gap: "15px" }}>
           <LogoutIcon />

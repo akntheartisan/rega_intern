@@ -7,7 +7,7 @@ import "./order.css";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import search from './search.png';
+import search from "./search.png";
 
 const Orders = () => {
   const location = useLocation();
@@ -15,7 +15,7 @@ const Orders = () => {
 
   const [ordered, setOrdered] = useState([]);
   const [filtered, setFiltered] = useState([]);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   console.log(filtered);
   console.log(ordered);
@@ -43,12 +43,10 @@ const Orders = () => {
 
   const filterOrder = () => {
     const filteredOrder = filtered.cartData.filter((each) =>
-        each.model.includes('craze')
-        
+      each.model.includes("craze")
     );
     setFiltered(filteredOrder);
-}
-
+  };
 
   return (
     <>
@@ -64,6 +62,7 @@ const Orders = () => {
               <FormGroup>
                 <FormControlLabel control={<Checkbox />} label="On the way" />
                 <FormControlLabel control={<Checkbox />} label="Delivered" />
+                <FormControlLabel control={<Checkbox />} label="Not Delivered" />
                 <FormControlLabel control={<Checkbox />} label="Cancelled" />
               </FormGroup>
             </Paper>
@@ -107,9 +106,37 @@ const Orders = () => {
                           <div>
                             <p>&#8377;{order.subModelDetails.price}</p>
                           </div>
+                         
                           <div>
-                            <p>Delivered</p>
-                          </div>
+                            
+                              {order.deliverystatus !== "Not Delivered" ? (
+                                <>
+                                <div
+                                  style={{
+                                    height: "10px",
+                                    width: "10px",
+                                    backgroundColor: "green",
+                                    borderRadius:'50%',
+                                    display:'inline-block'
+                                  }}
+                                ></div> {order.deliverystatus}
+                                </>
+                                
+                              ) : (
+                                <>
+                                <div
+                                  style={{
+                                    height: "10px",
+                                    width: "10px",
+                                    backgroundColor: "red",
+                                    borderRadius:'50%',
+                                    display:'inline-block'
+                                  }}
+                                ></div> {order.deliverystatus}
+                                </>
+                              )}
+                            
+                          </div> 
                         </Paper>
                       );
                     })}

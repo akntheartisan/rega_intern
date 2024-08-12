@@ -7,10 +7,10 @@ const PurchasedItems = new mongoose.Schema({
     type: String,
   },
   cartData:{
-    type:Array
-  },
-  deliverystatus: {
-    type: String,
+    type:Array,
+    deliverystatus: {
+      type: String,
+    },
   },
   order_id:{
     type:String,

@@ -9,10 +9,11 @@ const PurchasedItems = new mongoose.Schema(
     },
     cartData: {
       type: Array,
+      deliverystatus: {
+        type: String,
+      },
     },
-    deliverystatus: {
-      type: String,
-    },
+
     order_id: {
       type: String,
     },

@@ -37,6 +37,12 @@ const UserNavigation = () => {
     navigate("/cart", { state: { id } });
   };
 
+  const orders = () => {
+    const id = userData._id;
+    console.log("cart");
+    navigate("/orders", { state: { id } });
+  };
+
   const logout = async () => {
     try {
       await client.post("/user/logout", {}, { withCredentials: true });
@@ -133,7 +139,7 @@ const UserNavigation = () => {
                 border: "none",
                 backgroundColor: "transparent",
               }}
-              onClick={cart}
+              onClick={orders}
             >
               <h6 style={{ color: "#878787" }}>My Orders</h6>
             </button>

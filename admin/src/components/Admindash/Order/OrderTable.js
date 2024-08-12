@@ -20,14 +20,17 @@ import OrderView from "./OrderView";
 export default function OrderTable({ product, setProduct }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [orderData, setOrderData] = useState();
+  const [orderData, setOrderData] = useState([]);
   const [updateOpen, setUpdateOpen] = React.useState("");
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [deleteOpen, setDeleteOpen] = React.useState("");
   const [openOrderView, setOpenOrderView] = React.useState(false);
 
+  console.log(orderData);
+      
   const openEdit = (order) => {
-    setSelectedProduct((prev)=>[...prev,order]);
+    console.log('particular order');
+    setSelectedProduct(order);
     console.log(selectedProduct);
     setOpenOrderView(true);
   };
@@ -156,9 +159,34 @@ export default function OrderTable({ product, setProduct }) {
                     <TableCell component="th" scope="row" align="center">
                       {each.name}
                     </TableCell>
-                    <TableCell align="center">{each.productId.model}</TableCell>
+                    <TableCell align="center">
+                      {each.Purchased.map((eachPurchased)=>{
+                       return eachPurchased.cartData.map((eachCartData)=>{
+                          return (<div>
+                            <p>{eachCartData.model} - {eachCartData.subModelDetails.battery}</p>
+                          </div>)
+                        })
+                      })}
+                    </TableCell>
                     <TableCell align="center">{each.mobile}</TableCell>
-                    <TableCell align="center">-</TableCell>
+                    <TableCell align="center">
+                    {each.Purchased.map((eachPurchased)=>{
+                        if(eachPurchased.hasOwnProperty('order_id')){
+                          return <p>{eachPurchased.order_id}</p>
+                       }else{
+                        return <p>Offline</p>
+                       }
+                      })}
+                    </TableCell>
+                    <TableCell align="center">
+                      {each.Purchased.map((eachPurchased)=>{
+                       return eachPurchased.cartData.map((eachCartData)=>{
+                          return (<div>
+                            <p>{eachCartData.deliverystatus}</p>
+                          </div>)
+                        })
+                      })}
+                    </TableCell>
                     <TableCell align="center">
                       <IconButton
                         aria-label="edit"

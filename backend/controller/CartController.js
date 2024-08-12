@@ -10,6 +10,7 @@ exports.addCart = async (req, res, next) => {
   const { userId } = req.body.userDetails;
   console.log(userId);
   const { cartData, total, paymentMode } = req.body;
+  const deliverystatus = 'Not Delivered';
 
   console.log(typeof(cartData));
   
@@ -36,7 +37,8 @@ exports.addCart = async (req, res, next) => {
           $push:{
             PurchasedData:{
               total,
-              cartData: cartData.map((item) => item),
+              cartData: cartData.map((item) => ({...item, deliverystatus:deliverystatus})),
+              
             }
           }
         },
@@ -51,7 +53,7 @@ exports.addCart = async (req, res, next) => {
             $push: {
               Purchased: {
                 total,
-                cartData: cartData.map((item) => item),
+                cartData: cartData.map((item) => ({...item, deliverystatus:deliverystatus})),
               },
             },
           }
@@ -200,7 +202,9 @@ exports.getCart = async (req, res, next) => {
   console.log("getcart");
 
   try {
-    const cart = await cartmodel.find().populate("productId").exec();
+    const cart = await usermodel.find();
+    console.log(cart);
+    
     if (cart) {
       return res.status(200).json({
         status: "success",
