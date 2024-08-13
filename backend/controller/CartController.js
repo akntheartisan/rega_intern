@@ -6,44 +6,34 @@ const bucketmodel = require("../model/BuckerListModel");
 const razorpay = require("razorpay");
 const crypto = require("crypto");
 
-exports.addCart = async (req, res, next) => { 
+exports.addCart = async (req, res, next) => {
   const { userId } = req.body.userDetails;
-  console.log(userId);
+
   const { cartData, total, paymentMode } = req.body;
-  const deliverystatus = 'Not Delivered';
+  const deliverystatus = "Not Delivered";
 
-  console.log(typeof(cartData));
-  
-
-  console.log("paymentMode:", paymentMode);
+  console.log(cartData);
 
   try {
     if (paymentMode === "offline") {
       console.log("offline");
 
-      // const orderPlace = await cartmodel.create({
-      //   userId,
-      //   PurchasedData: [
-      //     {
-      //       total,
-      //       cartData: cartData.cartDetails.map((item) => item),
-      //     },
-      //   ],
-      // });
-
-      const orderPlace  = await cartmodel.updateOne(
-        {_id:userId},
+      const orderPlace = await cartmodel.updateOne(
+        { _id: userId },
         {
-          $push:{
-            PurchasedData:{
+          $push: {
+            Purchased: {
               total,
-              cartData: cartData.map((item) => ({...item, deliverystatus:deliverystatus})),
-              
-            }
-          }
+              cartData: cartData.map((item) => ({
+                ...item,
+                deliverystatus: deliverystatus,
+                cartId: new mongoose.Types.ObjectId(),
+              })),
+            },
+          },
         },
-        {upsert:true}
-      )
+        { upsert: true }
+      );
 
       const findUser = await usermodel.findById(userId);
       if (findUser) {
@@ -53,7 +43,11 @@ exports.addCart = async (req, res, next) => {
             $push: {
               Purchased: {
                 total,
-                cartData: cartData.map((item) => ({...item, deliverystatus:deliverystatus})),
+                cartData: cartData.map((item) => ({
+                  ...item,
+                  deliverystatus: deliverystatus,
+                  cartId: new mongoose.Types.ObjectId(),
+                })),
               },
             },
           }
@@ -64,8 +58,6 @@ exports.addCart = async (req, res, next) => {
         success: "offline order success",
         message: "Order has been placed successfully",
       });
-
-      
     } else if (paymentMode === "online") {
       console.log("payment mode: online");
 
@@ -105,12 +97,10 @@ exports.deleteCartData = async (req, res) => {
   const userId = req.userId;
   console.log("User ID:", userId);
   try {
-
     const deleteCartData = await bucketmodel.updateOne(
-      {_id:userId},
-      {$set:{list:[]}},
+      { _id: userId },
+      { $set: { list: [] } }
     );
-    
   } catch (error) {
     console.log(error);
   }
@@ -163,18 +153,18 @@ exports.addCartOnline = async (req, res, next) => {
     //   }
     // );
 
-    const orderPlace  = await cartmodel.updateOne(
-      {_id:userId},
+    const orderPlace = await cartmodel.updateOne(
+      { _id: userId },
       {
-        $push:{
-          PurchasedData:{
+        $push: {
+          PurchasedData: {
             total,
             cartData: cartData.cartDetails.map((item) => item),
-          }
-        }
+          },
+        },
       },
-      {upsert:true}
-    )
+      { upsert: true }
+    );
 
     const findUser = await usermodel.findById(userId);
     console.log(findUser);
@@ -204,7 +194,7 @@ exports.getCart = async (req, res, next) => {
   try {
     const cart = await usermodel.find();
     console.log(cart);
-    
+
     if (cart) {
       return res.status(200).json({
         status: "success",

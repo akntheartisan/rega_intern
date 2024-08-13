@@ -1,25 +1,27 @@
-import React from 'react'
-import Header from '../../Header/Header';
+import React from "react";
+import Header from "../../Header/Header";
 
 const Carousel = () => {
   return (
     <>
-  
       <div className="homepage-slider">
-        <div className="single-homepage-slider homepage-bg-1" style={{height:'100vh'}}>
+        <div
+          className="single-homepage-slider homepage-bg-1"
+          style={{ height: "100vh" }}
+        >
           <div className="container">
             <div className="row">
               <div className="col-md-12 col-lg-7 offset-lg-1 offset-xl-0">
                 <div className="hero-text">
                   <div className="hero-text-tablecell">
-                    <p className="subtitle">Fresh &amp; Organic</p>
-                    <h1>Delicious Seasonal Fruits</h1>
+                    <p className="subtitle">Explore the Future of Mobility</p>
+                    <h1>High-Performance e-Bikes</h1>
                     <div className="hero-btns">
                       <a href="shop.html" className="boxed-btn">
-                        Fruit Collection
+                        e-Bike Collection
                       </a>
                       <a href="contact.html" className="bordered-btn">
-                        Contact Us
+                        Get in Touch
                       </a>
                     </div>
                   </div>
@@ -75,6 +77,6 @@ const Carousel = () => {
       </div>
     </>
   );
-}
+};
 
-export default Carousel
+export default Carousel;

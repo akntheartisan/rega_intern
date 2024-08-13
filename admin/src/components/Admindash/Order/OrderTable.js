@@ -16,6 +16,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import toast from "react-hot-toast";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import OrderView from "./OrderView";
+import "./order.css";
 
 export default function OrderTable({ product, setProduct }) {
   const [page, setPage] = React.useState(0);
@@ -27,9 +28,9 @@ export default function OrderTable({ product, setProduct }) {
   const [openOrderView, setOpenOrderView] = React.useState(false);
 
   console.log(orderData);
-      
+
   const openEdit = (order) => {
-    console.log('particular order');
+    console.log("particular order");
     setSelectedProduct(order);
     console.log(selectedProduct);
     setOpenOrderView(true);
@@ -50,6 +51,21 @@ export default function OrderTable({ product, setProduct }) {
   useEffect(() => {
     getOrder();
   }, []);
+
+  const deliveryStatus = async (user_id, product_id, purchased_id) => {
+    console.log('deliverystatus');
+    
+    try {
+      const deliveryStatus = await client.post("/user/delivery", {
+        user_id,
+        product_id,
+        purchased_id
+      });
+      console.log(deliveryStatus);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //   const handleChangePage = (event, newPage) => {
   //     setPage(newPage);
@@ -112,6 +128,17 @@ export default function OrderTable({ product, setProduct }) {
                     fontSize: "18px",
                   }}
                 >
+                  Quantity
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{
+                    minWidth: 170,
+                    backgroundColor: "black",
+                    color: "white",
+                    fontSize: "18px",
+                  }}
+                >
                   Phone
                 </TableCell>
                 <TableCell
@@ -160,40 +187,59 @@ export default function OrderTable({ product, setProduct }) {
                       {each.name}
                     </TableCell>
                     <TableCell align="center">
-                      {each.Purchased.map((eachPurchased)=>{
-                       return eachPurchased.cartData.map((eachCartData)=>{
-                          return (<div>
-                            <p>{eachCartData.model} - {eachCartData.subModelDetails.battery}</p>
-                          </div>)
-                        })
+                      {each.Purchased.map((eachPurchased) => {
+                        return eachPurchased.cartData.map((eachCartData) => {
+                          return (
+                            <div>
+                              <p>
+                                {eachCartData.model} -{" "}
+                                {eachCartData.subModelDetails.battery}
+                              </p>
+                            </div>
+                          );
+                        });
+                      })}
+                    </TableCell>
+                    <TableCell align="center">
+                      {each.Purchased.map((eachPurchased) => {
+                        return eachPurchased.cartData.map((eachCartData) => {
+                          return (
+                            <div>
+                              <p>{eachCartData.quantity}</p>
+                            </div>
+                          );
+                        });
                       })}
                     </TableCell>
                     <TableCell align="center">{each.mobile}</TableCell>
                     <TableCell align="center">
-                    {each.Purchased.map((eachPurchased)=>{
-                        if(eachPurchased.hasOwnProperty('order_id')){
-                          return <p>{eachPurchased.order_id}</p>
-                       }else{
-                        return <p>Offline</p>
-                       }
+                      {each.Purchased.map((eachPurchased) => {
+                        if (eachPurchased.hasOwnProperty("order_id")) {
+                          return <p>{eachPurchased.order_id}</p>;
+                        } else {
+                          return <p>Offline</p>;
+                        }
                       })}
                     </TableCell>
                     <TableCell align="center">
-                      {each.Purchased.map((eachPurchased)=>{
-                       return eachPurchased.cartData.map((eachCartData)=>{
-                          return (<div>
-                            <p>{eachCartData.deliverystatus}</p>
-                          </div>)
-                        })
+                      {each.Purchased.map((eachPurchased) => {
+                        return eachPurchased.cartData.map((eachCartData) => {
+                          return (
+                            <div>
+                              <button
+                                className="deliverybtn"
+                                onClick={() =>
+                                  deliveryStatus(each._id, eachCartData.cartId, eachPurchased._id)
+                                }
+                              >
+                                {eachCartData.deliverystatus}
+                              </button>
+                            </div>
+                          );
+                        });
                       })}
                     </TableCell>
                     <TableCell align="center">
-                      <IconButton
-                        aria-label="edit"
-                        onClick={() => openEdit(each)}
-                      >
-                        <EditIcon color="primary" />
-                      </IconButton>
                       <IconButton aria-label="delete">
                         <DeleteIcon color="error" />
                       </IconButton>

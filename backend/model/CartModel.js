@@ -26,7 +26,7 @@ const Cart = new mongoose.Schema(
       type:mongoose.Schema.Types.ObjectId,
       ref:'userregister',
     },
-    PurchasedData: [PurchasedItems],
+    Purchased: [PurchasedItems],
     total: {
       type: String,
     },

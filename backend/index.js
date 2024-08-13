@@ -9,7 +9,7 @@ const cartroute = require("./route/CartRoute");
 const bucketroute = require("./route/BucketRoute");
 const cookieParser = require("cookie-parser");
 
-app.use(express.json());
+app.use(express.json()); 
 app.use(cookieParser());
 
 const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];

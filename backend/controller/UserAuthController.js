@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const JWT_SECRET = "fhsdkfhksdhfjksdhfkjsdhiy";
 const JWT_EXPIRATION = "1hr";
-const sendMail = require('../Utility/Mail');
+const sendMail = require("../Utility/Mail");
 const crypto = require("crypto");
 
 exports.userSignUp = async (req, res, next) => {
@@ -63,7 +63,7 @@ exports.userSignIn = async (req, res, next) => {
 
     //console.log(checkUser);
 
-    if(username === '' || password === ''){
+    if (username === "" || password === "") {
       return res.status(401).json({
         status: "fail",
         error: "Please fill all fields",
@@ -79,7 +79,7 @@ exports.userSignIn = async (req, res, next) => {
 
     const checkPassword = await bcrypt.compare(password, checkUser.password);
 
-    if (!checkPassword) { 
+    if (!checkPassword) {
       return res.status(400).json({
         status: "fail",
         error: "Incorrect password.Please try again",
@@ -226,44 +226,43 @@ exports.forgotpassword = async (req, res, next) => {
     });
 
     res.status(200).json({
-      status:"success",
-    })
-
-
+      status: "success",
+    });
   } catch (error) {
     console.log(error);
   }
 };
 
-exports.resetPassword = async (req,res,next)=>{
-  const {password,resetToken} = req.body;
-  console.log(password,resetToken);
+exports.resetPassword = async (req, res, next) => {
+  const { password, resetToken } = req.body;
+  console.log(password, resetToken);
 
-  const encryptedToken =  crypto
-  .createHash("sha256")
-  .update(resetToken)
-  .digest("hex");
+  const encryptedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
 
   console.log(encryptedToken);
-try {
-  const user = await usermodel.findOne({passwordResetToken:encryptedToken});
-  console.log(user);
-  if(user){
-    user.password = password;
-    await user.save();
+  try {
+    const user = await usermodel.findOne({
+      passwordResetToken: encryptedToken,
+    });
+    console.log(user);
+    if (user) {
+      user.password = password;
+      await user.save();
 
-    res.status(200).json({
-      status:'success'
-    })
+      res.status(200).json({
+        status: "success",
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
-} catch (error) {
-  console.log(error);
-}
- 
-}
+};
 
-exports.getOrderedProducts = async (req,res)=>{
-  const {id} = req.query;
+exports.getOrderedProducts = async (req, res) => {
+  const { id } = req.query;
   console.log(id);
 
   try {
@@ -271,15 +270,51 @@ exports.getOrderedProducts = async (req,res)=>{
     console.log(getOrderedProducts.Purchased);
     const purchased = getOrderedProducts.Purchased;
 
-    if(getOrderedProducts){
+    if (getOrderedProducts) {
       res.status(200).json({
-        purchased
-      })
+        purchased,
+      });
     }
-    
+  } catch (error) {
+    console.log(error); 
+  }
+};
+
+exports.deliveryStatus = async (req, res) => {
+  const { user_id, product_id, purchased_id } = req.body;
+  console.log(user_id, product_id, purchased_id);
+
+  const result = await usermodel.findOne({
+    _id: user_id,
+    'Purchased._id': purchased_id,
+    'Purchased.cartData.cartId': product_id,
+  });
+  
+  console.log(result);
+  
+  try {
+    const delivery = await usermodel.updateOne(
+    {
+      _id: user_id,
+      "Purchased._id": purchased_id,
+      "Purchased.cartData.cartId": product_id,
+    },
+    {
+      $set:{
+        'Purchased.$[purchase].cartData.$[cart].deliverystatus': 'Delivered'
+      }
+    },
+    {
+      arrayFilters : [
+        {'purchase._id' : purchased_id},
+        {'cart.cartId' : product_id}
+      ]
+    }
+  );
+  console.log(delivery);
+  
   } catch (error) {
     console.log(error);
     
   }
-  
-}
+};
