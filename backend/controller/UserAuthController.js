@@ -283,38 +283,62 @@ exports.getOrderedProducts = async (req, res) => {
 exports.deliveryStatus = async (req, res) => {
   const { user_id, product_id, purchased_id } = req.body;
   console.log(user_id, product_id, purchased_id);
-
-  const result = await usermodel.findOne({
-    _id: user_id,
-    'Purchased._id': purchased_id,
-    'Purchased.cartData.cartId': product_id,
-  });
   
-  console.log(result);
-  
-  try {
-    const delivery = await usermodel.updateOne(
+  const result = await usermodel.updateOne(
     {
       _id: user_id,
-      "Purchased._id": purchased_id,
-      "Purchased.cartData.cartId": product_id,
+      'Purchased._id': purchased_id,
+      'Purchased.cartData.cartId': product_id
     },
     {
-      $set:{
-        'Purchased.$[purchase].cartData.$[cart].deliverystatus': 'Delivered'
+      $set: {
+        'Purchased.$[purchase].cartData.$[item].deliverystatus': 'Delivered'
       }
     },
     {
-      arrayFilters : [
-        {'purchase._id' : purchased_id},
-        {'cart.cartId' : product_id}
+      arrayFilters: [
+        { 'purchase._id': purchased_id },
+        { 'item.cartId': product_id } 
       ]
     }
   );
-  console.log(delivery);
   
-  } catch (error) {
-    console.log(error);
-    
+  if (result.modifiedCount > 0) {
+    console.log('Delivery status updated successfully.');
+  } else {
+    console.log('No matching cartData found or already updated.');
   }
+  
+    
+
+    // selectedCartData.deliverystatus = 'Delivered';
+
+    // await findPurchased.save();
+    
+
+  // try {
+  //   const delivery = await usermodel.updateOne(
+  //     {
+  //       _id: user_id,
+  //       "Purchased._id": purchased_id,
+  //       "Purchased.cartData.cartId": product_id,
+  //     },
+  //     {
+  //       $set:{
+  //         'Purchased.$[purchase].cartData.$[cart].deliverystatus': 'Delivered',
+  //       }
+  //     },
+  //     {
+  //       arrayFilters : [
+  //         { 'purchase._id': purchased_id },
+  //         { 'cart.cartId': product_id }
+  //       ]
+  //     }
+  //   );
+  // console.log(delivery);
+  
+  // } catch (error) {
+  //   console.log(error);
+    
+  // }
 };
