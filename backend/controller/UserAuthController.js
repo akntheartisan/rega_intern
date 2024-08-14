@@ -6,6 +6,7 @@ const JWT_SECRET = "fhsdkfhksdhfjksdhfkjsdhiy";
 const JWT_EXPIRATION = "1hr";
 const sendMail = require("../Utility/Mail");
 const crypto = require("crypto");
+const { isErrored } = require("stream");
 
 exports.userSignUp = async (req, res, next) => {
   const { name, username, password, confirmpassword } = req.body;
@@ -283,62 +284,41 @@ exports.getOrderedProducts = async (req, res) => {
 exports.deliveryStatus = async (req, res) => {
   const { user_id, product_id, purchased_id } = req.body;
   console.log(user_id, product_id, purchased_id);
-  
-  const result = await usermodel.updateOne(
-    {
-      _id: user_id,
-      'Purchased._id': purchased_id,
-      'Purchased.cartData.cartId': product_id
-    },
-    {
-      $set: {
-        'Purchased.$[purchase].cartData.$[item].deliverystatus': 'Delivered'
+
+  try {
+    const userId = new mongoose.Types.ObjectId(user_id);
+    const purchasedId = new mongoose.Types.ObjectId(purchased_id);
+    const productId = new mongoose.Types.ObjectId(product_id);
+
+    const result = await usermodel.updateOne(
+      {
+        _id: userId,
+        'Purchased._id': purchasedId,
+        'Purchased.cartData.cartId': productId
+      },
+      {
+        $set: {
+          'Purchased.$[purchase].cartData.$[item].deliverystatus': 'Delivered'
+        }
+      },
+      {
+        arrayFilters: [
+          { 'purchase._id': purchasedId },
+          { 'item.cartId': productId }
+        ]
       }
-    },
-    {
-      arrayFilters: [
-        { 'purchase._id': purchased_id },
-        { 'item.cartId': product_id } 
-      ]
+    );
+
+    if(result){
+      return res.status(200).json({
+        status:'success',
+        message:'Delivered status changed successfully'
+      })
     }
-  );
-  
-  if (result.modifiedCount > 0) {
-    console.log('Delivery status updated successfully.');
-  } else {
-    console.log('No matching cartData found or already updated.');
+    
+  } catch (error) {
+    console.log('Error:', error);
+    res.status(500).json({ message: 'An error occurred while updating delivery status.' });
   }
-  
-    
-
-    // selectedCartData.deliverystatus = 'Delivered';
-
-    // await findPurchased.save();
-    
-
-  // try {
-  //   const delivery = await usermodel.updateOne(
-  //     {
-  //       _id: user_id,
-  //       "Purchased._id": purchased_id,
-  //       "Purchased.cartData.cartId": product_id,
-  //     },
-  //     {
-  //       $set:{
-  //         'Purchased.$[purchase].cartData.$[cart].deliverystatus': 'Delivered',
-  //       }
-  //     },
-  //     {
-  //       arrayFilters : [
-  //         { 'purchase._id': purchased_id },
-  //         { 'cart.cartId': product_id }
-  //       ]
-  //     }
-  //   );
-  // console.log(delivery);
-  
-  // } catch (error) {
-  //   console.log(error);
-    
-  // }
 };
+

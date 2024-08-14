@@ -61,7 +61,12 @@ export default function OrderTable({ product, setProduct }) {
         product_id,
         purchased_id
       });
-      console.log(deliveryStatus);
+      console.log(deliveryStatus.status);
+
+      if(deliveryStatus.status === 200){
+        getOrder();
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -226,14 +231,15 @@ export default function OrderTable({ product, setProduct }) {
                         return eachPurchased.cartData.map((eachCartData) => {
                           return (
                             <div>
-                              <button
+                              {eachCartData.deliverystatus === 'Not-Delivered' ? <button
                                 className="deliverybtn"
                                 onClick={() =>
                                   deliveryStatus(each._id, eachCartData.cartId, eachPurchased._id)
                                 }
                               >
                                 {eachCartData.deliverystatus}
-                              </button>
+                              </button> : <p style={{color:'green',fontSize:'15px',fontWeight:'540'}}>Delivered</p>}
+                              
                             </div>
                           );
                         });
