@@ -14,7 +14,7 @@ const Cart = () => {
     <>
       <CheckoutHeader/>
       <CartDetails id={id}/>
-      <p>harish</p>
+    
     
     </>
   );
