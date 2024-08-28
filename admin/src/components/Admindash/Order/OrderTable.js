@@ -53,20 +53,19 @@ export default function OrderTable({ product, setProduct }) {
   }, []);
 
   const deliveryStatus = async (user_id, product_id, purchased_id) => {
-    console.log('deliverystatus');
-    
+    console.log("deliverystatus");
+
     try {
       const deliveryStatus = await client.post("/user/delivery", {
         user_id,
         product_id,
-        purchased_id
+        purchased_id,
       });
       console.log(deliveryStatus.status);
 
-      if(deliveryStatus.status === 200){
+      if (deliveryStatus.status === 200) {
         getOrder();
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -231,15 +230,31 @@ export default function OrderTable({ product, setProduct }) {
                         return eachPurchased.cartData.map((eachCartData) => {
                           return (
                             <div>
-                              {eachCartData.deliverystatus === 'Not-Delivered' ? <button
-                                className="deliverybtn"
-                                onClick={() =>
-                                  deliveryStatus(each._id, eachCartData.cartId, eachPurchased._id)
-                                }
-                              >
-                                {eachCartData.deliverystatus}
-                              </button> : <p style={{color:'green',fontSize:'15px',fontWeight:'540'}}>Delivered</p>}
-                              
+                              {eachCartData.deliverystatus ===
+                              "Not-Delivered" ? (
+                                <button
+                                  className="deliverybtn"
+                                  onClick={() =>
+                                    deliveryStatus(
+                                      each._id,
+                                      eachCartData.cartId,
+                                      eachPurchased._id
+                                    )
+                                  }
+                                >
+                                  {eachCartData.deliverystatus}
+                                </button>
+                              ) : (
+                                <p
+                                  style={{
+                                    color: "green",
+                                    fontSize: "15px",
+                                    fontWeight: "540",
+                                  }}
+                                >
+                                  Delivered
+                                </p>
+                              )}
                             </div>
                           );
                         });
