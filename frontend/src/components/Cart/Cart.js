@@ -14,6 +14,7 @@ const Cart = () => {
     <>
       <CheckoutHeader/>
       <CartDetails id={id}/>
+      <p>hi</p>
     
     </>
   );
