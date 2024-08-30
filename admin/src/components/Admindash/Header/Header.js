@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <div className="header">
       <div className="wrapper">
-        <div className="logo">logo</div>
+        <div className="logo-2">LOGO</div>
         <div className="usericon">
            <Profile/>
         </div>

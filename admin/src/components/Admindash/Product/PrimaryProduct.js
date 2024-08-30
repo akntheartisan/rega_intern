@@ -5,16 +5,58 @@ import { toast } from "react-hot-toast";
 const PrimaryProduct = () => {
   const [image, setImage] = useState(null);
   const [model, setModel] = useState("");
+  const [modelError, setModelError] = useState("");
+  const [imageError, setImageError] = useState("");
 
-  console.log(image, model);
+  const modelRegexAlphabetic = /^[a-zA-Z]+$/; 
+  const modelRegexLength = /^.{3,30}$/; 
+  const maxFileSize = 1 * 1024 * 1024; 
 
+  
+  const validateModel = (value) => {
+    if (!modelRegexLength.test(value)) {
+      setModelError("Product name must be between 3 to 30 characters.");
+    } else if (!modelRegexAlphabetic.test(value)) {
+      setModelError("Product name must be alphabetic and can't include spaces.");
+    } else {
+      setModelError(""); 
+    }
+  };
+
+
+  const handleModelChange = (e) => {
+    const value = e.target.value;
+    setModel(value);
+    validateModel(value);
+  };
+
+  const validateImage = (file) => {
+    if (!file) {
+      setImageError("Please select an image.");
+    } else if (file.size > maxFileSize) {
+      setImageError("Image size must be less than 1 MB.");
+    } else {
+      setImageError(""); 
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    validateImage(file);
+  };
+
+  // Submit form
   const submit = async () => {
-    const formData = new FormData();
+    // Additional validation 
+    if (modelError==="" || imageError==="") 
+    {
+      return false;
+    }
 
+    const formData = new FormData();
     formData.append("image", image);
     formData.append("model", model);
-
-    console.log(formData);
 
     try {
       const response = await client.post("/project/primary", formData);
@@ -25,6 +67,7 @@ const PrimaryProduct = () => {
       }
     } catch (error) {
       console.log(error);
+      toast.error("Failed to create model");
     }
   };
 
@@ -39,9 +82,12 @@ const PrimaryProduct = () => {
                 type="text"
                 value={model}
                 name="model"
-                onChange={(e) => setModel(e.target.value)}
+                onChange={handleModelChange}
                 className="form-control"
               />
+              {modelError && (
+                <div className="text-danger">{modelError}</div>
+              )}
             </div>
           </div>
 
@@ -51,10 +97,13 @@ const PrimaryProduct = () => {
               <input
                 type="file"
                 name="image"
-                onChange={(e) => setImage(e.target.files[0])}
+                onChange={handleImageChange}
                 className="form-control"
                 accept="image/*"
               />
+              {imageError && (
+                <div className="text-danger">{imageError}</div>
+              )}
             </div>
           </div>
 

@@ -52,8 +52,23 @@ const Product = () => {
       ...prev,
       [name]: value,
     }));
+    
+    validateField(name, value);
   };
-
+  const validateField = (name, value) => {
+    let errorMessage = "";
+  
+    if (name === "price" && isNaN(value)) {
+      errorMessage = "Price must be a number.";
+    } else if (/\s/.test(value) && name !== "price") {
+      errorMessage = "Spaces are not allowed.";
+    }
+  
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: errorMessage,
+    }));
+  };
   useEffect(() => {
     getPrimayProduct();
   }, []);
@@ -91,16 +106,20 @@ const Product = () => {
     fields.forEach((field) => {
       if (!product[field]) {
         newErrors[field] = `Please fill the ${field}`;
+      } else if (field === "price" && isNaN(product[field])) {
+        newErrors[field] = "Price must be a number.";
+      } else if (/\s/.test(product[field]) && field !== "price") {
+        newErrors[field] = "Spaces are not allowed.";
       }
     });
-
+  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    // if (!validateForm()) return;
 
     const formData = new FormData();
 

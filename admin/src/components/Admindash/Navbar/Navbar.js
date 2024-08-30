@@ -5,7 +5,7 @@ import "./navbar.css";
 const Navbar = () => {
   return (
     <>
-      <h4 style={{ color: "white" }}>Admin Dashboard</h4>
+      <h4 className="logo" style={{ color: "white" }}>Admin Dashboard</h4>
 
       <div className="list mt-5">
         <div className="listitem">

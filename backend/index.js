@@ -38,7 +38,7 @@ app.use("/bucket", bucketroute);
 
 
 const mongo_uri =
-  "mongodb+srv://aravinthkumaran410:iRPBg1ArJBqv3ayN@cluster0.2eiliwy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://mkansha2312:Y81PZ1nahAdVONzX@regakansha.ljpzn.mongodb.net/?retryWrites=true&w=majority&appName=RegaKansha";
 
 mongoose
   .connect(mongo_uri)
