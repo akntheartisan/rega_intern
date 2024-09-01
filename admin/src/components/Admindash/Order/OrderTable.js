@@ -231,7 +231,7 @@ export default function OrderTable({ product, setProduct }) {
                           return (
                             <div>
                               {eachCartData.deliverystatus ===
-                              "Not-Delivered" ? (
+                              "Not Delivered" ? (
                                 <button
                                   className="deliverybtn"
                                   onClick={() =>
@@ -242,7 +242,7 @@ export default function OrderTable({ product, setProduct }) {
                                     )
                                   }
                                 >
-                                  {eachCartData.deliverystatus}
+                                  Not Delivered
                                 </button>
                               ) : (
                                 <p

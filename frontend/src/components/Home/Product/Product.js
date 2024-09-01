@@ -12,16 +12,15 @@ import "./product.css";
 const Product = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState([]);
-  console.log(product.productData);
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await client.get("/project/getproduct");
         console.log(response.data.data);
         const productData = response.data.data;
-        if (product) {
-          setProduct((prev) => ({ ...prev, productData }));
+        if (response) {
+          setProduct((prev) =>  [...prev, ...productData ]);
         }
       } catch (error) {
         console.log(error);
@@ -31,7 +30,7 @@ const Product = () => {
     fetchData();
   }, []);
 
-  console.log(product.productData);
+  console.log(product);
 
   return (
     <>
@@ -47,8 +46,8 @@ const Product = () => {
             </p>
           </div>
 
-          {product.productData &&
-            product.productData.map((each) => {
+          {product &&
+            product.map((each) => {
               console.log(each.SubModel);
               return (
                 <div
@@ -88,6 +87,7 @@ const Product = () => {
                             objectFit: "cover",
                             marginTop: "-25px",
                           }}
+                          alt="bike"
                         />
                       </div>
 
