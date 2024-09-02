@@ -15,7 +15,7 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import toast from "react-hot-toast";
 import ViewListIcon from "@mui/icons-material/ViewList";
-import OrderView from "./OrderView";
+
 import "./order.css";
 
 export default function OrderTable({ product, setProduct }) {
@@ -26,6 +26,7 @@ export default function OrderTable({ product, setProduct }) {
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [deleteOpen, setDeleteOpen] = React.useState("");
   const [openOrderView, setOpenOrderView] = React.useState(false);
+  const [values, setValues] = useState({});
 
   console.log(orderData);
 
@@ -51,6 +52,12 @@ export default function OrderTable({ product, setProduct }) {
   useEffect(() => {
     getOrder();
   }, []);
+
+  const handleChangeValues = (values,cartId)=>{
+    setValues((prev)=>({
+      ...prev,[cartId]:values
+    }))
+  }
 
   const deliveryStatus = async (user_id, product_id, purchased_id) => {
     console.log("deliverystatus");
@@ -165,6 +172,17 @@ export default function OrderTable({ product, setProduct }) {
                     fontSize: "18px",
                   }}
                 >
+                  Track Id
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{
+                    minWidth: 170,
+                    backgroundColor: "black",
+                    color: "white",
+                    fontSize: "18px",
+                  }}
+                >
                   Order Status
                 </TableCell>
                 <TableCell
@@ -229,7 +247,24 @@ export default function OrderTable({ product, setProduct }) {
                       {each.Purchased.map((eachPurchased) => {
                         return eachPurchased.cartData.map((eachCartData) => {
                           return (
-                            <div>
+                            <div className="mt-2" key={eachCartData.cartId}>
+                              <input
+                                className="form-control"
+                                type="text"
+                                style={{ borderColor: "black" }}
+                                value={values[eachCartData.cartId]}
+                                onChange={(e)=>handleChangeValues(e.target.value,eachCartData.cartId)}
+                              />
+                            </div>
+                          );
+                        });
+                      })}
+                    </TableCell>
+                    <TableCell align="center">
+                      {each.Purchased.map((eachPurchased) => {
+                        return eachPurchased.cartData.map((eachCartData) => {
+                          return (
+                            <div key={eachCartData.cartId}>
                               {eachCartData.deliverystatus ===
                               "Not Delivered" ? (
                                 <button
@@ -241,6 +276,7 @@ export default function OrderTable({ product, setProduct }) {
                                       eachPurchased._id
                                     )
                                   }
+                                  disabled={!values[eachCartData.cartId]}
                                 >
                                   Not Delivered
                                 </button>
@@ -280,12 +316,7 @@ export default function OrderTable({ product, setProduct }) {
         onRowsPerPageChange={handleChangeRowsPerPage}
       /> */}
       </Paper>
-      <OrderView
-        openOrderView={openOrderView}
-        setOpenOrderView={setOpenOrderView}
-        selectedProduct={selectedProduct}
-        setSelectedProduct={setSelectedProduct}
-      />
+
       {/* <ProductUpdate
         updateOpen={updateOpen}
         setUpdateOpen={setUpdateOpen}
@@ -299,7 +330,6 @@ export default function OrderTable({ product, setProduct }) {
         product={selectedProduct}
         deleteSubmit={deleteSubmit}
       /> */}
-      <OrderView />
     </>
   );
 }

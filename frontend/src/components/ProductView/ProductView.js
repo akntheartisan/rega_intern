@@ -10,6 +10,7 @@ import frame from "./frame.png";
 import hand from "./hand.png";
 import mobilesurf from "./mobilesurf.png";
 import bikereceive from "./bikereceive.png";
+import smallbattery from "./car-battery (2).png";
 import CallIcon from "@mui/icons-material/Call";
 import Footer from "../Footer/Footer";
 import Stack from "@mui/material/Stack";
@@ -197,13 +198,15 @@ const ProductView = () => {
               }}
             >
               {product.SubModel.map((each) => (
-                <Button
-                  variant="outlined"
+                <button
+                className="batteryvariant"
+                  variant="contained"
                   key={each._id}
                   onClick={() => getSelectModel(each.battery)}
                 >
+                  <img src={smallbattery} alt="battery"/>&nbsp;&nbsp;
                   {each.battery}
-                </Button>
+                </button>
               ))}
             </div>
 
