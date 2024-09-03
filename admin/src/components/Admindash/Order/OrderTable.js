@@ -67,11 +67,13 @@ export default function OrderTable({ product, setProduct }) {
         user_id,
         product_id,
         purchased_id,
+        values
       });
       console.log(deliveryStatus.status);
 
       if (deliveryStatus.status === 200) {
         getOrder();
+        setValues({});
       }
     } catch (error) {
       console.log(error);
@@ -276,7 +278,7 @@ export default function OrderTable({ product, setProduct }) {
                                       eachPurchased._id
                                     )
                                   }
-                                  disabled={!values[eachCartData.cartId]}
+                                  disabled={!values[eachCartData.cartId] || values[eachCartData.cartId].length < 5}
                                 >
                                   Not Delivered
                                 </button>

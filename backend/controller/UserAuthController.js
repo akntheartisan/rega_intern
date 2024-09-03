@@ -282,10 +282,12 @@ exports.getOrderedProducts = async (req, res) => {
 };
 
 exports.deliveryStatus = async (req, res) => {
-  const { user_id, product_id, purchased_id } = req.body;
-  console.log(user_id, product_id, purchased_id);
+  const { user_id, product_id, purchased_id,values } = req.body;
+  console.log(user_id, product_id, purchased_id,values);
 
   try {
+    const trackIdValues = Object.values(values);
+    const trackId = trackIdValues[0];
     const userId = new mongoose.Types.ObjectId(user_id);
     const purchasedId = new mongoose.Types.ObjectId(purchased_id);
     const productId = new mongoose.Types.ObjectId(product_id);
@@ -298,7 +300,9 @@ exports.deliveryStatus = async (req, res) => {
       },
       {
         $set: {
-          'Purchased.$[purchase].cartData.$[item].deliverystatus': 'Delivered'
+          'Purchased.$[purchase].cartData.$[item].deliverystatus': 'Delivered',
+          'Purchased.$[purchase].cartData.$[item].trackId': trackId,
+
         }
       },
       {
