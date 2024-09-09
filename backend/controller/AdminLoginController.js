@@ -9,6 +9,8 @@ exports.adminsignin = async (req, res, next) => {
     //console.log(username, password);
 
     if (!username || !password) {
+      console.log('no admin password');
+      
       return res.status(400).json({
         status: "fail",
         message: "Username and Password are required",
@@ -19,6 +21,8 @@ exports.adminsignin = async (req, res, next) => {
       .findOne({ username })
       .select("+password");
     //console.log(adminCheck);
+
+    const dbPassword = adminCheck.password;
 
     if (!adminCheck) {
       return res.status(401).json({
@@ -33,6 +37,13 @@ exports.adminsignin = async (req, res, next) => {
     //     error: "Incorrect password. Please try again",
     //   });
     // }
+
+    if (dbPassword !== password) {
+      return res.status(401).json({
+        status: "fail",
+        error: "Incorrect password. Please try again",
+      });
+    }
 
     const jwtSecret = "sdflkjsadlfhasldfjsdlk";
     const jwtExpiration = "90d";
@@ -121,10 +132,10 @@ exports.passwordUpdate = async (req, res) => {
     adminCheck.password = password;
     const passwordChange = await adminCheck.save();
 
-    if(passwordChange){
+    if (passwordChange) {
       return res.status(200).json({
-        status:'success'
-      })
+        status: "success",
+      });
     }
   } catch (error) {
     //console.log(error);
