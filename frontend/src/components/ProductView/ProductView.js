@@ -30,6 +30,8 @@ const ProductView = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const product = location.state;
+  console.log(product);
+  
   const [selected, setSelected] = useState("");
 
 

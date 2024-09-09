@@ -4,7 +4,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import AdminDash from "./components/Admindash/AdminDash";
 import { Toaster } from "react-hot-toast";
 import { client } from "./Client/Clientaxios";
-
+import AdminForgetPassword from './components/Adminlogin/AdminForgetPassword'; 
+import AdminResetPass from "./components/Adminlogin/AdminResetPass/AdminResetPass";
 export const AdminContext = createContext();
 function App() {
   const [admin, setAdmin] = useState("");
@@ -30,6 +31,7 @@ function App() {
 
   return (
     <>
+      
       <AdminContext.Provider value={{ admin, setAdmin }}>
         <Toaster
           toastOptions={{
@@ -58,6 +60,8 @@ function App() {
               )
             }
           />
+          <Route path="/forgotadminpassword" element={<AdminForgetPassword/>}/>
+          <Route path="/admin/resetPassword/:id" element={<AdminResetPass />} />
         </Routes>
       </AdminContext.Provider>
     </>

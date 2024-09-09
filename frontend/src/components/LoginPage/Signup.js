@@ -98,6 +98,9 @@ const Signup = () => {
       if(response.status === 200){
         setUserData(user);
         navigate('/');
+        localStorage.setItem("user","kansha");
+        // navigate('/', { state: { fromSignup: true } }); 
+
       }
     } catch (error) {
       console.log(error);

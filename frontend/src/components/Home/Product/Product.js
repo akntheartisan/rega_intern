@@ -20,8 +20,8 @@ const Product = () => {
         const response = await client.get("/project/getproduct");
         console.log(response.data.data);
         const productData = response.data.data;
-        if (product) {
-          setProduct((prev) => ({ ...prev, productData }));
+        if (response) {
+          setProduct((prev) => [...prev, ...productData]  );
         }
       } catch (error) {
         console.log(error);
@@ -47,8 +47,8 @@ const Product = () => {
             </p>
           </div>
 
-          {product.productData &&
-            product.productData.map((each) => {
+          {product &&
+            product.map((each) => {
               console.log(each.SubModel);
               return (
                 <div

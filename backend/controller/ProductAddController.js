@@ -149,31 +149,70 @@ exports.getProduct = async (req, res, next) => {
   }
 };
 
+// exports.updateProject = async (req, res) => {
+//   //console.log("this update get triggered");
+//   const id = req.body._id;
+// console.log(id);
+
+//   try {
+//     let updateProduct = await projectmodel.findByIdAndUpdate(id, req.body, {
+//       new: true,
+//     });
+//     console.log(updateProduct);
+//     // if (updateProduct) {
+//     //   return res.status(200).json({
+//     //     status: "success",
+//     //     message: "Updated successfully",
+//     //     data: updateProduct,
+//     //   });
+//     // } else {
+//     //   return res.status(404).json({
+//     //     status: "fail",
+//     //     message: "Product not found",
+//     //   });
+//     // }
+//   } catch (error) {
+//     //console.log(error);
+//   }
+// };
 exports.updateProject = async (req, res) => {
-  //console.log("this update get triggered");
-  const id = req.body._id;
+  const { id,sub_id, ...updateData } = req.body; 
+
+  console.log(req.body); 
+  console.log("Data to Update:", updateData);
+  
 
   try {
-    let updateProduct = await projectmodel.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    //console.log(updateProduct);
+    
+    const updateProduct = await projectmodel.updateOne(
+      { _id: id, 'SubModel._id': sub_id },
+      { $set: { 'SubModel.$': updateData } }, 
+      { new: true }
+    );
+    console.log(updateProduct);
+    
     if (updateProduct) {
       return res.status(200).json({
-        status: "success",
-        message: "Updated successfully",
+        status: 'success',
+        message: 'Updated successfully',
         data: updateProduct,
       });
     } else {
       return res.status(404).json({
-        status: "fail",
-        message: "Product not found",
+        status: 'fail',
+        message: 'Product not found',
       });
     }
   } catch (error) {
-    //console.log(error);
+    return res.status(500).json({
+      status: 'fail',
+      message: 'Error occurred during update',
+      error: error.message,
+    });
   }
 };
+
+
 
 exports.deleteProduct = async (req, res) => {
   //console.log(req.body.id);

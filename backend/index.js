@@ -11,7 +11,7 @@ const cookieParser = require("cookie-parser");
 
 app.use(express.json()); 
 app.use(cookieParser());
-
+app.use(express.urlencoded({ extended: true }));
 const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];
 
 const corsOptions = {
@@ -39,7 +39,6 @@ app.use("/bucket", bucketroute);
 
 const mongo_uri =
   "mongodb+srv://mkansha2312:Y81PZ1nahAdVONzX@regakansha.ljpzn.mongodb.net/?retryWrites=true&w=majority&appName=RegaKansha";
-
 mongoose
   .connect(mongo_uri)
   .then(() => {

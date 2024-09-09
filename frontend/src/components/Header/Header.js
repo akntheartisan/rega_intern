@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
+import { NavLink } from "react-router-dom";
 import { UserContext } from "../../App";
 import UserProfile from "./UserProfile";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MobileViewMenu from "../MobileViewMenu/MobileViewMenu";
+import "./Header.css";
 
 const AccountButton = styled(Button)({
   textTransform: "none",
@@ -30,9 +30,7 @@ const AccountButton = styled(Button)({
 });
 
 const Header = () => {
-  const { userData, setUserData } = useContext(UserContext);
-
-  console.log(userData);
+  const { userData } = useContext(UserContext);
 
   return (
     <>
@@ -42,60 +40,72 @@ const Header = () => {
             <div className="col-lg-12 col-sm-12 text-center">
               <div className="main-menu-wrap">
                 <div className="site-logo">
-                  <Link href="index.html">
-                    <img src="assets/img/logo.png" alt />
-                  </Link>
+                  <NavLink to="/">
+                    <img src="assets/img/logo.png" alt="Site Logo" />
+                  </NavLink>
                 </div>
                 <nav className="main-menu">
                   <ul>
                     <li className="current-list-item">
-                      <Link to="/">Home</Link>
-                    </li>
-                    
-                    <li>
-                      <Link href="about.html">About</Link>
-                    </li>
-
-                    <li>
-                      <Link href="about.html">Product</Link>
+                      <NavLink
+                        exact
+                        to="/"
+                        className={({ isActive }) => (isActive ? "active" : undefined)}
+                      >
+                        Home
+                      </NavLink>
                     </li>
 
                     <li>
-                      <Link to="/contact">Contact</Link>
+                      <NavLink
+                        to="/about"
+                        className={({ isActive }) => (isActive ? "active" : undefined)}
+                      >
+                        About
+                      </NavLink>
+                    </li>
+
+                    <li>
+                      <NavLink
+                        to="/product"
+                        className={({ isActive }) => (isActive ? "active" : undefined)}
+                      >
+                        Product
+                      </NavLink>
+                    </li>
+
+                    <li>
+                      <NavLink
+                        to="/contact"
+                        className={({ isActive }) => (isActive ? "active" : undefined)}
+                      >
+                        Contact
+                      </NavLink>
                     </li>
 
                     <li>
                       <div className="header-icons">
-                        {/* <Link className="shopping-cart" href="cart.html">
-                          <i className="fas fa-shopping-cart" />
-                        </Link>
-                        <Link className="mobile-hide search-bar-icon" href="#">
-                          <i className="fas fa-search" />
-                        </Link> */}
                         {userData ? (
                           <UserProfile />
                         ) : (
-                          <Link
-                            className="mobile-hide search-bar-icon"
-                            to="/register"
-                          >
+                          <NavLink className="mobile-hide" to="/register">
                             <AccountButton
                               variant="contained"
                               startIcon={
                                 <AccountCircleIcon sx={{ color: "white" }} />
                               }
                             >
-                              SignIn
+                              Sign In
                             </AccountButton>
-                          </Link>
+                          </NavLink>
                         )}
                       </div>
                     </li>
                   </ul>
                 </nav>
-                <Link className="mobile-show search-bar-icon" href="#">
+                <NavLink className="mobile-show" to="#">
                   <MobileViewMenu />
-                </Link>
+                </NavLink>
               </div>
             </div>
           </div>

@@ -15,6 +15,8 @@ import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import ScrollToTop from "./components/ScrollToTop";
 import Orders from "./components/Orders/Orders";
+import Invoice from "./components/Checkout/Invoice";
+import About from "./components/About/About";
 
 export const UserContext = createContext();
 function App() {
@@ -61,6 +63,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About/>} />
           <Route path="/productview" element={<ProductView/>}/>
           <Route path="/cart" element={<Cart/>} />
           <Route path="/orders" element={<Orders/>} />
@@ -69,6 +72,7 @@ function App() {
           <Route path="/userdash" element={<UserDash />} />
           <Route path="/forgetPasswordPage" element={<ForgotPassword />} />
           <Route path="/users/resetPassword/:id" element={<ResetPassword />} />
+          <Route path="/invoice" element={<Invoice />} />
         </Routes>
       </UserContext.Provider>
     </>

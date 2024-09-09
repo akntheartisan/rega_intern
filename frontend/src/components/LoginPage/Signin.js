@@ -49,7 +49,7 @@ const Signin = () => {
       const user = response.data.user;
       if (response.status === 200) {
         setUserData(user);
-        navigate(-1);
+        navigate("/");
       }
     } catch (error) {
       console.log(error);

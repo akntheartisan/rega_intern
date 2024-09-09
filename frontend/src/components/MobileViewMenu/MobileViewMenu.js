@@ -95,7 +95,7 @@ const MobileViewMenu = () => {
               <NavLink
                 className="responsive_link"
                 activeClassName="active_link"
-                to={"/userdash"}
+                to={"/about"}
               >
                 About Us
               </NavLink>

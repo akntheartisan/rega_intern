@@ -45,7 +45,8 @@ const LoginForm = ({ setAdmin, admin }) => {
 
   const submit = async () => {
     const credential = { username, password };
-
+    console.log("kansha");
+    
     console.log(credential);
     try {
       const response = await client.post("/admin/signin", credential, {
@@ -78,7 +79,10 @@ const LoginForm = ({ setAdmin, admin }) => {
       console.log(error);
     }
   };
-
+  const forgotAdminPass=()=>
+  {
+   navigate('/forgotadminpassword')
+  }
   return (
     <>
       <div className="form">
@@ -152,6 +156,20 @@ const LoginForm = ({ setAdmin, admin }) => {
             <Button size="small" variant="contained" onClick={submit}>
               LogIn
             </Button>
+            <button
+            onClick={forgotAdminPass}
+            className="forgotAdminpass"
+            style={{
+              margin: "20px 0 0px 0",
+              display: "flex",
+              justifyContent: "flex-end",
+              background: "transparent",
+              border: "none",
+              color: "white",
+            }}
+          >
+            Forget Password?
+          </button>
           </Stack>
    
         </Box>

@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const adminmodel = require("../model/AdminLoginModel");
 const jwt = require("jsonwebtoken");
-
 exports.adminsignin = async (req, res, next) => {
   //console.log(req.body);
   try {
@@ -99,8 +98,8 @@ exports.protect = async (req, res, next) => {
     return res.status(401).json({
       status: "fail",
       message: "Token expired or invalid. Please log in again",
-    });
-  }
+   });
+  }
 };
 
 exports.passwordUpdate = async (req, res) => {

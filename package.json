@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@mui/icons-material": "^6.0.2",
+    "@mui/material": "^6.0.2",
+    "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^6.26.1",
+    "react-spinners": "^0.14.1"
+  }
+}

@@ -13,12 +13,26 @@ export default function ProductUpdate({ updateOpen, setUpdateOpen, product, setP
     setUpdateOpen(false);
   };
 
-  const [updatedProduct, setUpdatedProduct] = React.useState(product);
+  const [updatedProduct, setUpdatedProduct] = React.useState('');
+console.log(product.SubModel);
 
-  React.useEffect(() => {
-    setUpdatedProduct(product);
-  }, [product]);
+React.useEffect(() => {
+  if (Array.isArray(product.SubModel) && product.SubModel.length > 0) {
+    const firstObject = product.SubModel[0];
+    console.log(firstObject);
+    setUpdatedProduct(firstObject);
+  } else {
+    console.log('SubModel is either undefined or empty.');
+  }
+}, [product.SubModel]);  // This will run only when product.SubModel changes
 
+// console.log(firstObject.battery);
+
+
+  // React.useEffect(() => {
+  //   setUpdatedProduct(product);
+  // }, [product]);
+// 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUpdatedProduct((prev) => ({
@@ -27,44 +41,111 @@ export default function ProductUpdate({ updateOpen, setUpdateOpen, product, setP
     }));
   };
 
+  // const updateSubmit = async () => {
+
+  //   // console.log(updatedProduct);
+
+  // console.log(updatedProduct._id);
+  // console.log(updatedProduct.motor);
+  
+
+  // const formData = new FormData();
+  // formData.append('id',updatedProduct._id)
+  
+  // formData.append('motor', updatedProduct.motor);
+  // formData.append('battery', updatedProduct.battery);
+  // formData.append('range', updatedProduct.range);
+  // formData.append('tyresize', updatedProduct.tyresize);
+  // formData.append('brakes', updatedProduct.brakes);
+  // formData.append('ground', updatedProduct.ground);
+  // formData.append('payload', updatedProduct.payload);
+  // formData.append('frame', updatedProduct.frame);
+
+  //   Object.keys(updatedProduct).forEach((key) => {
+  //     formData.append(key, updatedProduct[key]);
+  //   });
+
+  //   console.log(formData);
+
+    // try {
+    //   const response = await client.post("/project/updateproject", updatedProduct);
+    //   const updatedData = response.data.data;
+    //   console.log(updatedData);
+    //   if(response.status === 200){
+    //     toast.success('Updated Successfully');
+    //     getProduct();
+        // setProductData(updatedData);
+    //     setUpdateOpen(false);
+    //   } 
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  // };
+  // console.log(product._id);
+  
   const updateSubmit = async () => {
-
-//     console.log(updatedProduct);
-
-//   console.log(updatedProduct._id);
-//   const formData = new FormData();
-//   formData.append('id',updatedProduct._id)
-//   formData.append('model', updatedProduct.model);
-//   formData.append('motor', updatedProduct.motor);
-//   formData.append('battery', updatedProduct.battery);
-//   formData.append('range', updatedProduct.range);
-//   formData.append('tyresize', updatedProduct.tyresize);
-//   formData.append('brakes', updatedProduct.brakes);
-//   formData.append('ground', updatedProduct.ground);
-//   formData.append('payload', updatedProduct.payload);
-//   formData.append('frame', updatedProduct.frame);
-
-    // Object.keys(updatedProduct).forEach((key) => {
-    //   formData.append(key, updatedProduct[key]);
-    // });
-
-    // console.log(formData);
-
     try {
-      const response = await client.post("/project/updateproject", updatedProduct);
+      // Check if updatedProduct._id exists to avoid undefined errors
+      if (!updatedProduct._id) {
+        console.error("No product ID found to update");
+        return;
+      }
+  
+      // const formData = new FormData();
+      
+      // // Append necessary fields to FormData
+      // formData.append('id', product._id);
+      // // formData.append('id', updatedProduct._id);
+      // formData.append('motor', updatedProduct.motor);
+      // formData.append('battery', updatedProduct.battery);
+      // formData.append('range', updatedProduct.range);
+      // formData.append('tyresize', updatedProduct.tyresize);
+      // formData.append('brakes', updatedProduct.brakes);
+      // formData.append('ground', updatedProduct.ground);
+      // formData.append('payload', updatedProduct.payload);
+      // formData.append('frame', updatedProduct.frame);
+      
+      // If you wish to append the whole object (remove the above manual append if using this approach)
+      // Object.keys(updatedProduct).forEach((key) => {
+      //   formData.append(key, updatedProduct[key]);
+      // });
+  
+      // console.log([...formData.entries()]); // Log formData content for debugging
+      // for (let [key, value] of formData.entries()) {
+      //   console.log(`${key}: ${value}`);
+      // }
+      // Send the form data using client
+      console.log("kansha:",updatedProduct);
+      // console.log(formData);
+      
+      
+     const response = await client.post("/project/updateproject", {
+               id: product._id,
+               sub_id: updatedProduct._id,
+                motor: updatedProduct.motor,
+                battery: updatedProduct.battery,
+                range: updatedProduct.range,
+                tyresize: updatedProduct.tyresize,
+                brakes: updatedProduct.brakes,
+                ground: updatedProduct.ground,
+                payload: updatedProduct.payload,
+                frame: updatedProduct.frame,
+     });
+  
+      // Handle response
       const updatedData = response.data.data;
       console.log(updatedData);
-      if(response.status === 200){
+      
+      if (response.status === 200) {
         toast.success('Updated Successfully');
-        getProduct();
-        // setProductData(updatedData);
-        setUpdateOpen(false);
-      } 
+        getProduct(); // Fetch the updated product list
+        setUpdateOpen(false); // Close the update dialog
+      }
     } catch (error) {
-      console.log(Error);
+      console.error("Error while updating product:", error);
     }
   };
-
+  
   return (
     <React.Fragment>
       <Dialog
@@ -101,7 +182,7 @@ export default function ProductUpdate({ updateOpen, setUpdateOpen, product, setP
                       className="form-control"
                       id="model"
                       name="model"
-                      value={updatedProduct.model}
+                      value={product.model}
                       onChange={handleChange}
                     />
                   </div>

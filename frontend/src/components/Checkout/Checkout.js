@@ -23,7 +23,10 @@ const intial = {
 const Checkout = () => {
   const navigate = useNavigate();
 
-  const { userData, setUserData } = useContext(UserContext);
+  const {userData, setUserData } = useContext(UserContext);
+  console.log("1234567890");
+
+  
   const [checked, setChecked] = useState(false);
   const [shipAddress, setShipAddress] = useState(intial);
   const [pod, setPod] = useState();
@@ -114,7 +117,8 @@ const Checkout = () => {
       console.log(typeof cartOffline.status);
 
       if (cartOffline.status === 200) {
-        toast.success("your order has been placed");
+        toast.success("your order kansha has been placed");
+        navigate("/invoice");
         setChecked(false);
         setPod(false);
         setModel(false);

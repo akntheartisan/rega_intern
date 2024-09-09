@@ -26,6 +26,8 @@ export default function ProductTable({ product, setProduct }) {
   const [deleteOpen, setDeleteOpen] = React.useState("");
 
   const handleClickOpen = (product) => {
+    console.log(product);
+    
     setSelectedProduct(product)
     setUpdateOpen(true);
   };
