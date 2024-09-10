@@ -6,16 +6,21 @@ exports.adminsignin = async (req, res, next) => {
   //console.log(req.body);
   try {
     const { username, password } = req.body;
-   
+    //console.log(username, password);
 
-    if (username == '' || password == '') {
+    if (!username || !password) {
+      console.log('no admin password');
+      
       return res.status(400).json({
         status: "fail",
         message: "Username and Password are required",
       });
     }
 
-    const adminCheck = await adminmodel.findOne({ username });
+    const adminCheck = await adminmodel
+      .findOne({ username })
+      .select("+password");
+    //console.log(adminCheck);
 
     const dbPassword = adminCheck.password;
 
@@ -33,7 +38,7 @@ exports.adminsignin = async (req, res, next) => {
     //   });
     // }
 
-    if (!(dbPassword === password)) {
+    if (dbPassword !== password) {
       return res.status(401).json({
         status: "fail",
         error: "Incorrect password. Please try again",

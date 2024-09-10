@@ -19,13 +19,24 @@ export default function ProductUpdate({
     setUpdateOpen(false);
   };
 
-  const [updatedProduct, setUpdatedProduct] = React.useState(product);
+  console.log(product);
+  const [filteredProduct, setFilteredProduct] = React.useState(product);
+  const [updatedProduct, setUpdatedProduct] = React.useState({
+    price: filteredProduct.price,
+    motor: filteredProduct.motor,
+    range: filteredProduct.range,
+    tyresize: filteredProduct.tyresize,
+    brakes: filteredProduct.brakes,
+    ground: filteredProduct.ground,
+    payload: filteredProduct.payload,
+  });
+  
+  // const [subModel, setSubModel] = React.useState([]);
 
-  console.log(updatedProduct);
-
-  React.useEffect(() => {
-    setUpdatedProduct(product);
-  }, [product]);
+  // React.useEffect(() => {
+  //   setUpdatedProduct(product);
+  //   // setSubModel(product.SubModel || []);
+  // }, [product]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,44 +46,40 @@ export default function ProductUpdate({
     }));
   };
 
+  console.log(product.SubModel);
+  // console.log(subModel);
+
+  const handleSelect = (e) => {
+    console.log(e.target.value);
+    const batteryValue = e.target.value;
+
+    const selectedBatteryModel = product.SubModel.filter((eachModel) =>
+      eachModel.battery.includes(batteryValue)
+    );
+
+    console.log(selectedBatteryModel[0]);
+    setFilteredProduct(selectedBatteryModel[0]);
+  };
+
   const updateSubmit = async () => {
-    //     console.log(updatedProduct);
+    console.log(updatedProduct);
 
-    //   console.log(updatedProduct._id);
-    //   const formData = new FormData();
-    //   formData.append('id',updatedProduct._id)
-    //   formData.append('model', updatedProduct.model);
-    //   formData.append('motor', updatedProduct.motor);
-    //   formData.append('battery', updatedProduct.battery);
-    //   formData.append('range', updatedProduct.range);
-    //   formData.append('tyresize', updatedProduct.tyresize);
-    //   formData.append('brakes', updatedProduct.brakes);
-    //   formData.append('ground', updatedProduct.ground);
-    //   formData.append('payload', updatedProduct.payload);
-    //   formData.append('frame', updatedProduct.frame);
-
-    // Object.keys(updatedProduct).forEach((key) => {
-    //   formData.append(key, updatedProduct[key]);
-    // });
-
-    // console.log(formData);
-
-    try {
-      const response = await client.post(
-        "/project/updateproject",
-        updatedProduct
-      );
-      const updatedData = response.data.data;
-      console.log(updatedData);
-      if (response.status === 200) {
-        toast.success("Updated Successfully");
-        getProduct();
-        // setProductData(updatedData);
-        setUpdateOpen(false);
-      }
-    } catch (error) {
-      console.log(Error);
-    }
+    // try {
+    //   const response = await client.post(
+    //     "/project/updateproject",
+    //     updatedProduct
+    //   );
+    //   const updatedData = response.data.data;
+    //   console.log(updatedData);
+    //   if (response.status === 200) {
+    //     toast.success("Updated Successfully");
+    //     getProduct();
+    //     // setProductData(updatedData);
+    //     setUpdateOpen(false);
+    //   }
+    // } catch (error) {
+    //   console.log(Error);
+    // }
   };
 
   return (
@@ -111,7 +118,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="model"
                       name="model"
-                      value={updatedProduct.model}
+                      value={product.model}
                       onChange={handleChange}
                     />
                   </div>
@@ -122,20 +129,30 @@ export default function ProductUpdate({
                     <label htmlFor="battery" className="form-label">
                       Battery
                     </label>
-                    <input
-                      type="text"
-                      className="form-control"
+                    <select
+                      className="form-select"
                       id="battery"
                       name="battery"
-                      value={updatedProduct.battery}
-                      onChange={handleChange}
-                    />
+                      onChange={handleSelect}
+                    >
+                      <option>Select</option>
+                      {product.SubModel &&
+                        product.SubModel.map((eachModel) => {
+                          return (
+                            <option
+                              key={eachModel._id}
+                              value={eachModel.battery}
+                            >
+                              {eachModel.battery}
+                            </option>
+                          );
+                        })}
+                    </select>
                   </div>
                 </div>
-
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label htmlFor="battery" className="form-label">
+                    <label htmlFor="motor" className="form-label">
                       Price
                     </label>
                     <input
@@ -143,7 +160,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="price"
                       name="price"
-                      value={updatedProduct.price}
+                      value={filteredProduct.price}
                       onChange={handleChange}
                     />
                   </div>
@@ -158,7 +175,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="motor"
                       name="motor"
-                      value={updatedProduct.motor}
+                      value={filteredProduct.motor}
                       onChange={handleChange}
                     />
                   </div>
@@ -174,7 +191,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="range"
                       name="range"
-                      value={updatedProduct.range}
+                      value={filteredProduct.range}
                       onChange={handleChange}
                     />
                   </div>
@@ -189,7 +206,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="tyresize"
                       name="tyresize"
-                      value={updatedProduct.tyresize}
+                      value={filteredProduct.tyresize}
                       onChange={handleChange}
                     />
                   </div>
@@ -204,7 +221,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="brakes"
                       name="brakes"
-                      value={updatedProduct.brakes}
+                      value={filteredProduct.brakes}
                       onChange={handleChange}
                     />
                   </div>
@@ -219,7 +236,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="ground"
                       name="ground"
-                      value={updatedProduct.ground}
+                      value={filteredProduct.ground}
                       onChange={handleChange}
                     />
                   </div>
@@ -234,7 +251,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="payload"
                       name="payload"
-                      value={updatedProduct.payload}
+                      value={filteredProduct.payload}
                       onChange={handleChange}
                     />
                   </div>
