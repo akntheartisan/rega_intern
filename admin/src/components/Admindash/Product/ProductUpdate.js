@@ -8,12 +8,20 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { client } from "../../../Client/Clientaxios";
 import toast from "react-hot-toast";
 
-export default function ProductUpdate({ updateOpen, setUpdateOpen, product, setProductData,getProduct }) {
+export default function ProductUpdate({
+  updateOpen,
+  setUpdateOpen,
+  product,
+  setProductData,
+  getProduct,
+}) {
   const handleClose = () => {
     setUpdateOpen(false);
   };
 
   const [updatedProduct, setUpdatedProduct] = React.useState(product);
+
+  console.log(updatedProduct);
 
   React.useEffect(() => {
     setUpdatedProduct(product);
@@ -28,21 +36,20 @@ export default function ProductUpdate({ updateOpen, setUpdateOpen, product, setP
   };
 
   const updateSubmit = async () => {
+    //     console.log(updatedProduct);
 
-//     console.log(updatedProduct);
-
-//   console.log(updatedProduct._id);
-//   const formData = new FormData();
-//   formData.append('id',updatedProduct._id)
-//   formData.append('model', updatedProduct.model);
-//   formData.append('motor', updatedProduct.motor);
-//   formData.append('battery', updatedProduct.battery);
-//   formData.append('range', updatedProduct.range);
-//   formData.append('tyresize', updatedProduct.tyresize);
-//   formData.append('brakes', updatedProduct.brakes);
-//   formData.append('ground', updatedProduct.ground);
-//   formData.append('payload', updatedProduct.payload);
-//   formData.append('frame', updatedProduct.frame);
+    //   console.log(updatedProduct._id);
+    //   const formData = new FormData();
+    //   formData.append('id',updatedProduct._id)
+    //   formData.append('model', updatedProduct.model);
+    //   formData.append('motor', updatedProduct.motor);
+    //   formData.append('battery', updatedProduct.battery);
+    //   formData.append('range', updatedProduct.range);
+    //   formData.append('tyresize', updatedProduct.tyresize);
+    //   formData.append('brakes', updatedProduct.brakes);
+    //   formData.append('ground', updatedProduct.ground);
+    //   formData.append('payload', updatedProduct.payload);
+    //   formData.append('frame', updatedProduct.frame);
 
     // Object.keys(updatedProduct).forEach((key) => {
     //   formData.append(key, updatedProduct[key]);
@@ -51,15 +58,18 @@ export default function ProductUpdate({ updateOpen, setUpdateOpen, product, setP
     // console.log(formData);
 
     try {
-      const response = await client.post("/project/updateproject", updatedProduct);
+      const response = await client.post(
+        "/project/updateproject",
+        updatedProduct
+      );
       const updatedData = response.data.data;
       console.log(updatedData);
-      if(response.status === 200){
-        toast.success('Updated Successfully');
+      if (response.status === 200) {
+        toast.success("Updated Successfully");
         getProduct();
         // setProductData(updatedData);
         setUpdateOpen(false);
-      } 
+      }
     } catch (error) {
       console.log(Error);
     }
@@ -106,21 +116,7 @@ export default function ProductUpdate({ updateOpen, setUpdateOpen, product, setP
                     />
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label htmlFor="motor" className="form-label">
-                      Motor
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="motor"
-                      name="motor"
-                      value={updatedProduct.motor}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
+
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="battery" className="form-label">
@@ -136,6 +132,38 @@ export default function ProductUpdate({ updateOpen, setUpdateOpen, product, setP
                     />
                   </div>
                 </div>
+
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label htmlFor="battery" className="form-label">
+                      Price
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="price"
+                      name="price"
+                      value={updatedProduct.price}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label htmlFor="motor" className="form-label">
+                      Motor
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="motor"
+                      name="motor"
+                      value={updatedProduct.motor}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="range" className="form-label">
