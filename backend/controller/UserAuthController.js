@@ -44,10 +44,21 @@ exports.userSignUp = async (req, res, next) => {
     });
 
     if (newuser) {
+
+      const otp = Math.floor(1000 + Math.random() * 9000);
+
+      const message = `Your 4 digit otp is ${otp}`;
+
+      await sendMail({
+        email: newuser.username,
+        subject: "Your SignUp OTP",
+        message: message,
+      });
+
       return res
         .status(200)
         .cookie("token", token, { httpOnly: true })
-        .json({ newuser });
+        .json({ newuser,otp });
     }
   } catch (error) {
     res.status(400).json({

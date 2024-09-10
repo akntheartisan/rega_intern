@@ -91,26 +91,25 @@ exports.productadd = async (req, res, next) => {
     let findModel = await projectmodel.find({ model });
     if (findModel) {
       await projectmodel.updateOne(
-          { model: model },
-          {
-              $push: {
-                  SubModel: {
-                      motor,
-                      battery,
-                      range,
-                      tyresize,
-                      brakes,
-                      ground,
-                      payload,
-                      charging,
-                      frame,
-                      price,
-                  },
-              },
-          }
+        { model: model },
+        {
+          $push: {
+            SubModel: {
+              motor,
+              battery,
+              range,
+              tyresize,
+              brakes,
+              ground,
+              payload,
+              charging,
+              frame,
+              price,
+            },
+          },
+        }
       );
-      
-  }
+    }
   } catch (error) {
     //console.log(error);
     res.status(400).json({
@@ -151,27 +150,25 @@ exports.getProduct = async (req, res, next) => {
 
 exports.updateProject = async (req, res) => {
   //console.log("this update get triggered");
-  const id = req.body._id;
+  const { updatedProduct, id } = req.body;
+  console.log(updatedProduct, id);
 
   try {
-    let updateProduct = await projectmodel.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    //console.log(updateProduct);
-    if (updateProduct) {
+    const updatedDoc = await projectmodel.updateOne(
+      { _id: id, "SubModel._id": updatedProduct._id },
+      { $set: { "SubModel.$": updatedProduct } }
+    );
+
+    console.log(updatedDoc);
+    if(updatedDoc){
       return res.status(200).json({
         status: "success",
         message: "Updated successfully",
-        data: updateProduct,
-      });
-    } else {
-      return res.status(404).json({
-        status: "fail",
-        message: "Product not found",
       });
     }
+    
   } catch (error) {
-    //console.log(error);
+    console.log(error);
   }
 };
 
