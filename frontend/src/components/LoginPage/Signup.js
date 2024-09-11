@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "./Signin.css";
 import { useNavigate } from "react-router-dom";
 import { Stack, TextField, InputAdornment, Box } from "@mui/material";
@@ -11,7 +11,7 @@ import PasswordIcon from "@mui/icons-material/Password";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import { client } from "../Client/Client";
 import { UserContext } from "../../App";
-import PinIcon from '@mui/icons-material/Pin';
+import PinIcon from "@mui/icons-material/Pin";
 
 const intial = { name: "", username: "", password: "", confirmpassword: "" };
 
@@ -23,7 +23,8 @@ const Signup = () => {
     passwordCheck: "",
     confirmPasswordCheck: "",
   });
-  const [mailOTP, setMailOTP] = useState({ ogotp: "", tyotp: "" });
+  const [mailOTP, setMailOTP] = useState();
+  const [userOTP, setUserOTP] = useState();
   const [typeOTP, setTypeOTP] = useState(false);
 
   const handleChange = (e) => {
@@ -83,13 +84,9 @@ const Signup = () => {
     }));
   };
 
-  const handleChangeOtp = (e)=>{
-    const {name,value} = e.target.value;
-
-    setMailOTP((prev)=>({
-      ...prev,[name]:value
-    }))
-  }
+  const handleChangeOtp = (e) => {
+    setUserOTP(e.target.value);
+  };
 
   console.log(user);
 
@@ -99,26 +96,12 @@ const Signup = () => {
         withCredentials: true,
       });
 
-      console.log(response.data.otp);
+      setMailOTP(response.data.otp);
 
-      setMailOTP((prevState) => ({
-        ...prevState,   
-        ogotp: response.data.otp 
-      }));
+      console.log(mailOTP);
 
-      // const {ogotp,tyotp} = mailOTP;
-
-      // console.log(mailOTP.ogotp,mailOTP.tyotp);
-
-      setTypeOTP(true);
-      
-      
-
-      if (mailOTP.ogotp === mailOTP.tyotp) {
-        toast.success("Successfully Created");
-        getUserData();
-      }
       setUser(intial);
+      setTypeOTP(true);
     } catch (error) {
       console.log(error);
       if (error.response.data.error) {
@@ -127,7 +110,18 @@ const Signup = () => {
     }
   };
 
-  const getUserData = async (req, res, next) => {
+  console.log(mailOTP, userOTP);
+
+  const verifyOtp = async () => {
+    if (mailOTP == userOTP) {
+      toast.success("OTP verified successfully!");
+      await getUserData();
+    } else {
+      toast.error("Invalid OTP. Please try again.");
+    }
+  };
+
+  const getUserData = async () => {
     try {
       const response = await client.get("/user/protect", {
         withCredentials: true,
@@ -291,8 +285,8 @@ const Signup = () => {
           </button>{" "}
         </Stack>
       ) : (
-        <Stack>
-            <TextField
+        <Stack direction="column" spacing={4}>
+          <TextField
             label="OTP"
             name="tyotp"
             size="small"
@@ -309,7 +303,7 @@ const Signup = () => {
                 },
               },
             }}
-            value={mailOTP.tyotp}
+            value={userOTP}
             onChange={handleChangeOtp}
             InputProps={{
               endAdornment: (
@@ -323,7 +317,15 @@ const Signup = () => {
               style: { color: "#fff" },
             }}
           />
-      
+
+          <Button
+            type="button"
+            class="btn"
+            style={{ color: "white", backgroundColor: "#f28123" }}
+            onClick={verifyOtp}
+          >
+            Ok
+          </Button>
         </Stack>
       )}
     </>
