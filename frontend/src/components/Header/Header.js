@@ -35,7 +35,7 @@ const Header = () => {
   return (
     <>
       <div className="top-header-area" id="sticker">
-        <div className="container">
+        <div className="container-fluid px-5" >
           <div className="row">
             <div className="col-lg-12 col-sm-12 text-center">
               <div className="main-menu-wrap">
@@ -47,7 +47,7 @@ const Header = () => {
                 <nav className="main-menu">
                   <ul>
                     <li className="current-list-item">
-                      <NavLink
+                      <NavLink style={{fontSize:"16px"}}
                         exact
                         to="/"
                         className={({ isActive }) => (isActive ? "active" : undefined)}
@@ -57,7 +57,8 @@ const Header = () => {
                     </li>
 
                     <li>
-                      <NavLink
+                      <NavLink style={{fontSize:"16px"}}
+                      
                         to="/about"
                         className={({ isActive }) => (isActive ? "active" : undefined)}
                       >
@@ -66,7 +67,7 @@ const Header = () => {
                     </li>
 
                     <li>
-                      <NavLink
+                      <NavLink style={{fontSize:"16px"}}
                         to="/product"
                         className={({ isActive }) => (isActive ? "active" : undefined)}
                       >
@@ -75,7 +76,7 @@ const Header = () => {
                     </li>
 
                     <li>
-                      <NavLink
+                      <NavLink style={{fontSize:"16px"}}
                         to="/contact"
                         className={({ isActive }) => (isActive ? "active" : undefined)}
                       >
