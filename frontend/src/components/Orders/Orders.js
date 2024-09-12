@@ -60,10 +60,10 @@ const Orders = () => {
               <h6>Ordered Status</h6>
 
               <FormGroup>
-                <FormControlLabel control={<Checkbox />} label="On the way" />
+           
                 <FormControlLabel control={<Checkbox />} label="Delivered" />
                 <FormControlLabel control={<Checkbox />} label="Not Delivered" />
-                <FormControlLabel control={<Checkbox />} label="Cancelled" />
+               
               </FormGroup>
             </Paper>
           </div>

@@ -31,7 +31,7 @@ const Checkout = () => {
   const [model, setModel] = useState(true);
   const [totalShow, setTotalShow] = useState(true);
   const [singleQuantity, setSingleQuantity] = useState(0);
-  const [cartData,setCartData] = useState();
+  const [cartData, setCartData] = useState();
 
   console.log(userData);
 
@@ -85,16 +85,15 @@ const Checkout = () => {
     let userDetails;
 
     const userId = userData._id;
-    
+
     let singleCartArray = [];
-    
-    if(typeof(singleCartData) === "object"){
-        singleCartArray.push(singleCartData)
+
+    if (typeof singleCartData === "object") {
+      singleCartArray.push(singleCartData);
     }
-   
 
     console.log(cartData);
-    
+
     if (checked) {
       userDetails = { ...userData, userId };
       console.log(userDetails);
@@ -175,11 +174,10 @@ const Checkout = () => {
     const payment_id = payment;
 
     let singleCartArray = [];
-    
-    if(typeof(singleCartData) === "object"){
-        singleCartArray.push(singleCartData)
+
+    if (typeof singleCartData === "object") {
+      singleCartArray.push(singleCartData);
     }
- 
 
     if (checked) {
       userDetails = { ...userData, userId };
@@ -306,6 +304,16 @@ const Checkout = () => {
                                 />
                               </p>
                             </form>
+                            <button
+                              className="stepper_button"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseTwo"
+                              aria-expanded="true"
+                              aria-controls="collapseTwo"
+                            >
+                              NEXT
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -315,11 +323,11 @@ const Checkout = () => {
                         <h5 className="mb-0">
                           <button
                             className="btn btn-link collapsed"
-                            type="button"
-                            data-toggle="collapse"
-                            data-target="#collapseTwo"
-                            aria-expanded="false"
-                            aria-controls="collapseTwo"
+                            // type="button"
+                            // data-toggle="collapse"
+                            // data-target="#collapseTwo"
+                            // aria-expanded="false"
+                            // aria-controls="collapseTwo"
                           >
                             Shipping Address
                           </button>
@@ -452,6 +460,27 @@ const Checkout = () => {
                                 />
                               </p>
                             </form>
+                            <button
+                              className="stepper_button"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#headingSummary1"
+                              aria-expanded="false"
+                              aria-controls="collapseThree"
+                              disabled={!checked}
+                            >
+                              NEXT
+                            </button>&nbsp;&nbsp;
+                            <button
+                              className="stepper_button_back"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseOne"
+                              aria-expanded="true"
+                              aria-controls="collapseOne"
+                            >
+                              BACK
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -535,7 +564,29 @@ const Checkout = () => {
                                   </button>
                                 </div>
                               </div>
+                              
                             </div>
+                            <button
+                              className="stepper_button"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseThree"
+                              aria-expanded="false"
+                              aria-controls="collapseThree"
+                            >
+                              NEXT
+                            </button>&nbsp;&nbsp;
+                            <button
+                              className="stepper_button_back"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseTwo"
+                              aria-expanded="true"
+                              aria-controls="collapseTwo"
+                            >
+                              BACK
+                            </button>
+                            
                           </div>
                         </div>
                       </div>
@@ -594,8 +645,28 @@ const Checkout = () => {
                                 </div>
                               );
                             })}
-                                <hr/>
+                            <hr />
                           </div>
+                          <button
+                              className="stepper_button"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseThree"
+                              aria-expanded="false"
+                              aria-controls="collapseThree"
+                            >
+                              NEXT
+                            </button>&nbsp;&nbsp;
+                             <button
+                              className="stepper_button_back"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseTwo"
+                              aria-expanded="true"
+                              aria-controls="collapseTwo"
+                            >
+                              BACK
+                            </button>
                         </div>
                       </div>
                     )}
@@ -672,7 +743,18 @@ const Checkout = () => {
                                   </label>
                                 </div>
                               </div>
+                           
                             </div>
+                            <button
+                              className="stepper_button_back"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#headingSummary1"
+                              aria-expanded="false"
+                              aria-controls="collapseThree"
+                            >
+                              BACK
+                            </button>
                           </div>
                         </div>
                       </div>
