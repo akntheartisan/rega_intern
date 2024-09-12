@@ -20,17 +20,9 @@ export default function ProductUpdate({
   };
 
   console.log(product);
-  const [filteredProduct, setFilteredProduct] = React.useState(product);
-  const [updatedProduct, setUpdatedProduct] = React.useState({
-    price: filteredProduct.price,
-    motor: filteredProduct.motor,
-    range: filteredProduct.range,
-    tyresize: filteredProduct.tyresize,
-    brakes: filteredProduct.brakes,
-    ground: filteredProduct.ground,
-    payload: filteredProduct.payload,
-  });
-  
+  // const [filteredProduct, setFilteredProduct] = React.useState(product);
+  const [updatedProduct, setUpdatedProduct] = React.useState({});
+
   // const [subModel, setSubModel] = React.useState([]);
 
   // React.useEffect(() => {
@@ -57,29 +49,31 @@ export default function ProductUpdate({
       eachModel.battery.includes(batteryValue)
     );
 
-    console.log(selectedBatteryModel[0]);
-    setFilteredProduct(selectedBatteryModel[0]);
+    // setFilteredProduct(selectedBatteryModel[0]);
+    setUpdatedProduct(selectedBatteryModel[0]);
   };
 
   const updateSubmit = async () => {
     console.log(updatedProduct);
+    const id = product._id;
 
-    // try {
-    //   const response = await client.post(
-    //     "/project/updateproject",
-    //     updatedProduct
-    //   );
-    //   const updatedData = response.data.data;
-    //   console.log(updatedData);
-    //   if (response.status === 200) {
-    //     toast.success("Updated Successfully");
-    //     getProduct();
-    //     // setProductData(updatedData);
-    //     setUpdateOpen(false);
-    //   }
-    // } catch (error) {
-    //   console.log(Error);
-    // }
+    try {
+      const response = await client.post("/project/updateproject", {
+        updatedProduct,
+        id,
+      });
+      const updatedData = response.data.data;
+      console.log(updatedData);
+      if (response.status === 200) {
+        toast.success("Updated Successfully");
+        getProduct();
+        setUpdatedProduct({});
+        // setProductData(updatedData);
+        setUpdateOpen(false);
+      }
+    } catch (error) {
+      console.log(Error);
+    }
   };
 
   return (
@@ -135,7 +129,7 @@ export default function ProductUpdate({
                       name="battery"
                       onChange={handleSelect}
                     >
-                      <option>Select</option>
+                      <option value="">Select</option>
                       {product.SubModel &&
                         product.SubModel.map((eachModel) => {
                           return (
@@ -160,7 +154,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="price"
                       name="price"
-                      value={filteredProduct.price}
+                      value={updatedProduct.price}
                       onChange={handleChange}
                     />
                   </div>
@@ -175,7 +169,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="motor"
                       name="motor"
-                      value={filteredProduct.motor}
+                      value={updatedProduct.motor}
                       onChange={handleChange}
                     />
                   </div>
@@ -191,7 +185,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="range"
                       name="range"
-                      value={filteredProduct.range}
+                      value={updatedProduct.range}
                       onChange={handleChange}
                     />
                   </div>
@@ -206,7 +200,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="tyresize"
                       name="tyresize"
-                      value={filteredProduct.tyresize}
+                      value={updatedProduct.tyresize}
                       onChange={handleChange}
                     />
                   </div>
@@ -221,7 +215,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="brakes"
                       name="brakes"
-                      value={filteredProduct.brakes}
+                      value={updatedProduct.brakes}
                       onChange={handleChange}
                     />
                   </div>
@@ -236,7 +230,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="ground"
                       name="ground"
-                      value={filteredProduct.ground}
+                      value={updatedProduct.ground}
                       onChange={handleChange}
                     />
                   </div>
@@ -251,7 +245,7 @@ export default function ProductUpdate({
                       className="form-control"
                       id="payload"
                       name="payload"
-                      value={filteredProduct.payload}
+                      value={updatedProduct.payload}
                       onChange={handleChange}
                     />
                   </div>
