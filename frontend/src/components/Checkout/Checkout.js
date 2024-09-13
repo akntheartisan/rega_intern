@@ -714,7 +714,8 @@ const Checkout = () => {
                                     id="flexRadioDefault1"
                                     value={pod}
                                     onChange={handlePaymentDelivery}
-                                    {...(pod ? { checked } : {})}
+                                    checked={pod}
+                                    // {...(pod ? { checked } : {})}
                                   />
                                   <label
                                     className="form-check-label"
@@ -733,7 +734,8 @@ const Checkout = () => {
                                     id="flexRadioDefault2"
                                     value={online}
                                     onChange={handlePaymentOnline}
-                                    {...(pod ? { checked } : {})}
+                                    checked={online}
+                                    // {...(pod ? { checked } : {})}
                                   />
                                   <label
                                     className="form-check-label"

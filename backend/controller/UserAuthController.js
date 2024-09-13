@@ -44,7 +44,6 @@ exports.userSignUp = async (req, res, next) => {
     });
 
     if (newuser) {
-
       const otp = Math.floor(1000 + Math.random() * 9000);
 
       const message = `Your 4 digit otp is ${otp}`;
@@ -58,7 +57,7 @@ exports.userSignUp = async (req, res, next) => {
       return res
         .status(200)
         .cookie("token", token, { httpOnly: true })
-        .json({ newuser,otp });
+        .json({ newuser, otp });
     }
   } catch (error) {
     res.status(400).json({
@@ -288,13 +287,13 @@ exports.getOrderedProducts = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error); 
+    console.log(error);
   }
 };
 
 exports.deliveryStatus = async (req, res) => {
-  const { user_id, product_id, purchased_id,values } = req.body;
-  console.log(user_id, product_id, purchased_id,values);
+  const { user_id, product_id, purchased_id, values } = req.body;
+  console.log(user_id, product_id, purchased_id, values);
 
   try {
     const trackIdValues = Object.values(values);
@@ -306,34 +305,75 @@ exports.deliveryStatus = async (req, res) => {
     const result = await usermodel.updateOne(
       {
         _id: userId,
-        'Purchased._id': purchasedId,
-        'Purchased.cartData.cartId': productId
+        "Purchased._id": purchasedId,
+        "Purchased.cartData.cartId": productId,
       },
       {
         $set: {
-          'Purchased.$[purchase].cartData.$[item].deliverystatus': 'Delivered',
-          'Purchased.$[purchase].cartData.$[item].trackId': trackId,
-
-        }
+          "Purchased.$[purchase].cartData.$[item].deliverystatus": "Delivered",
+          "Purchased.$[purchase].cartData.$[item].trackId": trackId,
+        },
       },
       {
         arrayFilters: [
-          { 'purchase._id': purchasedId },
-          { 'item.cartId': productId }
-        ]
+          { "purchase._id": purchasedId },
+          { "item.cartId": productId },
+        ],
       }
     );
 
-    if(result){
+    if (result) {
       return res.status(200).json({
-        status:'success',
-        message:'Delivered status changed successfully'
-      })
+        status: "success",
+        message: "Delivered status changed successfully",
+      });
     }
-    
   } catch (error) {
-    console.log('Error:', error);
-    res.status(500).json({ message: 'An error occurred while updating delivery status.' });
+    console.log("Error:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while updating delivery status." });
   }
 };
 
+exports.cancelProducts = async (req, res) => {
+  const { id, purchased_id, cartId } = req.body;
+  console.log(id, purchased_id, cartId);
+
+  const userId = new mongoose.Types.ObjectId(id);
+  const purchaseId = new mongoose.Types.ObjectId(purchased_id);
+  const cart_Id = new mongoose.Types.ObjectId(cartId);
+
+  try {
+    const cancelProduct = await usermodel.findOneAndUpdate(
+      {
+        _id: id,
+        "Purchased._id": purchaseId,
+        "Purchased.cartData.cartId": cart_Id,
+      },
+      {
+        $set: {
+          "Purchased.$[purchase].cartData.$[cart].deliverystatus": "cancelled",
+        },
+      },
+      {
+        arrayFilters: [
+          { "purchase._id": purchaseId },
+          { "cart.cartId": cart_Id },
+        ],
+        new:true
+      },
+      
+    );
+
+    if(cancelProduct){
+      return res.status(200).json({
+        status: "success",
+        message: cancelProduct,
+      });
+    }
+
+    console.log(cancelProduct);
+    
+  } catch (error) {}
+};
