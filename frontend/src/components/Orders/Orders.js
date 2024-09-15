@@ -21,6 +21,11 @@ const Orders = () => {
   const [ordered, setOrdered] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState("");
+  const [orderCheckBox, setOrderCheckBox] = useState({
+    delivered: false,
+    notdelivered: false,
+    cancelled: false,
+  });
 
   console.log(filtered);
   console.log(ordered);
@@ -46,10 +51,60 @@ const Orders = () => {
     }
   };
 
+  const handleCheck = (e) => {
+    const { name, checked } = e.target;
+    console.log(name, checked);
+
+    setOrderCheckBox((prev) => ({
+      ...prev,
+      [name]: checked,
+    }));
+  };
+
+  useEffect(() => {
+    filterOrder();
+  }, [orderCheckBox]);
+
   const filterOrder = () => {
-    const filteredOrder = filtered.cartData.filter((each) =>
-      each.model.includes("craze")
-    );
+
+    let filteredOrder = [...ordered]
+
+    if (orderCheckBox.delivered) {
+       filteredOrder = filtered.map((each) => {
+        return {
+          ...each,
+          cartData:each.cartData.filter((eachData)=>
+            eachData.deliverystatus.includes("Delivered")
+          )
+        }
+      });
+      
+    }
+
+    if (orderCheckBox.notdelivered) {
+       filteredOrder = filtered.map((each) => {
+        return {
+          ...each,
+          cartData:each.cartData.filter((eachData)=>
+            eachData.deliverystatus.includes("Not Delivered")
+          )
+        }
+      });
+      
+    }
+
+    if (orderCheckBox.cancelled) {
+       filteredOrder = filtered.map((each) => {
+        return {
+          ...each,
+          cartData:each.cartData.filter((eachData)=>
+            eachData.deliverystatus.includes("cancelled")
+          )
+        }
+      });
+      
+    }
+
     setFiltered(filteredOrder);
   };
 
@@ -84,10 +139,35 @@ const Orders = () => {
               <h6>Ordered Status</h6>
 
               <FormGroup>
-                <FormControlLabel control={<Checkbox />} label="Delivered" />
                 <FormControlLabel
-                  control={<Checkbox />}
+                  control={
+                    <Checkbox
+                      value={orderCheckBox.delivered}
+                      onChange={handleCheck}
+                      name="delivered"
+                    />
+                  }
+                  label="Delivered"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      value={orderCheckBox.notdelivered}
+                      onChange={handleCheck}
+                      name="notdelivered"
+                    />
+                  }
                   label="Not Delivered"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      value={orderCheckBox.cancelled}
+                      onChange={handleCheck}
+                      name="cancelled"
+                    />
+                  }
+                  label="Cancelled"
                 />
               </FormGroup>
             </Paper>
@@ -161,7 +241,7 @@ const Orders = () => {
                                   style={{
                                     height: "10px",
                                     width: "10px",
-                                    backgroundColor: "red",
+                                    backgroundColor: "#f28123",
                                     borderRadius: "50%",
                                     display: "inline-block",
                                   }}
@@ -182,8 +262,19 @@ const Orders = () => {
                                 </div>
                               </>
                             ) : order.deliverystatus === "cancelled" ? (
-                              
-                              <p>{order.deliverystatus}</p>
+                              <>
+                                <div
+                                  style={{
+                                    height: "10px",
+                                    width: "10px",
+                                    backgroundColor: "red",
+                                    borderRadius: "50%",
+                                    display: "inline-block",
+                                  }}
+                                ></div>
+                                {order.deliverystatus}
+                                <div></div>
+                              </>
                             ) : null}
                           </div>
                         </Paper>
