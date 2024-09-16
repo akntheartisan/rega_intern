@@ -12,6 +12,12 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import search from "./search.png";
 import { UserContext } from "../../App";
 
+const intialCheckBox = {
+  delivered: false,
+  notdelivered: false,
+  cancelled: false,
+};
+
 const Orders = () => {
   const location = useLocation();
   const { id } = location.state;
@@ -21,11 +27,7 @@ const Orders = () => {
   const [ordered, setOrdered] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState("");
-  const [orderCheckBox, setOrderCheckBox] = useState({
-    delivered: false,
-    notdelivered: false,
-    cancelled: false,
-  });
+  const [orderCheckBox, setOrderCheckBox] = useState(intialCheckBox);
 
   console.log(filtered);
   console.log(ordered);
@@ -66,45 +68,39 @@ const Orders = () => {
   }, [orderCheckBox]);
 
   const filterOrder = () => {
+    let filteredOrder = [...ordered]; // Start with the original ordered data
 
-    let filteredOrder = [...ordered]
-
+    // If 'Delivered' checkbox is selected
     if (orderCheckBox.delivered) {
-       filteredOrder = filtered.map((each) => {
-        return {
-          ...each,
-          cartData:each.cartData.filter((eachData)=>
-            eachData.deliverystatus.includes("Delivered")
-          )
-        }
-      });
-      
+      filteredOrder = ordered.map((each) => ({
+        ...each,
+        cartData: each.cartData.filter((eachData) =>
+          eachData.deliverystatus.includes("Delivered")
+        ),
+      }));
     }
 
+    // If 'Not Delivered' checkbox is selected (only apply this if 'Delivered' is not selected)
     if (orderCheckBox.notdelivered) {
-       filteredOrder = filtered.map((each) => {
-        return {
-          ...each,
-          cartData:each.cartData.filter((eachData)=>
-            eachData.deliverystatus.includes("Not Delivered")
-          )
-        }
-      });
-      
+      filteredOrder = ordered.map((each) => ({
+        ...each,
+        cartData: each.cartData.filter((eachData) =>
+          eachData.deliverystatus.includes("Not Delivered")
+        ),
+      }));
     }
 
+    // If 'Cancelled' checkbox is selected (only apply this if the other two are not selected)
     if (orderCheckBox.cancelled) {
-       filteredOrder = filtered.map((each) => {
-        return {
-          ...each,
-          cartData:each.cartData.filter((eachData)=>
-            eachData.deliverystatus.includes("cancelled")
-          )
-        }
-      });
-      
+      filteredOrder = ordered.map((each) => ({
+        ...each,
+        cartData: each.cartData.filter((eachData) =>
+          eachData.deliverystatus.includes("cancelled")
+        ),
+      }));
     }
 
+    // Update the filtered state
     setFiltered(filteredOrder);
   };
 
@@ -127,6 +123,35 @@ const Orders = () => {
       console.log(error);
     }
   };
+
+  const pdfDownload = async (purchased_id, cartId) => {
+    const id = userData._id;
+  
+    console.log(id, purchased_id, cartId);
+  
+    try {
+      // Make the request to the backend to get the PDF
+      const response = await client.get("/pdfdown/downloads", {
+        params: { id, purchased_id, cartId },
+        responseType: 'blob'  // Important: Set responseType to 'blob' to handle binary data
+      });
+  
+      // Create a Blob from the PDF response
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+  
+      // Create a link to download the PDF
+      const url = window.URL.createObjectURL(pdfBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'invoice.pdf';  // Set the filename for the download
+      document.body.appendChild(a);  // Append the link to the body
+      a.click();  // Simulate a click to trigger the download
+      a.remove();  // Clean up by removing the link from the DOM
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+    }
+  };
+  
   return (
     <>
       <CheckoutHeader />
@@ -145,6 +170,9 @@ const Orders = () => {
                       value={orderCheckBox.delivered}
                       onChange={handleCheck}
                       name="delivered"
+                      disabled={
+                        orderCheckBox.notdelivered || orderCheckBox.cancelled
+                      }
                     />
                   }
                   label="Delivered"
@@ -155,6 +183,9 @@ const Orders = () => {
                       value={orderCheckBox.notdelivered}
                       onChange={handleCheck}
                       name="notdelivered"
+                      disabled={
+                        orderCheckBox.delivered || orderCheckBox.cancelled
+                      }
                     />
                   }
                   label="Not Delivered"
@@ -165,6 +196,9 @@ const Orders = () => {
                       value={orderCheckBox.cancelled}
                       onChange={handleCheck}
                       name="cancelled"
+                      disabled={
+                        orderCheckBox.delivered || orderCheckBox.notdelivered
+                      }
                     />
                   }
                   label="Cancelled"
@@ -227,6 +261,9 @@ const Orders = () => {
                                 {order.deliverystatus}
                                 <div>
                                   <Button
+                                    onClick={() =>
+                                      pdfDownload(eachOrder._id, order.cartId)
+                                    }
                                     variant="contained"
                                     startIcon={<PictureAsPdfIcon />}
                                     className="order_cancel"

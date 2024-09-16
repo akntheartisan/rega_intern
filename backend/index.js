@@ -7,6 +7,7 @@ const userroute = require("./route/UserRoute");
 const productroute = require("./route/ProductRoute");
 const cartroute = require("./route/CartRoute");
 const bucketroute = require("./route/BucketRoute");
+const pdfdownroute = require("./route/PdfRoute");
 const cookieParser = require("cookie-parser");
 
 app.use(express.json()); 
@@ -35,6 +36,7 @@ app.use("/project", productroute);
 app.use("/user", userroute);
 app.use("/cart", cartroute);
 app.use("/bucket", bucketroute);
+app.use("/pdfdown", pdfdownroute);
 
 
 const mongo_uri =
