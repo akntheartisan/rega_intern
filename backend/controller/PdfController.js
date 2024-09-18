@@ -8,19 +8,25 @@ exports.pdfDownloads = async (req, res, next) => {
   // Log the incoming query params for verification
   console.log("PDF generation started with params:", id, purchased_id, cartId);
 
+  const purachaseId = new mongoose.Types.ObjectId(purchased_id);
+  const dbCartId = new mongoose.Types.ObjectId(cartId);
+  console.log(purachaseId);
+  
   try {
 
     const user = await usermodel.findById(id);
-    console.log(user);
-    // const userDetail = {name:user.name,address:user.address,district:user.district,}
-    
+    console.log(user.Purchased);
+    const userPurchased = user.Purchased.find((eachPurchase)=>eachPurchase._id.equals(purachaseId));
+    const cartData = userPurchased.cartData.find((eachCartData)=>eachCartData.cartId.equals(dbCartId))
+    console.log('userPurchased',cartData);
+        
     // Set the response headers for PDF download
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", "attachment; filename=invoice.pdf");
 
     // Use pdfService to generate the PDF
     pdfService.generateInvoice(
-       user,
+       user,cartData,
       (chunk) => res.write(chunk),  // Write PDF chunk to response stream
       () => {
         res.end();  // End the stream once PDF generation is complete

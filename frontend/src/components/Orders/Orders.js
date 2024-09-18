@@ -29,9 +29,7 @@ const Orders = () => {
   const [search, setSearch] = useState("");
   const [orderCheckBox, setOrderCheckBox] = useState(intialCheckBox);
 
-  console.log(filtered);
-  console.log(ordered);
-  console.log(search);
+
 
   useEffect(() => {
     getOrderedProducts();
@@ -52,6 +50,10 @@ const Orders = () => {
       console.log(error);
     }
   };
+
+  console.log(filtered);
+  console.log(ordered);
+  console.log(search);
 
   const handleCheck = (e) => {
     const { name, checked } = e.target;

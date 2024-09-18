@@ -304,6 +304,7 @@ exports.deliveryStatus = async (req, res) => {
     const userId = new mongoose.Types.ObjectId(user_id);
     const purchasedId = new mongoose.Types.ObjectId(purchased_id);
     const productId = new mongoose.Types.ObjectId(product_id);
+    const invoice = Math.floor(100000 + Math.random()*900000);
 
     const result = await usermodel.updateOne(
       {
@@ -315,6 +316,7 @@ exports.deliveryStatus = async (req, res) => {
         $set: {
           "Purchased.$[purchase].cartData.$[item].deliverystatus": "Delivered",
           "Purchased.$[purchase].cartData.$[item].trackId": trackId,
+          "Purchased.$[purchase].cartData.$[item].invoice": invoice,
         },
       },
       {

@@ -14,6 +14,9 @@ const PurchasedItems = new mongoose.Schema(
       },
       trackId:{
         type:String,
+      },
+      invoice:{
+        type:String,
       }
     },
     order_id: {

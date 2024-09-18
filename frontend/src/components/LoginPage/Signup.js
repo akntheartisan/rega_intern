@@ -20,6 +20,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(intial);
   const [errors, setErrors] = useState({
+    mailCheck: "",
     passwordCheck: "",
     confirmPasswordCheck: "",
   });
@@ -47,6 +48,20 @@ const Signup = () => {
       }
     }
 
+    if (e.target.name === "username") {
+      const typedMail = e.target.value;
+      console.log(typedMail);
+
+      const checkMailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(typedMail);
+      console.log(checkMailFormat);
+
+      if (!checkMailFormat) {
+        setErrors({ mailCheck: "Please provide valid emailId" });
+      } else {
+        setErrors({ mailCheck: "" });
+      }
+    }
+
     if (e.target.name === "password") {
       console.log(e.target.value);
       const typedPassword = e.target.value;
@@ -63,7 +78,15 @@ const Signup = () => {
         !SpecialChar ||
         passwordLength < 8
       ) {
-        setErrors({ passwordCheck: "must contain 8 characters" });
+        setErrors({ passwordCheck:  <>
+          Password Must Contain:<br />
+          1 Caps,<br />
+          1 Small,<br />
+          1 special character,<br />
+          1 number,<br/>
+          8 characters
+        </> 
+        });
       } else {
         setErrors({ passwordCheck: "" });
       }
@@ -91,6 +114,9 @@ const Signup = () => {
   console.log(user);
 
   const submit = async () => {
+    if(!user.name || !user.username || !user.password || !user.confirmpassword){
+      toast.error('Please fill all the fields');
+    }
     try {
       const response = await client.post("/user/usersignup", user, {
         withCredentials: true,
@@ -192,9 +218,11 @@ const Signup = () => {
                   borderColor: "white", // Border color when focused
                 },
               },
+              "& .MuiFormHelperText-root.Mui-error": {
+                color: "#f28123",
+                fontSize:'13px'
+              },
             }}
-            // helperText={errors.companyname}
-            // error={!!errors.companyname}
             value={user.username}
             onChange={handleChange}
             InputProps={{
@@ -208,6 +236,8 @@ const Signup = () => {
             InputLabelProps={{
               style: { color: "#fff" },
             }}
+            helperText={errors.mailCheck}
+            error={!!errors.mailCheck}
           />
           <TextField
             label="Password"
@@ -224,6 +254,10 @@ const Signup = () => {
                 "&.Mui-focused fieldset": {
                   borderColor: "white", // Border color when focused
                 },
+              },
+              "& .MuiFormHelperText-root.Mui-error": {
+                color: "#f28123",
+                fontSize:'13px'
               },
             }}
             helperText={errors.passwordCheck}
@@ -257,6 +291,10 @@ const Signup = () => {
                 "&.Mui-focused fieldset": {
                   borderColor: "white", // Border color when focused
                 },
+              },
+              "& .MuiFormHelperText-root.Mui-error": {
+                color: "#f28123",
+                fontSize:'13px'
               },
             }}
             helperText={errors.confirmPasswordCheck}
