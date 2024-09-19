@@ -75,6 +75,7 @@ export default function UserProfile() {
 
     setUserData("");
     navigate("/");
+    localStorage.removeItem("authToken");
   };
 
   return (

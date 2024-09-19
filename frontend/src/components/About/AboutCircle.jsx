@@ -34,14 +34,14 @@ const AboutCircle = () => {
             sx={{ paddingLeft: { lg: 10 } }} // Apply paddingLeft only on large screens
             style={{ display: 'flex', justifyContent: 'center' }}
           >
-            <div className="card">
-              <div className="card__face card__face--front">
+            <div className="custom-card">
+              <div className="custom-card__face custom-card__face--front">
                 <VerifiedIcon fontSize="large" style={{ marginBottom: '10px' }} />
-                <p className="card-title">Benefits</p>
+                <p className="custom-card-title">Benefits</p>
               </div>
-              <div className="card__face card__face--back">
+              <div className="custom-card__face custom-card__face--back">
                 <VerifiedIcon fontSize="large" style={{ marginBottom: '10px' }} />
-                <p className="card-text">Our products are made from the finest ingredients to support your health.</p>
+                <p className="custom-card-text">Our products are made from the finest ingredients to support your health.</p>
               </div>
             </div>
           </Grid>
@@ -56,14 +56,14 @@ const AboutCircle = () => {
             sx={{ paddingLeft: { lg: 10 } }} // Apply paddingLeft only on large screens
             style={{ display: 'flex', justifyContent: 'center' }}
           >
-            <div className="card">
-              <div className="card__face card__face--front">
+            <div className="custom-card">
+              <div className="custom-card__face custom-card__face--front">
                 <PriceCheckIcon fontSize="large" style={{ marginBottom: '10px' }} />
-                <p className="card-title">Savings</p>
+                <p className="custom-card-title">Savings</p>
               </div>
-              <div className="card__face card__face--back">
+              <div className="custom-card__face custom-card__face--back">
                 <PriceCheckIcon fontSize="large" style={{ marginBottom: '10px' }} />
-                <p className="card-text">Enjoy great savings on high-quality herbal products.</p>
+                <p className="custom-card-text">Enjoy great savings on high-quality herbal products.</p>
               </div>
             </div>
           </Grid>
@@ -78,14 +78,14 @@ const AboutCircle = () => {
             sx={{ paddingLeft: { lg: 10 } }} // Apply paddingLeft only on large screens
             style={{ display: 'flex', justifyContent: 'center' }}
           >
-            <div className="card">
-              <div className="card__face card__face--front">
+            <div className="custom-card">
+              <div className="custom-card__face custom-card__face--front">
                 <LocalShippingIcon fontSize="large" style={{ marginBottom: '10px' }} />
-                <p className="card-title">Support</p>
+                <p className="custom-card-title">Support</p>
               </div>
-              <div className="card__face card__face--back">
+              <div className="custom-card__face custom-card__face--back">
                 <LocalShippingIcon fontSize="large" style={{ marginBottom: '10px' }} />
-                <p className="card-text">Our customer support team is here to help you with any questions.</p>
+                <p className="custom-card-text">Our customer support team is here to help you with any questions.</p>
               </div>
             </div>
           </Grid>

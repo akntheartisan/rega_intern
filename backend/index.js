@@ -8,6 +8,8 @@ const productroute = require("./route/ProductRoute");
 const cartroute = require("./route/CartRoute");
 const bucketroute = require("./route/BucketRoute");
 const cookieParser = require("cookie-parser");
+const pdfdownroute= require("./route/pdfRoute");
+const ratingRoute = require("./route/ratingRoute")
 
 app.use(express.json()); 
 app.use(cookieParser());
@@ -35,8 +37,8 @@ app.use("/project", productroute);
 app.use("/user", userroute);
 app.use("/cart", cartroute);
 app.use("/bucket", bucketroute);
-
-
+app.use("/pdfdown", pdfdownroute);
+app.use("/rating", ratingRoute);
 const mongo_uri =
   "mongodb+srv://mkansha2312:Y81PZ1nahAdVONzX@regakansha.ljpzn.mongodb.net/?retryWrites=true&w=majority&appName=RegaKansha";
 mongoose

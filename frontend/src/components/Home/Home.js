@@ -15,15 +15,21 @@ import Button from '@mui/material/Button';
 const Home = () => {
   const navigate = useNavigate();
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showAnotherDialog, setShowAnotherDialog] = useState(false); // State for the second dialog
+
   const val = localStorage.getItem("user");
-  
+  const login_val = localStorage.getItem("authToken");
+
   useEffect(() => {
+    // Check if user data exists and show the corresponding dialog
     if (val) {
       setShowConfirmation(true);
+    } else if (!login_val) {
+      setShowAnotherDialog(true); // Show the second dialog if the user is not logged in
     } else {
       setShowConfirmation(false);
     }
-  }, [val]);
+  }, [val, login_val]);
 
   const handleConfirm = () => {
     setShowConfirmation(false);
@@ -31,21 +37,24 @@ const Home = () => {
     navigate('/userdash');
   };
 
-  // const handleClose = () => {
-  //   setShowConfirmation(false);
-  // };
+  const handleCloseAnotherDialog = () => {
+    setShowAnotherDialog(false);
+  };
 
   return (
     <>
       <Header />
+    
       <Carousel />
       <Features />
       <Product />
       <SelfAd />
       <Footer />
+
+      {/* Existing Dialog */}
       <Dialog
         open={showConfirmation}
-      
+        onClose={() => setShowConfirmation(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -56,18 +65,47 @@ const Home = () => {
           <p>You need to update your profile.</p>
         </DialogContent>
         <DialogActions>
-        <Button
-  onClick={handleConfirm}
-  sx={{
-    bgcolor: '#F28123',
-    color: '#fff', 
-    '&:hover': {
-      bgcolor: '#d96b1b', 
-    },
-  }}
->
-  OK
-</Button>
+          <Button
+            onClick={handleConfirm}
+            sx={{
+              bgcolor: '#F28123',
+              color: '#fff', 
+              '&:hover': {
+                bgcolor: '#d96b1b', 
+              },
+            }}
+          >
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* New Dialog for Unauthenticated Users */}
+      <Dialog
+        open={showAnotherDialog}
+        onClose={handleCloseAnotherDialog}
+        aria-labelledby="another-dialog-title"
+        aria-describedby="another-dialog-description"
+      >
+        <DialogTitle id="another-dialog-title">
+          {"Login Required"}
+        </DialogTitle>
+        <DialogContent>
+          <p>Please log in to continue.</p>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleCloseAnotherDialog}
+            sx={{
+              bgcolor: '#F28123',
+              color: '#fff', 
+              '&:hover': {
+                bgcolor: '#d96b1b', 
+              },
+            }}
+          >
+            Close
+          </Button>
         </DialogActions>
       </Dialog>
     </>

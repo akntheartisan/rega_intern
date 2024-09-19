@@ -39,10 +39,10 @@ const AdminDash = () => {
           aria-label="menu"
           onClick={toggleDrawer(true)}
           
-          sx={{ position: 'fixed', top: 26, left: 20 ,transform: 'scale(1.5)'}}
+          sx={{ position: 'sticky', top: 30, left: 10,marginBottom: '-100px' ,paddingRight: '20' }}
           
         >
-          <MenuIcon />
+          <MenuIcon  sx={{fontSize:"50"}}/>
         </IconButton>
       </div>
 

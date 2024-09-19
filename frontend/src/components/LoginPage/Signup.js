@@ -99,6 +99,7 @@ const Signup = () => {
         setUserData(user);
         navigate('/');
         localStorage.setItem("user","kansha");
+        localStorage.setItem("authToken","rega");
         // navigate('/', { state: { fromSignup: true } }); 
 
       }

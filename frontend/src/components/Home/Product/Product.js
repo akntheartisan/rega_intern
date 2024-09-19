@@ -20,18 +20,22 @@ const Product = () => {
         const response = await client.get("/project/getproduct");
         console.log(response.data.data);
         const productData = response.data.data;
+        console.log(productData);
+        
         if (response) {
-          setProduct((prev) => [...prev, ...productData]  );
+          // setProduct((prev) => [...prev,...productData]  );
+          setProduct(productData);
         }
       } catch (error) {
         console.log(error);
       }
     };
 
+
     fetchData();
   }, []);
 
-  console.log(product.productData);
+  console.log(product);
 
   return (
     <>

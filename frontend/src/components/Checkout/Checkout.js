@@ -23,10 +23,7 @@ const intial = {
 const Checkout = () => {
   const navigate = useNavigate();
 
-  const {userData, setUserData } = useContext(UserContext);
-  console.log("1234567890");
-
-  
+  const { userData, setUserData } = useContext(UserContext);
   const [checked, setChecked] = useState(false);
   const [shipAddress, setShipAddress] = useState(intial);
   const [pod, setPod] = useState();
@@ -34,7 +31,7 @@ const Checkout = () => {
   const [model, setModel] = useState(true);
   const [totalShow, setTotalShow] = useState(true);
   const [singleQuantity, setSingleQuantity] = useState(0);
-  const [cartData,setCartData] = useState();
+  const [cartData, setCartData] = useState();
 
   console.log(userData);
 
@@ -88,16 +85,15 @@ const Checkout = () => {
     let userDetails;
 
     const userId = userData._id;
-    
+
     let singleCartArray = [];
-    
-    if(typeof(singleCartData) === "object"){
-        singleCartArray.push(singleCartData)
+
+    if (typeof singleCartData === "object") {
+      singleCartArray.push(singleCartData);
     }
-   
 
     console.log(cartData);
-    
+
     if (checked) {
       userDetails = { ...userData, userId };
       console.log(userDetails);
@@ -117,8 +113,7 @@ const Checkout = () => {
       console.log(typeof cartOffline.status);
 
       if (cartOffline.status === 200) {
-        toast.success("your order kansha has been placed");
-        navigate("/invoice");
+        toast.success("your order has been placed");
         setChecked(false);
         setPod(false);
         setModel(false);
@@ -179,11 +174,10 @@ const Checkout = () => {
     const payment_id = payment;
 
     let singleCartArray = [];
-    
-    if(typeof(singleCartData) === "object"){
-        singleCartArray.push(singleCartData)
+
+    if (typeof singleCartData === "object") {
+      singleCartArray.push(singleCartData);
     }
- 
 
     if (checked) {
       userDetails = { ...userData, userId };
@@ -310,6 +304,16 @@ const Checkout = () => {
                                 />
                               </p>
                             </form>
+                            <button
+                              className="stepper_button"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseTwo"
+                              aria-expanded="true"
+                              aria-controls="collapseTwo"
+                            >
+                              NEXT
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -319,11 +323,11 @@ const Checkout = () => {
                         <h5 className="mb-0">
                           <button
                             className="btn btn-link collapsed"
-                            type="button"
-                            data-toggle="collapse"
-                            data-target="#collapseTwo"
-                            aria-expanded="false"
-                            aria-controls="collapseTwo"
+                            // type="button"
+                            // data-toggle="collapse"
+                            // data-target="#collapseTwo"
+                            // aria-expanded="false"
+                            // aria-controls="collapseTwo"
                           >
                             Shipping Address
                           </button>
@@ -456,6 +460,27 @@ const Checkout = () => {
                                 />
                               </p>
                             </form>
+                            <button
+                              className="stepper_button"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#headingSummary1"
+                              aria-expanded="false"
+                              aria-controls="collapseThree"
+                              disabled={!checked}
+                            >
+                              NEXT
+                            </button>&nbsp;&nbsp;
+                            <button
+                              className="stepper_button_back"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseOne"
+                              aria-expanded="true"
+                              aria-controls="collapseOne"
+                            >
+                              BACK
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -539,7 +564,29 @@ const Checkout = () => {
                                   </button>
                                 </div>
                               </div>
+                              
                             </div>
+                            <button
+                              className="stepper_button"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseThree"
+                              aria-expanded="false"
+                              aria-controls="collapseThree"
+                            >
+                              NEXT
+                            </button>&nbsp;&nbsp;
+                            <button
+                              className="stepper_button_back"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseTwo"
+                              aria-expanded="true"
+                              aria-controls="collapseTwo"
+                            >
+                              BACK
+                            </button>
+                            
                           </div>
                         </div>
                       </div>
@@ -598,8 +645,28 @@ const Checkout = () => {
                                 </div>
                               );
                             })}
-                                <hr/>
+                            <hr />
                           </div>
+                          <button
+                              className="stepper_button"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseThree"
+                              aria-expanded="false"
+                              aria-controls="collapseThree"
+                            >
+                              NEXT
+                            </button>&nbsp;&nbsp;
+                             <button
+                              className="stepper_button_back"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseTwo"
+                              aria-expanded="true"
+                              aria-controls="collapseTwo"
+                            >
+                              BACK
+                            </button>
                         </div>
                       </div>
                     )}
@@ -647,7 +714,8 @@ const Checkout = () => {
                                     id="flexRadioDefault1"
                                     value={pod}
                                     onChange={handlePaymentDelivery}
-                                    {...(pod ? { checked } : {})}
+                                    // {...(pod ? { checked } : {})}
+                                    checked={pod}
                                   />
                                   <label
                                     className="form-check-label"
@@ -666,7 +734,8 @@ const Checkout = () => {
                                     id="flexRadioDefault2"
                                     value={online}
                                     onChange={handlePaymentOnline}
-                                    {...(pod ? { checked } : {})}
+                                    // {...(pod ? { checked } : {})}
+                                     checked={online}
                                   />
                                   <label
                                     className="form-check-label"
@@ -676,7 +745,18 @@ const Checkout = () => {
                                   </label>
                                 </div>
                               </div>
+                           
                             </div>
+                            <button
+                              className="stepper_button_back"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#headingSummary1"
+                              aria-expanded="false"
+                              aria-controls="collapseThree"
+                            >
+                              BACK
+                            </button>
                           </div>
                         </div>
                       </div>

@@ -37,7 +37,7 @@ const Product = () => {
   const [errors, setErrors] = useState({});
   const [primary, setPrimary] = useState("");
 
-  console.log(product);
+  
 
   // const handleFileChange = (e) => {
   //   const file = e.target.files[0];
@@ -47,6 +47,7 @@ const Product = () => {
   // };
 
   const handleChange = (e) => {
+   
     const { name, value } = e.target;
     setProduct((prev) => ({
       ...prev,

@@ -20,6 +20,7 @@ const Signin = () => {
   const [errors, setErrors] = useState({ username: "", password: "" });
 
   async function verify() {
+
     const credential = { username, password };
     try {
       const response = await client.post("/user/signin", credential, {
@@ -50,6 +51,8 @@ const Signin = () => {
       if (response.status === 200) {
         setUserData(user);
         navigate("/");
+        localStorage.setItem('authToken', 'rega');
+
       }
     } catch (error) {
       console.log(error);

@@ -1,11 +1,11 @@
 .About-Head {
-    height: 400px;
-    background-image: url('../../assets/images/About.jpg');
+    height: 420px;
+    /* background-image: url('../../assets/images/About.jpg'); */
     background-size: cover;
     background-position: center;
     padding: 0 20px;
     position: relative;
-    flex-direction: column; /* Stack items vertically */
+    /* flex-direction: column; */
 }
 
 .About-Head::after {
