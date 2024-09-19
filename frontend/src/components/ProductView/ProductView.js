@@ -44,22 +44,28 @@ const ProductView = () => {
   };
 
   const buynow = () => {
+
+    console.log(product);
+    
     const image = product.image.url;
     const model = product.model;
-    let battery;
-    let price;
-    let modelId;
+    // let battery;
+    // let price;
+    // let modelId;
+    let subModelDetails;
     if (!selected) {
-      battery = product.SubModel[0].battery;
-      price = product.SubModel[0].price;
-      modelId = product.SubModel[0]._id;
+      subModelDetails = product.SubModel[0];
+      // battery = product.SubModel[0].battery;
+      // price = product.SubModel[0].price;
+      // modelId = product.SubModel[0]._id;
     } else {
-      battery = selected.battery;
-      price = selected.price;
-      modelId = selected._id;
+      subModelDetails = selected;
+      // battery = selected.battery;
+      // price = selected.price;
+      // modelId = selected._id;
     }
 
-    const details = { image, model, battery, price, modelId };
+    const details = { image, model, subModelDetails };
 
     navigate("/checkout", { state: { singleItem: details } });
   };

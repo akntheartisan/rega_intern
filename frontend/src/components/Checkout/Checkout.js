@@ -20,6 +20,7 @@ const intial = {
   pincode: "",
   mobile: "",
 };
+
 const Checkout = () => {
   const navigate = useNavigate();
 
@@ -42,7 +43,7 @@ const Checkout = () => {
   console.log(singleCartData);
   console.log(multiCartData);
   const singleQuantityPrice = singleQuantity
-    ? singleQuantity * singleCartData.price
+    ? singleQuantity * singleCartData.subModelDetails.price
     : 0;
   const total = location.state.total
     ? location.state.total
@@ -92,7 +93,7 @@ const Checkout = () => {
       singleCartArray.push(singleCartData);
     }
 
-    console.log(cartData);
+    console.log(singleCartArray);
 
     if (checked) {
       userDetails = { ...userData, userId };
@@ -107,7 +108,7 @@ const Checkout = () => {
         userDetails,
         total,
         paymentMode,
-        cartData: multiCartData ? multiCartData : singleCartArray,
+        cartData: multiCartData ? multiCartData : [...singleCartArray],
       });
 
       console.log(typeof cartOffline.status);
@@ -191,7 +192,7 @@ const Checkout = () => {
       const cartOnline = await client.post("/cart/addCartOnline", {
         userDetails,
         total,
-        cartData: multiCartData ? multiCartData : singleCartArray,
+        cartData: multiCartData ? multiCartData : singleCartArray,singleQuantity,
         order_id,
         payment_id,
       });
@@ -535,7 +536,7 @@ const Checkout = () => {
                                 </p>
                                 <p style={{ marginBottom: "10px" }}>
                                   <strong>Price :</strong>{" "}
-                                  {singleCartData.price}
+                                  {singleCartData.subModelDetails.price}
                                 </p>
                                 <div style={{ display: "flex" }}>
                                   <button

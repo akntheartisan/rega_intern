@@ -11,7 +11,7 @@ import "./product.css";
 
 const Product = () => {
   const navigate = useNavigate();
-  const [product, setProduct] = useState([]);
+  const [product, setProduct] = useState();
  
   useEffect(() => {
     const fetchData = async () => {
@@ -20,7 +20,7 @@ const Product = () => {
         console.log(response.data.data);
         const productData = response.data.data;
         if (response) {
-          setProduct((prev) =>  [...prev, ...productData ]);
+          setProduct(productData);
         }
       } catch (error) {
         console.log(error);
