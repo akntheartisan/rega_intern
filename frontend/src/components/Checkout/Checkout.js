@@ -90,7 +90,8 @@ const Checkout = () => {
     let singleCartArray = [];
 
     if (typeof singleCartData === "object") {
-      singleCartArray.push(singleCartData);
+      const updateSingleCartData = {...singleCartData,'quantity':singleQuantity}
+      singleCartArray.push(updateSingleCartData);
     }
 
     console.log(singleCartArray);
@@ -102,7 +103,7 @@ const Checkout = () => {
       userDetails = { ...shipAddress, userId };
       console.log(userDetails);
     }
-
+    
     try {
       const cartOffline = await client.post("/cart/addCart", {
         userDetails,
