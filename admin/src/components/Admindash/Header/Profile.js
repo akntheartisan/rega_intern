@@ -16,6 +16,7 @@ import EditProfile from "./EditProfile";
 // import PasswordEdit from "./PasswordEdit";
 
 import { useNavigate } from "react-router-dom";
+import { client } from "../../../Client/Clientaxios";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -41,8 +42,8 @@ export default function Profile() {
     setAnchorEl(null);
   };
 
-  const logout = () => {
-    setAdmin("");
+  const logout = async () => {
+    const logout = await client.post('/admin/logout');
     navigate("/admin");
   };
 

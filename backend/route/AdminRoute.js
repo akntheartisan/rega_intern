@@ -12,6 +12,7 @@ router.get('/authuser',cont.protect,(req,res)=>{
 });
 
 router.post('/passwordupdate',cont.passwordUpdate);
+router.post('/logout',cont.logout);
 
 
 module.exports = router;

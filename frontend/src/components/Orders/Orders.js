@@ -11,6 +11,7 @@ import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import CancelIcon from "@mui/icons-material/Cancel";
 import search from "./search.png";
 import { UserContext } from "../../App";
+import EmptyCart from "../Cart/CartDetails/EmptyCart";
 
 const intialCheckBox = {
   delivered: false,
@@ -157,7 +158,7 @@ const Orders = () => {
   return (
     <>
       <CheckoutHeader />
-      <div className="container-fluid mt-5">
+      {ordered.length === 0 ? <EmptyCart/> :    <div className="container-fluid mt-5">
         <div className="row" style={{ display: "flex" }}>
           <div className="col-md-3 mt-3">
             <Paper elevation={3} sx={{ padding: "5px" }}>
@@ -324,7 +325,8 @@ const Orders = () => {
               })}
           </div>
         </div>
-      </div>
+      </div>}
+   
     </>
   );
 };

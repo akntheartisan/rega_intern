@@ -46,7 +46,7 @@ exports.adminsignin = async (req, res, next) => {
     }
 
     const jwtSecret = "sdflkjsadlfhasldfjsdlk";
-    const jwtExpiration = "90d";
+    const jwtExpiration = "1hr";
 
     const token = jwt.sign({ id: adminCheck._id }, jwtSecret, {
       expiresIn: jwtExpiration,
@@ -141,3 +141,17 @@ exports.passwordUpdate = async (req, res) => {
     //console.log(error);
   }
 };
+
+exports.logout = async(req,res,next)=>{
+
+  const cookieOptions = {
+    expires: new Date(0),
+    httpOnly: true,
+  };
+
+  res.cookie("jwt", '', cookieOptions).status(200).json({
+    status: "success",
+    message: "Successfully logged in",
+  });
+
+}

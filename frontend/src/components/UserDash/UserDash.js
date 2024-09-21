@@ -167,7 +167,7 @@ const UserDash = () => {
             </Paper>
           </div>
           <div className="col-lg-9 col-12">
-            <ProfileForm userData={userData} />
+            <ProfileForm/>
           </div>
         </div>
       </div>

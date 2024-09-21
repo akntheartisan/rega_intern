@@ -3,13 +3,20 @@ import toast from "react-hot-toast";
 import { client } from "../Client/Client";
 import "./profiledesign.css";
 import { Paper } from "@mui/material";
+import { UserContext } from "../../App";
 
-const ProfileForm = ({ userData }) => {
+
+const ProfileForm = () => {
+ 
+
+  const { userData, setUserData } = useContext(UserContext);
+
   console.log(userData);
+  
 
   const [profileData, setProfileData] = useState({
-    name: userData.name,
-    username: userData.username,
+    name: userData.name || "",
+    username: userData.username || "",
     mobile: "",
     address: "",
     landmark: "",
