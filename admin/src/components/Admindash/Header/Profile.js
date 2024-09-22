@@ -43,8 +43,15 @@ export default function Profile() {
   };
 
   const logout = async () => {
-    const logout = await client.post('/admin/logout');
-    navigate("/admin");
+    const logout = await client.post('/admin/logout',{},{withCredentials:true});
+    console.log(logout);
+
+    if(logout.status === 200){
+      setAdmin('');
+      navigate("/admin");
+    }
+    
+    
   };
 
   return (

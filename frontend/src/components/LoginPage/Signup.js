@@ -3,15 +3,14 @@ import "./Signin.css";
 import { useNavigate } from "react-router-dom";
 import { Stack, TextField, InputAdornment, Box } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import BusinessIcon from "@mui/icons-material/Business";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import { toast } from "react-hot-toast";
 import PasswordIcon from "@mui/icons-material/Password";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import { client } from "../Client/Client";
 import { UserContext } from "../../App";
 import PinIcon from "@mui/icons-material/Pin";
+import Alert from '@mui/material/Alert';
 
 const intial = { name: "", username: "", password: "", confirmpassword: "" };
 
@@ -27,6 +26,7 @@ const Signup = () => {
   const [mailOTP, setMailOTP] = useState();
   const [userOTP, setUserOTP] = useState();
   const [typeOTP, setTypeOTP] = useState(false);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -79,12 +79,14 @@ const Signup = () => {
         passwordLength < 8
       ) {
         setErrors({ passwordCheck:  <>
-          Password Must Contain:<br />
-          1 Caps,<br />
-          1 Small,<br />
-          1 special character,<br />
-          1 number,<br/>
-          8 characters
+        Password Must Contain:
+        <ol>
+          <li>One Capital Letter</li>
+          <li>One Small Letter</li>
+          <li>One Special character</li>
+          <li>One Number</li>
+          <li>Minimum 8 characters</li>
+        </ol>          
         </> 
         });
       } else {
@@ -121,13 +123,11 @@ const Signup = () => {
       const response = await client.post("/user/usersignup", user, {
         withCredentials: true,
       });
-
+      
       setMailOTP(response.data.otp);
-
-      console.log(mailOTP);
-
       setUser(intial);
       setTypeOTP(true);
+      
     } catch (error) {
       console.log(error);
       if (error.response.data.error) {
@@ -155,6 +155,7 @@ const Signup = () => {
       const user = response.data.user;
       if (response.status === 200) {
         setUserData(user);
+  
         navigate("/");
       }
     } catch (error) {
@@ -165,7 +166,10 @@ const Signup = () => {
   return (
     <>
       {/* {typeOTP ? } */}
-
+     
+    
+     
+     
       {!typeOTP ? (
         <Stack direction="column" spacing={4}>
           {" "}
@@ -323,6 +327,8 @@ const Signup = () => {
           </button>{" "}
         </Stack>
       ) : (
+        <>
+        
         <Stack direction="column" spacing={4}>
           <TextField
             label="OTP"
@@ -365,6 +371,8 @@ const Signup = () => {
             Ok
           </Button>
         </Stack>
+        </>
+   
       )}
     </>
   );
