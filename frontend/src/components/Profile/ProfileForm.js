@@ -5,25 +5,36 @@ import "./profiledesign.css";
 import { Paper } from "@mui/material";
 import { UserContext } from "../../App";
 
+const intialUserContactDetails = {
+  name:"",
+  username:"",
+  mobile: "",
+  address: "",
+  landmark: "",
+  district: "",
+  state: "",
+  pincode: "",
+}
 
 const ProfileForm = () => {
- 
-
   const { userData, setUserData } = useContext(UserContext);
 
   console.log(userData);
-  
 
-  const [profileData, setProfileData] = useState({
-    name: userData.name || "",
-    username: userData.username || "",
-    mobile: "",
-    address: "",
-    landmark: "",
-    district: "",
-    state: "",
-    pincode: "",
-  });
+  const [profileData, setProfileData] = useState(intialUserContactDetails);
+
+  useEffect(() => {
+    if(userData){
+
+      setProfileData({
+        ...profileData,
+        name: userData.name || "",
+        username: userData.username || "",
+      });
+
+    }
+
+  }, [userData]);
 
   const [error, setError] = useState({
     mobile: "",
@@ -34,8 +45,6 @@ const ProfileForm = () => {
     pincode: "",
   });
 
-  console.log(error.mobile,error.address);
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,7 +67,7 @@ const ProfileForm = () => {
     }));
   };
 
-  console.log(profileData);
+
 
   const validateFunction = () => {
     let isValid = true;
@@ -112,16 +121,7 @@ const ProfileForm = () => {
 
         if (response.status === 200) {
           toast.success("Submitted Successfully");
-          setProfileData({
-            name: userData.name,
-            username: userData.username,
-            mobile: "",
-            address: "",
-            landmark: "",
-            district: "",
-            state: "",
-            pincode: "",
-          });
+          setProfileData(intialUserContactDetails);
 
           getProfileData();
         }
@@ -244,7 +244,7 @@ const ProfileForm = () => {
                   value={profileData.address}
                   onChange={handleChange}
                 />
-                   {error.address ? (
+                {error.address ? (
                   <span style={{ color: "red", fontStyle: "normal" }}>
                     Please fill this detail*
                   </span>
@@ -266,7 +266,7 @@ const ProfileForm = () => {
                   value={profileData.landmark}
                   onChange={handleChange}
                 />
-                   {error.landmark ? (
+                {error.landmark ? (
                   <span style={{ color: "red", fontStyle: "normal" }}>
                     Please fill this detail*
                   </span>
@@ -288,7 +288,7 @@ const ProfileForm = () => {
                   value={profileData.district}
                   onChange={handleChange}
                 />
-                   {error.district ? (
+                {error.district ? (
                   <span style={{ color: "red", fontStyle: "normal" }}>
                     Please fill this detail*
                   </span>
@@ -310,7 +310,7 @@ const ProfileForm = () => {
                   value={profileData.state}
                   onChange={handleChange}
                 />
-                  {error.state ? (
+                {error.state ? (
                   <span style={{ color: "red", fontStyle: "normal" }}>
                     Please fill this detail*
                   </span>
@@ -333,7 +333,7 @@ const ProfileForm = () => {
                   onChange={handleChange}
                   maxLength={6}
                 />
-                   {error.pincode ? (
+                {error.pincode ? (
                   <span style={{ color: "red", fontStyle: "normal" }}>
                     Please fill this detail*
                   </span>

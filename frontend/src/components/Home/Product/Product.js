@@ -8,11 +8,13 @@ import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import { Link, useNavigate } from "react-router-dom";
 import Cart from "../../Cart/Cart";
 import "./product.css";
+import Rating from "@mui/material/Rating";
 
 const Product = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState();
- 
+  const [ratingValue, setRatingValue] = useState();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -92,15 +94,31 @@ const Product = () => {
                       </div>
 
                       <div style={{ padding: "10px" }}>
-                        <p
+                        <div
                           style={{
-                            fontSize: "17px",
-                            color: "#cccccc",
-                            margin: "0px 0px 0px 0px",
+                            display: "flex",
+                            justifyContent: "space-between",
                           }}
                         >
-                          {each.model}
-                        </p>
+                          <p
+                            style={{
+                              fontSize: "17px",
+                              color: "#cccccc",
+                              margin: "0px 0px 0px 0px",
+                            }}
+                          >
+                            {each.model}
+                          </p>
+                          {/* <div>
+                            <Rating
+                              name="half-rating-read"
+                              value={each.SubModel[0].rating}
+                              precision={0.1}
+                              readOnly
+                            />
+                            <span>{each.SubModel[0].rating}</span>
+                          </div> */}
+                        </div>
                         <p
                           style={{
                             fontSize: "19px",
@@ -127,15 +145,34 @@ const Product = () => {
                           {each.SubModel[0].payload}
                         </span>
                         <hr />
-                        <span
+                        <div
                           style={{
-                            fontSize: "18px",
-                            color: "#fbb72c",
-                            fontWeight: "600",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems:'center'
                           }}
                         >
-                          ₹ {each.SubModel[0].price}
-                        </span>
+                          <span
+                            style={{
+                              fontSize: "18px",
+                              color: "#fbb72c",
+                              fontWeight: "600",
+                            }}
+                          >
+                            ₹ {each.SubModel[0].price}
+                          </span>
+
+                          <div style={{display: "flex",gap:'3px'}}>
+                            <Rating
+                              name="half-rating-read"
+                              value={each.SubModel[0].rating}
+                              precision={0.1}
+                              readOnly
+                            />
+                            <span style={{fontStyle:'normal',fontWeight:'500'}}
+                            >{each.SubModel[0].rating}</span>
+                          </div>
+                        </div>
                         {/* <div style={{ display: "flex" }}>
                           <button
                             onClick={() =>
