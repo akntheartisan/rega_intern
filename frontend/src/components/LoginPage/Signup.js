@@ -123,6 +123,8 @@ const Signup = () => {
       const response = await client.post("/user/usersignup", user, {
         withCredentials: true,
       });
+
+  
       
       setMailOTP(response.data.otp);
       setUser(intial);

@@ -43,7 +43,7 @@ export default function UserProfile() {
 
   const Profile = () => {
     console.log("profile opened");
-    navigate('/userdash');
+    navigate('/userdash',{ state: { user:userData } });
   };
 
   const cart = () => {

@@ -9,6 +9,9 @@ import toast from "react-hot-toast";
 
 const CartDetails = ({ id }) => {
 
+  console.log(id);
+  
+
   const navigate = useNavigate();
   const { userData, setUserData } = useContext(UserContext);
 

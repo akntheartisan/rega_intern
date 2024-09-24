@@ -9,6 +9,7 @@ import ProductViewHeader from "../ProductView/ProductViewHeader";
 const Cart = () => {
     const location = useLocation();
     const {id} = location.state;
+    console.log(id);
     
   return (
     <>
