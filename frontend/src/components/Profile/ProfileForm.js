@@ -5,36 +5,44 @@ import "./profiledesign.css";
 import { Paper } from "@mui/material";
 import { UserContext } from "../../App";
 
-const intialUserContactDetails = {
-  name:"",
-  username:"",
-  mobile: "",
-  address: "",
-  landmark: "",
-  district: "",
-  state: "",
-  pincode: "",
-}
+
 
 const ProfileForm = () => {
   const { userData, setUserData } = useContext(UserContext);
 
-  console.log(userData);
+  
+  const [profileData, setProfileData] = useState({
+    name: '',
+    username: '',
+    mobile: '',
+    address: '',
+    landmark: '',
+    district: '',
+    state: '',
+    pincode: '',
+  });
 
-  const [profileData, setProfileData] = useState(intialUserContactDetails);
-
+  
   useEffect(() => {
-    if(userData){
+    if (userData) {
+      const initialUserContactDetails = {
+        name: userData.name || '',
+        username: userData.username || '',
+        mobile: userData.mobile || '',
+        address: userData.address || '',
+        landmark: userData.landmark || '',
+        district: userData.district || '',
+        state: userData.state || '',
+        pincode: userData.pincode || '',
+      };
 
-      setProfileData({
-        ...profileData,
-        name: userData.name || "",
-        username: userData.username || "",
-      });
-
+    
+      setProfileData(initialUserContactDetails);
     }
+  }, [userData]); 
 
-  },[]);
+  console.log(profileData.name); 
+  
 
   const [error, setError] = useState({
     mobile: "",
@@ -121,9 +129,10 @@ const ProfileForm = () => {
 
         if (response.status === 200) {
           toast.success("Submitted Successfully");
-          setProfileData(intialUserContactDetails);
+        }
 
-          getProfileData();
+        if(response.status === 400){
+          toast.error("Username has already been registered")
         }
       } catch (error) {
         console.log(error);
@@ -131,25 +140,6 @@ const ProfileForm = () => {
     }
   };
 
-  const getProfileData = useCallback(async () => {
-    const id = userData._id;
-    try {
-      const response = await client.get("/user/getprofiledata", {
-        params: { id },
-      });
-      const user = response.data.profile;
-      console.log(user);
-      if (response.status === 200) {
-        setProfileData(user);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [userData]);
-
-  useEffect(() => {
-    getProfileData();
-  }, [getProfileData]);
 
   const deleteAccount = async () => {
     const id = userData._id;
@@ -161,6 +151,9 @@ const ProfileForm = () => {
       console.log(error);
     }
   };
+
+  console.log(profileData);
+  
 
   return (
     <>
@@ -186,6 +179,7 @@ const ProfileForm = () => {
                   name="name"
                   value={profileData.name}
                   onChange={handleChange}
+                  readOnly
                 />
               </div>
             </div>
@@ -201,6 +195,7 @@ const ProfileForm = () => {
                   name="username"
                   value={profileData.username}
                   onChange={handleChange}
+                  readOnly
                 />
               </div>
             </div>

@@ -155,12 +155,24 @@ exports.protect = async (req, res, next) => {
 };
 
 exports.profileUpdate = async (req, res, next) => {
-  const { id, mobile, address, landmark, district, state, pincode } = req.body;
+  console.log(req.body);
+  
+  const { id, name, username, mobile, address, landmark, district, state, pincode } = req.body;
 
   try {
+
+    // const exist = await usermodel.findOne({ username });
+
+    // if (exist) {
+    //   return res.status(400).json({
+    //     status: "fail",
+    //     error: "Username has already been registered",
+    //   });
+    // }
+
     const profileData = await usermodel.findByIdAndUpdate(
       id,
-      { mobile, address, landmark, district, state, pincode },
+      {name, username, mobile, address, landmark, district, state, pincode },
       { new: true }
     );
     return res.status(200).json({ profileData });
@@ -172,23 +184,7 @@ exports.profileUpdate = async (req, res, next) => {
   }
 };
 
-// exports.profileUpdate = async (req, res, next) => {
-//   const { id, mobile, address, landmark, district, state, pincode } = req.body;
 
-//   try {
-//     const profileData = await usermodel.findByIdAndUpdate(
-//       id,
-//       { mobile, address, landmark, district, state, pincode },
-//       { new: true }
-//     );
-//     return res.status(200).json({ profileData });
-//   } catch (error) {
-//     return res.status(400).json({
-//       status: "fail",
-//       message: error.message,
-//     });
-//   }
-// };
 
 exports.getProfileData = async (req, res, next) => {
   //console.log(req.query.id);

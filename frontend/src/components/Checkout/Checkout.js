@@ -596,7 +596,7 @@ const Checkout = () => {
 
                     {multiCartData && (
                       <div className="card single-accordion">
-                        <div className="card-header" id="headingSummary">
+                        <div className="card-header" id="headingSummaryMulti">
                           <h5 className="mb-0">
                             <button
                               className="btn btn-link collapsed"
