@@ -19,10 +19,6 @@ const UserDash = () => {
   const { userData, setUserData } = useContext(UserContext);
   console.log(userData);
 
-  const location = useLocation();
-  const {user} = location.state.userData;
-  console.log(user);
-  
 
   const cart = () => {
     const id = userData._id;
