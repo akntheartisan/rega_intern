@@ -214,12 +214,16 @@ export default function OrderTable({ product, setProduct }) {
                       {each.Purchased.map((eachPurchased) => {
                         return eachPurchased.cartData.map((eachCartData) => {
                           return (
-                            <div>
-                              <p>
-                                {eachCartData.model} -{" "}
-                                {eachCartData.subModelDetails.battery}
-                              </p>
-                            </div>
+                            <>
+                            
+                             <div>
+                             <p>
+                               {eachCartData.model} -{" "}
+                               {eachCartData.subModelDetails.battery}
+                             </p>
+                           </div>
+                            </>
+                           
                           );
                         });
                       })}
@@ -228,9 +232,13 @@ export default function OrderTable({ product, setProduct }) {
                       {each.Purchased.map((eachPurchased) => {
                         return eachPurchased.cartData.map((eachCartData) => {
                           return (
+                            <>
+                            
                             <div>
                               <p>{eachCartData.quantity}</p>
                             </div>
+                            </>
+                            
                           );
                         });
                       })}
@@ -239,9 +247,9 @@ export default function OrderTable({ product, setProduct }) {
                     <TableCell align="center">
                       {each.Purchased.map((eachPurchased) => {
                         if (eachPurchased.hasOwnProperty("order_id")) {
-                          return <p>{eachPurchased.order_id}</p>;
+                          return <><p>{eachPurchased.order_id}</p></>;
                         } else {
-                          return <p>Offline</p>;
+                          return <><p>Offline</p></> ;
                         }
                       })}
                     </TableCell>

@@ -34,7 +34,7 @@ const ProfileForm = () => {
 
     }
 
-  }, [userData,profileData]);
+  },[]);
 
   const [error, setError] = useState({
     mobile: "",
