@@ -40,7 +40,7 @@ const SubProduct = new mongoose.Schema({
     default: 0,
     min: 0,
     max: 5,
-    get: (val) => Math.round(val * 10) / 10 // Round to 1 decimal place
+    get: (val) => Math.round(val * 10) / 10 
   }
 }, { _id: true });
 

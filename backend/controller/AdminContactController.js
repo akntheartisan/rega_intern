@@ -1,4 +1,5 @@
 const AdminContactModel = require('../model/AdminContactModel');
+const usermodel = require("../model/UserRegisterModel");
 // Controller to get the shop contact details
 exports.getAdminContact = async (req, res) => {
     try {
@@ -64,3 +65,25 @@ exports.updateAdminContact = async (req, res) => {
     }
 };
 
+exports.getLoginUser = async (req, res) => {
+    try {
+     
+        const UserDetails = await usermodel.find();
+        console.log("Kansha",UserDetails);
+        
+        if (UserDetails) {
+            return res.status(200).json(UserDetails);
+        } else {
+            return res.status(404).json({
+                status: "error",
+                message: "No user  details found",
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: "error",
+            message: "Failed to retrieve User details",
+        });
+    }
+};

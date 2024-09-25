@@ -5,6 +5,7 @@ import Header from "../Header/Header";
 import Order from "../Order/Order";
 import PrimaryProduct from "../Product/PrimaryProduct";
 import AdminContact from "../Contact/AdminContact";
+import UserLogin from "../Users/UserLogin";
 
 const WorkSpace = () => {
   return (
@@ -15,6 +16,7 @@ const WorkSpace = () => {
         <Route path="/project" element={<Product />} />
         <Route path="/order" element={<Order />} />
         <Route path="/contact" element={<AdminContact />} />
+        <Route path="/users" element={<UserLogin />} />
       </Routes>
     </>
   );

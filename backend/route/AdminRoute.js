@@ -19,6 +19,7 @@ router.post('/forgotpassword', cont1.forgotpassword);
 router.post('/resetpassword', cont1.resetpassword);
 
 router.get('/shopcontact',cont2.getAdminContact);
+router.get('/fetchuser',cont2.getLoginUser);
 router.put('/shopcontact', cont2.updateAdminContact);
 
 
