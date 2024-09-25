@@ -11,12 +11,14 @@ import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { client } from "../Client/Client";
+import { useLocation } from "react-router-dom";
 import './userdash.css';
 
 const UserDash = () => {
   const navigate = useNavigate();
   const { userData, setUserData } = useContext(UserContext);
   console.log(userData);
+
 
   const cart = () => {
     const id = userData._id;
@@ -167,7 +169,7 @@ const UserDash = () => {
             </Paper>
           </div>
           <div className="col-lg-9 col-12">
-            <ProfileForm userData={userData} />
+            <ProfileForm/>
           </div>
         </div>
       </div>

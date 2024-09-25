@@ -57,8 +57,8 @@ const LoginForm = ({ setAdmin, admin }) => {
         getProtected();
       }
     } catch (error) {
-      console.log(error.response.data.error);
-      toast.error(error.response.data.error)
+      console.log(error);
+      toast.error(error.response.data.message)
     }
   };
 
@@ -72,7 +72,7 @@ const LoginForm = ({ setAdmin, admin }) => {
       if (adminDetails) {
         setAdmin(adminDetails);
         console.log("admin:" + admin);
-        navigate("/admin");
+        navigate("/admin/profile");
       }
     } catch (error) {
       console.log(error);

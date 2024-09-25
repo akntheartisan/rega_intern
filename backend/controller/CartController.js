@@ -10,6 +10,8 @@ exports.addCart = async (req, res, next) => {
   const { userId } = req.body.userDetails;
 
   const { cartData, total, paymentMode } = req.body;
+
+  
   const deliverystatus = "Not Delivered";
 
   console.log(cartData);

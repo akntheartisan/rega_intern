@@ -9,6 +9,8 @@ exports.adminsignin = async (req, res, next) => {
     //console.log(username, password);
 
     if (!username || !password) {
+      console.log('no admin password');
+      
       return res.status(400).json({
         status: "fail",
         message: "Username and Password are required",
@@ -19,6 +21,8 @@ exports.adminsignin = async (req, res, next) => {
       .findOne({ username })
       .select("+password");
     //console.log(adminCheck);
+
+    const dbPassword = adminCheck.password;
 
     if (!adminCheck) {
       return res.status(401).json({
@@ -34,8 +38,15 @@ exports.adminsignin = async (req, res, next) => {
     //   });
     // }
 
+    if (dbPassword !== password) {
+      return res.status(401).json({
+        status: "fail",
+        error: "Incorrect password. Please try again",
+      });
+    }
+
     const jwtSecret = "sdflkjsadlfhasldfjsdlk";
-    const jwtExpiration = "90d";
+    const jwtExpiration = "1hr";
 
     const token = jwt.sign({ id: adminCheck._id }, jwtSecret, {
       expiresIn: jwtExpiration,
@@ -121,12 +132,26 @@ exports.passwordUpdate = async (req, res) => {
     adminCheck.password = password;
     const passwordChange = await adminCheck.save();
 
-    if(passwordChange){
+    if (passwordChange) {
       return res.status(200).json({
-        status:'success'
-      })
+        status: "success",
+      });
     }
   } catch (error) {
     //console.log(error);
   }
 };
+
+exports.logout = async(req,res,next)=>{
+
+  const cookieOptions = {
+    expires: new Date(0),
+    httpOnly: true,
+  };
+
+  res.cookie("jwt", '', cookieOptions).status(200).json({
+    status: "success",
+    message: "Successfully logged in",
+  });
+
+}

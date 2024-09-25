@@ -3,20 +3,46 @@ import toast from "react-hot-toast";
 import { client } from "../Client/Client";
 import "./profiledesign.css";
 import { Paper } from "@mui/material";
+import { UserContext } from "../../App";
 
-const ProfileForm = ({ userData }) => {
-  console.log(userData);
 
+
+const ProfileForm = () => {
+  const { userData, setUserData } = useContext(UserContext);
+
+  
   const [profileData, setProfileData] = useState({
-    name: userData.name,
-    username: userData.username,
-    mobile: "",
-    address: "",
-    landmark: "",
-    district: "",
-    state: "",
-    pincode: "",
+    name: '',
+    username: '',
+    mobile: '',
+    address: '',
+    landmark: '',
+    district: '',
+    state: '',
+    pincode: '',
   });
+
+  
+  useEffect(() => {
+    if (userData) {
+      const initialUserContactDetails = {
+        name: userData.name || '',
+        username: userData.username || '',
+        mobile: userData.mobile || '',
+        address: userData.address || '',
+        landmark: userData.landmark || '',
+        district: userData.district || '',
+        state: userData.state || '',
+        pincode: userData.pincode || '',
+      };
+
+    
+      setProfileData(initialUserContactDetails);
+    }
+  }, [userData]); 
+
+  console.log(profileData.name); 
+  
 
   const [error, setError] = useState({
     mobile: "",
@@ -27,8 +53,6 @@ const ProfileForm = ({ userData }) => {
     pincode: "",
   });
 
-  console.log(error.mobile,error.address);
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +75,7 @@ const ProfileForm = ({ userData }) => {
     }));
   };
 
-  console.log(profileData);
+
 
   const validateFunction = () => {
     let isValid = true;
@@ -105,18 +129,10 @@ const ProfileForm = ({ userData }) => {
 
         if (response.status === 200) {
           toast.success("Submitted Successfully");
-          setProfileData({
-            name: userData.name,
-            username: userData.username,
-            mobile: "",
-            address: "",
-            landmark: "",
-            district: "",
-            state: "",
-            pincode: "",
-          });
+        }
 
-          getProfileData();
+        if(response.status === 400){
+          toast.error("Username has already been registered")
         }
       } catch (error) {
         console.log(error);
@@ -124,25 +140,6 @@ const ProfileForm = ({ userData }) => {
     }
   };
 
-  const getProfileData = useCallback(async () => {
-    const id = userData._id;
-    try {
-      const response = await client.get("/user/getprofiledata", {
-        params: { id },
-      });
-      const user = response.data.profile;
-      console.log(user);
-      if (response.status === 200) {
-        setProfileData(user);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [userData]);
-
-  useEffect(() => {
-    getProfileData();
-  }, [getProfileData]);
 
   const deleteAccount = async () => {
     const id = userData._id;
@@ -154,6 +151,9 @@ const ProfileForm = ({ userData }) => {
       console.log(error);
     }
   };
+
+  console.log(profileData);
+  
 
   return (
     <>
@@ -179,6 +179,7 @@ const ProfileForm = ({ userData }) => {
                   name="name"
                   value={profileData.name}
                   onChange={handleChange}
+                  readOnly
                 />
               </div>
             </div>
@@ -194,6 +195,7 @@ const ProfileForm = ({ userData }) => {
                   name="username"
                   value={profileData.username}
                   onChange={handleChange}
+                  readOnly
                 />
               </div>
             </div>
@@ -237,7 +239,7 @@ const ProfileForm = ({ userData }) => {
                   value={profileData.address}
                   onChange={handleChange}
                 />
-                   {error.address ? (
+                {error.address ? (
                   <span style={{ color: "red", fontStyle: "normal" }}>
                     Please fill this detail*
                   </span>
@@ -259,7 +261,7 @@ const ProfileForm = ({ userData }) => {
                   value={profileData.landmark}
                   onChange={handleChange}
                 />
-                   {error.landmark ? (
+                {error.landmark ? (
                   <span style={{ color: "red", fontStyle: "normal" }}>
                     Please fill this detail*
                   </span>
@@ -281,7 +283,7 @@ const ProfileForm = ({ userData }) => {
                   value={profileData.district}
                   onChange={handleChange}
                 />
-                   {error.district ? (
+                {error.district ? (
                   <span style={{ color: "red", fontStyle: "normal" }}>
                     Please fill this detail*
                   </span>
@@ -303,7 +305,7 @@ const ProfileForm = ({ userData }) => {
                   value={profileData.state}
                   onChange={handleChange}
                 />
-                  {error.state ? (
+                {error.state ? (
                   <span style={{ color: "red", fontStyle: "normal" }}>
                     Please fill this detail*
                   </span>
@@ -326,7 +328,7 @@ const ProfileForm = ({ userData }) => {
                   onChange={handleChange}
                   maxLength={6}
                 />
-                   {error.pincode ? (
+                {error.pincode ? (
                   <span style={{ color: "red", fontStyle: "normal" }}>
                     Please fill this detail*
                   </span>

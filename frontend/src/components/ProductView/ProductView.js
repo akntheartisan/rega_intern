@@ -10,6 +10,7 @@ import frame from "./frame.png";
 import hand from "./hand.png";
 import mobilesurf from "./mobilesurf.png";
 import bikereceive from "./bikereceive.png";
+import smallbattery from "./car-battery (2).png";
 import CallIcon from "@mui/icons-material/Call";
 import Footer from "../Footer/Footer";
 import Stack from "@mui/material/Stack";
@@ -43,22 +44,28 @@ const ProductView = () => {
   };
 
   const buynow = () => {
+
+    console.log(product);
+    
     const image = product.image.url;
     const model = product.model;
-    let battery;
-    let price;
-    let modelId;
+    // let battery;
+    // let price;
+    // let modelId;
+    let subModelDetails;
     if (!selected) {
-      battery = product.SubModel[0].battery;
-      price = product.SubModel[0].price;
-      modelId = product.SubModel[0]._id;
+      subModelDetails = product.SubModel[0];
+      // battery = product.SubModel[0].battery;
+      // price = product.SubModel[0].price;
+      // modelId = product.SubModel[0]._id;
     } else {
-      battery = selected.battery;
-      price = selected.price;
-      modelId = selected._id;
+      subModelDetails = selected;
+      // battery = selected.battery;
+      // price = selected.price;
+      // modelId = selected._id;
     }
 
-    const details = { image, model, battery, price, modelId };
+    const details = { image, model, subModelDetails };
 
     navigate("/checkout", { state: { singleItem: details } });
   };
@@ -197,13 +204,15 @@ const ProductView = () => {
               }}
             >
               {product.SubModel.map((each) => (
-                <Button
-                  variant="outlined"
+                <button
+                className="batteryvariant"
+                  variant="contained"
                   key={each._id}
                   onClick={() => getSelectModel(each.battery)}
                 >
+                  <img src={smallbattery} alt="battery"/>&nbsp;&nbsp;
                   {each.battery}
-                </Button>
+                </button>
               ))}
             </div>
 

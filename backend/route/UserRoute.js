@@ -33,5 +33,6 @@ router.post("/forgotpassword", cont.forgotpassword);
 router.post("/resetPassword", cont.resetPassword);
 router.get("/getOrderedProducts", cont.getOrderedProducts);
 router.post("/delivery", cont.deliveryStatus);
+router.post("/cancelProducts", cont.cancelProducts);
 
 module.exports = router;

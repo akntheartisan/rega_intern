@@ -8,16 +8,27 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { client } from "../../../Client/Clientaxios";
 import toast from "react-hot-toast";
 
-export default function ProductUpdate({ updateOpen, setUpdateOpen, product, setProductData,getProduct }) {
+export default function ProductUpdate({
+  updateOpen,
+  setUpdateOpen,
+  product,
+  setProductData,
+  getProduct,
+}) {
   const handleClose = () => {
     setUpdateOpen(false);
   };
 
-  const [updatedProduct, setUpdatedProduct] = React.useState(product);
+  console.log(product);
+  // const [filteredProduct, setFilteredProduct] = React.useState(product);
+  const [updatedProduct, setUpdatedProduct] = React.useState({});
 
-  React.useEffect(() => {
-    setUpdatedProduct(product);
-  }, [product]);
+  // const [subModel, setSubModel] = React.useState([]);
+
+  // React.useEffect(() => {
+  //   setUpdatedProduct(product);
+  //   // setSubModel(product.SubModel || []);
+  // }, [product]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,39 +38,39 @@ export default function ProductUpdate({ updateOpen, setUpdateOpen, product, setP
     }));
   };
 
+  console.log(product.SubModel);
+  // console.log(subModel);
+
+  const handleSelect = (e) => {
+    console.log(e.target.value);
+    const batteryValue = e.target.value;
+
+    const selectedBatteryModel = product.SubModel.filter((eachModel) =>
+      eachModel.battery.includes(batteryValue)
+    );
+
+    // setFilteredProduct(selectedBatteryModel[0]);
+    setUpdatedProduct(selectedBatteryModel[0]);
+  };
+
   const updateSubmit = async () => {
-
-//     console.log(updatedProduct);
-
-//   console.log(updatedProduct._id);
-//   const formData = new FormData();
-//   formData.append('id',updatedProduct._id)
-//   formData.append('model', updatedProduct.model);
-//   formData.append('motor', updatedProduct.motor);
-//   formData.append('battery', updatedProduct.battery);
-//   formData.append('range', updatedProduct.range);
-//   formData.append('tyresize', updatedProduct.tyresize);
-//   formData.append('brakes', updatedProduct.brakes);
-//   formData.append('ground', updatedProduct.ground);
-//   formData.append('payload', updatedProduct.payload);
-//   formData.append('frame', updatedProduct.frame);
-
-    // Object.keys(updatedProduct).forEach((key) => {
-    //   formData.append(key, updatedProduct[key]);
-    // });
-
-    // console.log(formData);
+    console.log(updatedProduct);
+    const id = product._id;
 
     try {
-      const response = await client.post("/project/updateproject", updatedProduct);
+      const response = await client.post("/project/updateproject", {
+        updatedProduct,
+        id,
+      });
       const updatedData = response.data.data;
       console.log(updatedData);
-      if(response.status === 200){
-        toast.success('Updated Successfully');
+      if (response.status === 200) {
+        toast.success("Updated Successfully");
         getProduct();
+        setUpdatedProduct({});
         // setProductData(updatedData);
         setUpdateOpen(false);
-      } 
+      }
     } catch (error) {
       console.log(Error);
     }
@@ -101,7 +112,49 @@ export default function ProductUpdate({ updateOpen, setUpdateOpen, product, setP
                       className="form-control"
                       id="model"
                       name="model"
-                      value={updatedProduct.model}
+                      value={product.model}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label htmlFor="battery" className="form-label">
+                      Battery
+                    </label>
+                    <select
+                      className="form-select"
+                      id="battery"
+                      name="battery"
+                      onChange={handleSelect}
+                    >
+                      <option value="">Select</option>
+                      {product.SubModel &&
+                        product.SubModel.map((eachModel) => {
+                          return (
+                            <option
+                              key={eachModel._id}
+                              value={eachModel.battery}
+                            >
+                              {eachModel.battery}
+                            </option>
+                          );
+                        })}
+                    </select>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label htmlFor="motor" className="form-label">
+                      Price
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="price"
+                      name="price"
+                      value={updatedProduct.price}
                       onChange={handleChange}
                     />
                   </div>
@@ -121,21 +174,7 @@ export default function ProductUpdate({ updateOpen, setUpdateOpen, product, setP
                     />
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label htmlFor="battery" className="form-label">
-                      Battery
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="battery"
-                      name="battery"
-                      value={updatedProduct.battery}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
+
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="range" className="form-label">

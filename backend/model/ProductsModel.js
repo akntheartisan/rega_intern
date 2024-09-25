@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-
 const SubProduct = new mongoose.Schema({
   battery: {
     type: String,
@@ -32,7 +31,19 @@ const SubProduct = new mongoose.Schema({
   price: {
     type: String,
   },
+  count: {
+    type: Number,
+    default: 0,
+  },
+  rating: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 5,
+    get: (val) => Math.round(val * 10) / 10 
+  }
 }, { _id: true });
+
 
 const ProductSchema = new mongoose.Schema(
   {

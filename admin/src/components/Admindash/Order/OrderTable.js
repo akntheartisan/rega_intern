@@ -15,7 +15,7 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import toast from "react-hot-toast";
 import ViewListIcon from "@mui/icons-material/ViewList";
-import OrderView from "./OrderView";
+
 import "./order.css";
 
 export default function OrderTable({ product, setProduct }) {
@@ -26,6 +26,7 @@ export default function OrderTable({ product, setProduct }) {
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [deleteOpen, setDeleteOpen] = React.useState("");
   const [openOrderView, setOpenOrderView] = React.useState(false);
+  const [values, setValues] = useState({});
 
   console.log(orderData);
 
@@ -52,6 +53,13 @@ export default function OrderTable({ product, setProduct }) {
     getOrder();
   }, []);
 
+  const handleChangeValues = (values, cartId) => {
+    setValues((prev) => ({
+      ...prev,
+      [cartId]: values,
+    }));
+  };
+
   const deliveryStatus = async (user_id, product_id, purchased_id) => {
     console.log("deliverystatus");
 
@@ -60,11 +68,13 @@ export default function OrderTable({ product, setProduct }) {
         user_id,
         product_id,
         purchased_id,
+        values,
       });
       console.log(deliveryStatus.status);
 
       if (deliveryStatus.status === 200) {
         getOrder();
+        setValues({});
       }
     } catch (error) {
       console.log(error);
@@ -165,6 +175,17 @@ export default function OrderTable({ product, setProduct }) {
                     fontSize: "18px",
                   }}
                 >
+                  Track Id
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{
+                    minWidth: 170,
+                    backgroundColor: "black",
+                    color: "white",
+                    fontSize: "18px",
+                  }}
+                >
                   Order Status
                 </TableCell>
                 <TableCell
@@ -194,12 +215,14 @@ export default function OrderTable({ product, setProduct }) {
                       {each.Purchased.map((eachPurchased) => {
                         return eachPurchased.cartData.map((eachCartData) => {
                           return (
-                            <div>
-                              <p>
-                                {eachCartData.model} -{" "}
-                                {eachCartData.subModelDetails.battery}
-                              </p>
-                            </div>
+                            <>
+                              <div>
+                                <p>
+                                  {eachCartData.model} -{" "}
+                                  {eachCartData.subModelDetails.battery}
+                                </p>
+                              </div>
+                            </>
                           );
                         });
                       })}
@@ -208,9 +231,11 @@ export default function OrderTable({ product, setProduct }) {
                       {each.Purchased.map((eachPurchased) => {
                         return eachPurchased.cartData.map((eachCartData) => {
                           return (
-                            <div>
-                              <p>{eachCartData.quantity}</p>
-                            </div>
+                            <>
+                              <div>
+                                <p>{eachCartData.quantity}</p>
+                              </div>
+                            </>
                           );
                         });
                       })}
@@ -219,9 +244,17 @@ export default function OrderTable({ product, setProduct }) {
                     <TableCell align="center">
                       {each.Purchased.map((eachPurchased) => {
                         if (eachPurchased.hasOwnProperty("order_id")) {
-                          return <p>{eachPurchased.order_id}</p>;
+                          return (
+                            <>
+                              <p>{eachPurchased.order_id}</p>
+                            </>
+                          );
                         } else {
-                          return <p>Offline</p>;
+                          return (
+                            <>
+                              <p>Offline</p>
+                            </>
+                          );
                         }
                       })}
                     </TableCell>
@@ -229,9 +262,37 @@ export default function OrderTable({ product, setProduct }) {
                       {each.Purchased.map((eachPurchased) => {
                         return eachPurchased.cartData.map((eachCartData) => {
                           return (
-                            <div>
+                            <div className="mt-2" key={eachCartData.cartId}>
+                              {eachCartData.deliverystatus === "cancelled" ? (
+                                <p>-</p>
+                              ) : eachCartData.hasOwnProperty("trackId") ? (
+                                <p>{eachCartData.trackId}</p>
+                              ) : (
+                                <input
+                                  className="form-control"
+                                  type="text"
+                                  style={{ borderColor: "black" }}
+                                  value={values[eachCartData.cartId]}
+                                  onChange={(e) =>
+                                    handleChangeValues(
+                                      e.target.value,
+                                      eachCartData.cartId
+                                    )
+                                  }
+                                />
+                              )}
+                            </div>
+                          );
+                        });
+                      })}
+                    </TableCell>
+                    <TableCell align="center">
+                      {each.Purchased.map((eachPurchased) => {
+                        return eachPurchased.cartData.map((eachCartData) => {
+                          return (
+                            <div key={eachCartData.cartId}>
                               {eachCartData.deliverystatus ===
-                              "Not-Delivered" ? (
+                              "Not Delivered" ? (
                                 <button
                                   className="deliverybtn"
                                   onClick={() =>
@@ -241,9 +302,24 @@ export default function OrderTable({ product, setProduct }) {
                                       eachPurchased._id
                                     )
                                   }
+                                  disabled={
+                                    !values[eachCartData.cartId] ||
+                                    values[eachCartData.cartId].length < 5
+                                  }
                                 >
-                                  {eachCartData.deliverystatus}
+                                  Not Delivered
                                 </button>
+                              ) : eachCartData.deliverystatus ===
+                                "cancelled" ? (
+                                <p
+                                  style={{
+                                    color: "red",
+                                    fontSize: "15px",
+                                    fontWeight: "540",
+                                  }}
+                                >
+                                  Cancelled
+                                </p>
                               ) : (
                                 <p
                                   style={{
@@ -280,12 +356,7 @@ export default function OrderTable({ product, setProduct }) {
         onRowsPerPageChange={handleChangeRowsPerPage}
       /> */}
       </Paper>
-      <OrderView
-        openOrderView={openOrderView}
-        setOpenOrderView={setOpenOrderView}
-        selectedProduct={selectedProduct}
-        setSelectedProduct={setSelectedProduct}
-      />
+
       {/* <ProductUpdate
         updateOpen={updateOpen}
         setUpdateOpen={setUpdateOpen}
@@ -299,7 +370,6 @@ export default function OrderTable({ product, setProduct }) {
         product={selectedProduct}
         deleteSubmit={deleteSubmit}
       /> */}
-      <OrderView />
     </>
   );
 }
